@@ -21,6 +21,15 @@ typedef enum {
     SafeUriResolverLikeType_PluginWrapper,
 } SafeUriResolverLikeType;
 
+typedef struct BuilderConfig BuilderConfig;
+typedef struct WasmWrapper WasmWrapper;
+typedef struct PluginWrapper PluginWrapper;
+typedef struct WasmPackage WasmPackage;
+typedef struct PluginPackage PluginPackage;
+typedef struct StaticResolver StaticResolver;
+typedef struct ExtendableUriResolver ExtendableUriResolver;
+typedef struct PolywrapClient PolywrapClient;
+
 typedef struct {
     SafeUriResolverLikeType _type;
     void *data;
@@ -33,35 +42,14 @@ typedef struct {
 } Buffer;
 
 typedef struct {
-    Buffer (*_wrap_invoke)(const int8_t *method_name, const uint8_t *params_buffer, uintptr_t params_len, void *invoker);
+    Buffer (*_wrap_invoke)(const int8_t *method_name, const uint8_t *params_buffer, uintptr_t params_len, PolywrapClient *invoker);
 } ExtPluginModule;
-
-typedef enum {
-    SafeOption_Tag_None,
-    SafeOption_Tag_Some,
-} SafeOption_Tag;
-
-typedef struct {
-    SafeOption_Tag tag;
-    union {
-        const int8_t *some;
-    };
-} SafeOption;
 
 typedef struct {
     const char *uri;
     SafeUriPackageOrWrapperType data_type;
     void *data;
 } SafeUriPackageOrWrapper;
-
-typedef struct BuilderConfig BuilderConfig;
-typedef struct WasmWrapper WasmWrapper;
-typedef struct PluginWrapper PluginWrapper;
-typedef struct WasmPackage WasmPackage;
-typedef struct PluginPackage PluginPackage;
-typedef struct StaticResolver StaticResolver;
-typedef struct ExtendableUriResolver ExtendableUriResolver;
-typedef struct PolywrapClient PolywrapClient;
 
 #ifdef __cplusplus
 extern "C" {
@@ -111,7 +99,7 @@ const void *build_client(BuilderConfig *builder_config_ptr);
 
 void set_plugin_env(ExtPluginModule *plugin_ptr, const char *env_json_str);
 
-SafeOption get_plugin_env(ExtPluginModule *plugin_ptr, const char *key);
+const char *get_plugin_env(ExtPluginModule *plugin_ptr, const char *key);
 
 StaticResolver *create_static_resolver(const SafeUriPackageOrWrapper *entries, uintptr_t len);
 
@@ -122,8 +110,8 @@ PolywrapClient *create_client(BuilderConfig *builder_config_ptr);
 const Buffer *invoke_raw(PolywrapClient *client_ptr,
                          const char *uri,
                          const char *method,
-                         SafeOption args,
-                         SafeOption env);
+                         const Buffer *args,
+                         const char *env);
 
 const Buffer *encode(const char *json_str);
 
