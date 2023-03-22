@@ -9,7 +9,7 @@ typealias WrapInvokeFunction = @convention(c) (
         _ invoker: UnsafeRawPointer?
 ) -> Buffer
 
-typealias MethodsMap = [String: (method: (_ args: Decodable) -> Codable, type: Any.Type)]
+typealias MethodsMap = [String: (method: (_ args: Decodable) -> Codable, type: Decodable.Type)]
 
 struct PluginModule {
     let _wrap_invoke: WrapInvokeFunction
@@ -25,25 +25,23 @@ struct PluginModule {
                     count: methodNameLength
             )
             let methodName = String(decoding: methodNameBuffer, as: UTF8.self)
-            let decoder = MsgPackDecoder()
 
             if let entry = methods_map[methodName] {
-                let out = try! decoder.decode(entry.type, from: Data(encodedParams))
-            } else {
-                throw "Method not found"
+                let decoder = MsgPackDecoder()
+                let decodedArgs = try! decoder.decode(entry.type, from: Data(encodedParams))
+                let invokeResult = (entry.method)(decodedArgs)
+
+                let encoder = MsgPackEncoder()
+                let encodedResult = try! encoder.encode(invokeResult);
+
+                encodedResult.withUnsafeBytes { (bytes: UnsafeRawBufferPointer) -> Void in
+                    let bufferPointer = bytes.bindMemory(to: UInt8.self)
+                    let bufferLength = bytes.count
+
+                    return ArrayBuffer(data: bufferPointer.baseAddress, len: UInt(bufferLength))
+                }
             }
         }
 
     }
-}
-
-class Plugin: NSObject {
-    let module: ExtPluginModule
-
-    init() {
-        module = ExtPluginModule()
-        self.perform()
-    }
-
-
 }
