@@ -45,3 +45,46 @@ struct PluginModule {
 
     }
 }
+
+class Plugin {
+    let pluginModule: PluginModule
+
+    init() {
+        let mirror = Mirror(reflecting: self)
+        var methods:[String: (method: (_ args: Decodable) -> Codable, type: Decodable.Type)] = [:]
+
+        for child in mirror.children {
+            if let method = child.value as? (Decodable) -> Any {
+                guard let name = child.label else {
+                    fatalError("Method label not found")
+                }
+                let argumentType = methodArgumentType(for: child)
+
+                methods[name] = ({ input in
+                    guard let codableInput = input as? Decodable else {
+                        fatalError("Invalid input type")
+                    }
+                    let result = method(codableInput)
+                    if let codableResult = result as? Codable {
+                        return codableResult
+                    }
+                    fatalError("Invalid method return type")
+                }, argumentType)
+
+                print("Method \(name) has argument type \(argumentType)")
+            }
+        }
+
+        pluginModule = PluginModule(methods_map: methods)
+    }
+
+    private func methodArgumentType(for child: Mirror.Child) -> Decodable.Type {
+        guard let methodMirror = Mirror(reflecting: child.value) as? Mirror,
+              methodMirror.displayStyle == .tuple,
+              let argumentType = methodMirror.children.first?.value as? Decodable.Type
+        else {
+            fatalError("Invalid method argument type")
+        }
+        return argumentType
+    }
+}
