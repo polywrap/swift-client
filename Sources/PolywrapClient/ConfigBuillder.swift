@@ -41,5 +41,11 @@ class ConfigBuilder {
         remove_interface_implementation(builderPtr, interfaceUriPtr, implementationUriPtr)
     }
 
-    func addWrapper()
+    func addWrapper() {
+
+    }
+
+    func build() -> OpaquePointer {
+       create_client(builderPtr)
+    }
 }
