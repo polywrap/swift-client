@@ -1,6 +1,6 @@
 import Foundation
 
-struct Uri: Equatable, CustomStringConvertible {
+public struct Uri: Equatable, CustomStringConvertible {
     let authority: String
     let path: String
     let uri: String
@@ -46,7 +46,7 @@ struct Uri: Equatable, CustomStringConvertible {
         )
     }
 
-    var description: String {
+    public var description: String {
         uri
     }
 }
