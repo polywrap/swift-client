@@ -3,56 +3,56 @@ import Cpolywrap_ffi_c
 import SwiftMsgpack
 
 typealias WrapInvokeFunction = @convention(c) (
-        _ method_name: UnsafePointer<Int8>,
-        _ params_buffer: UnsafePointer<UInt8>?,
-        _ params_len: Int,
+        _ pluginPtr: UnsafeMutableRawPointer,
+        _ methodName: UnsafePointer<Int8>,
+        _ paramsBuffer: UnsafePointer<UInt8>?,
+        _ paramsLen: Int,
         _ invoker: UnsafeRawPointer?
-) -> Buffer
+) -> UnsafePointer<Buffer>
 
-typealias MethodsMap = [String: (method: (_ args: Decodable) -> Codable, type: Decodable.Type)]
+let invoke_plugin: WrapInvokeFunction = { pluginRawPtr, methodName, paramsBuffer, paramsLen, invoker in
+    let bufferPointer = UnsafeBufferPointer(start: paramsBuffer, count: paramsLen)
+    let encodedParams = Array(bufferPointer)
 
-struct PluginModule {
-    let _wrap_invoke: WrapInvokeFunction
+    let methodNameLength = strlen(methodName)
+    let methodNameBuffer = UnsafeBufferPointer(
+            start: methodName.withMemoryRebound(to: UInt8.self, capacity: methodNameLength) { $0 },
+            count: methodNameLength
+    )
+    let methodName = String(decoding: methodNameBuffer, as: UTF8.self)
+    let pluginPtr = pluginRawPtr.assumingMemoryBound(to: Plugin.self)
+    let plugin = pluginPtr.pointee
 
-    init(methods_map: MethodsMap) {
-        _wrap_invoke = { method_name, params_buffer, params_len, invoker in
-            let bufferPointer = UnsafeBufferPointer(start: params_buffer, count: params_len)
-            let encodedParams = Array(bufferPointer)
+    guard let entry = plugin.methodsMap[methodName] else {
+        let emptyBufferPtr = UnsafeMutablePointer<UInt8>.allocate(capacity: 0)
+        return create_buffer(emptyBufferPtr, 0)
+    }
 
-            let methodNameLength = strlen(method_name)
-            let methodNameBuffer = UnsafeBufferPointer(
-                    start: method_name.withMemoryRebound(to: UInt8.self, capacity: methodNameLength) { $0 },
-                    count: methodNameLength
-            )
-            let methodName = String(decoding: methodNameBuffer, as: UTF8.self)
+    let decoder = MsgPackDecoder()
+    let decodedArgs = try! decoder.decode(entry.type, from: Data(encodedParams))
+    let invokeResult = (entry.method)(decodedArgs)
 
-            if let entry = methods_map[methodName] {
-                let decoder = MsgPackDecoder()
-                let decodedArgs = try! decoder.decode(entry.type, from: Data(encodedParams))
-                let invokeResult = (entry.method)(decodedArgs)
+    let encoder = MsgPackEncoder()
+    let encodedResult = try! encoder.encode(invokeResult)
+    let resultData = try! encoder.encode(invokeResult)
+    var resultBytes = [UInt8](repeating: 0, count: resultData.count)
+    let resultBytesCount = resultBytes.count
 
-                let encoder = MsgPackEncoder()
-                let encodedResult = try! encoder.encode(invokeResult);
+    resultData.withUnsafeBytes { bufferPointer in
+        let buffer = UnsafeBufferPointer<UInt8>(start: bufferPointer.baseAddress!.assumingMemoryBound(to: UInt8.self), count: bufferPointer.count)
+        resultBytes = Array(buffer)
+    }
 
-                encodedResult.withUnsafeBytes { (bytes: UnsafeRawBufferPointer) -> Void in
-                    let bufferPointer = bytes.bindMemory(to: UInt8.self)
-                    let bufferLength = bytes.count
-
-                    return ArrayBuffer(data: bufferPointer.baseAddress, len: UInt(bufferLength))
-                }
-            }
-        }
-
+    return resultBytes.withUnsafeMutableBufferPointer { bufferPointer in
+        create_buffer(bufferPointer.baseAddress, UInt(resultBytesCount))
     }
 }
 
 class Plugin {
-    let pluginModule: PluginModule
+    var methodsMap: [String: (method: (_ args: Decodable) -> Codable, type: Decodable.Type)] = [:]
 
     init() {
         let mirror = Mirror(reflecting: self)
-        var methods:[String: (method: (_ args: Decodable) -> Codable, type: Decodable.Type)] = [:]
-
         for child in mirror.children {
             if let method = child.value as? (Decodable) -> Any {
                 guard let name = child.label else {
@@ -60,7 +60,7 @@ class Plugin {
                 }
                 let argumentType = methodArgumentType(for: child)
 
-                methods[name] = ({ input in
+                methodsMap[name] = ({ input in
                     guard let codableInput = input as? Decodable else {
                         fatalError("Invalid input type")
                     }
@@ -74,8 +74,6 @@ class Plugin {
                 print("Method \(name) has argument type \(argumentType)")
             }
         }
-
-        pluginModule = PluginModule(methods_map: methods)
     }
 
     private func methodArgumentType(for child: Mirror.Child) -> Decodable.Type {

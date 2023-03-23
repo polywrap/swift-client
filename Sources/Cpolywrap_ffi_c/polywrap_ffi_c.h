@@ -114,6 +114,7 @@ const Buffer *invoke_raw(PolywrapClient *client_ptr,
                          const char *env);
 
 const Buffer *encode(const char *json_str);
+const Buffer *create_buffer(uint8_t *data, uintptr_t len);
 
 #ifdef __cplusplus
 }
