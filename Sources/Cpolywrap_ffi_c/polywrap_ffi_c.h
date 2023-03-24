@@ -45,6 +45,8 @@ typedef struct {
     Buffer (*_wrap_invoke)(const int8_t *method_name, const uint8_t *params_buffer, uintptr_t params_len, PolywrapClient *invoker);
 } ExtPluginModule;
 
+typedef const Buffer *(*PluginInvokeFn)(const void *plugin_ptr, const int8_t *method_name, const uint8_t *params_buffer, uintptr_t params_len, PolywrapClient *invoker);
+
 typedef struct {
     const char *uri;
     SafeUriPackageOrWrapperType data_type;
@@ -73,7 +75,10 @@ void remove_interface_implementation(BuilderConfig *builder_config_ptr,
 
 void add_wasm_wrapper(BuilderConfig *builder_config_ptr, const char *uri, WasmWrapper *wrapper);
 
-void add_plugin_wrapper(BuilderConfig *builder_config_ptr, const char *uri, PluginWrapper *wrapper);
+void add_plugin_wrapper(BuilderConfig *builder_config_ptr,
+                        const char *uri,
+                        void *plugin_ptr,
+                        PluginInvokeFn plugin_invoke_fn);
 
 void remove_wrapper(BuilderConfig *builder_config_ptr, const char *uri);
 

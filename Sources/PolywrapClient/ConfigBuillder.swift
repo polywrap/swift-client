@@ -44,8 +44,9 @@ class ConfigBuilder {
     func addPlugin<T: Plugin>(uri: Uri, plugin: T) {
         let pluginPtr = Unmanaged.passRetained(plugin).toOpaque()
         let uriPtr = uri.uri.cString(using: .utf8).unsafelyUnwrapped
+        let invokePluginFnPtr = unsafeBitCast(invoke_plugin, to: PluginInvokeFn.self)
 
-        add_plugin_wrapper(builderPtr, uriPtr, OpaquePointer(pluginPtr))
+        add_plugin_wrapper(builderPtr, uriPtr, pluginPtr, invokePluginFnPtr)
     }
 
     func build() -> OpaquePointer {
