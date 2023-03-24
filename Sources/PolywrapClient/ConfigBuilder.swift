@@ -1,5 +1,5 @@
 import Foundation
-import Cpolywrap_ffi_c
+import PolywrapNativeClient
 
 class ConfigBuilder {
     let builderPtr: OpaquePointer;

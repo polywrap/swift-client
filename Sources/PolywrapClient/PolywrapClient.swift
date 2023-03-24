@@ -1,4 +1,4 @@
-import Cpolywrap_ffi_c
+import PolywrapNativeClient
 
 public struct PolywrapClient {
     private let clientPtr: OpaquePointer

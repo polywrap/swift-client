@@ -1,5 +1,0 @@
-module Cpolywrap_ffi_c {
-    header "polywrap_ffi_c.h"
-    link "polywrap_ffi_c.so"
-    export *
-}

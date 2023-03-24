@@ -19,28 +19,18 @@ let package = Package(
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
-        .systemLibrary(
-                name: "Cpolywrap_ffi_c",
-                path: "Sources/Cpolywrap_ffi_c",
-                pkgConfig: nil,
-                providers: nil
-        ),
+        .systemLibrary(name: "PolywrapNativeClient", path: "Sources/PolywrapNativeClient"),
         .target(
             name: "PolywrapClient",
             dependencies: [
-                "Cpolywrap_ffi_c",
+                "PolywrapNativeClient",
                 .product(name: "SwiftMsgpack", package: "swift-msgpack"),
-            ],
-            cSettings: [
-                .headerSearchPath("Sources/Cpolywrap_ffi_c")
-            ],
-            linkerSettings: [
-                .linkedLibrary("polywrap_ffi_c"),
-                .unsafeFlags(["-LSources/Cpolywrap_ffi_c/polywrap_ffi_c.so"])
             ]
         ),
         .testTarget(
             name: "PolywrapClientTests",
-            dependencies: ["PolywrapClient"]),
+            dependencies: [
+                "PolywrapClient"
+            ])
     ]
 )

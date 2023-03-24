@@ -1,0 +1,5 @@
+module PolywrapNativeClient {
+    header "polywrapnativeclient.h"
+    link "polywrapnativeclient"
+    export *
+}
