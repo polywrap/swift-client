@@ -20,8 +20,8 @@ let invoke_plugin: WrapInvokeFunction = { pluginRawPtr, methodName, paramsBuffer
             count: methodNameLength
     )
     let methodName = String(decoding: methodNameBuffer, as: UTF8.self)
-    let pluginPtr = pluginRawPtr.assumingMemoryBound(to: Plugin.self)
-    let plugin = pluginPtr.pointee
+    let pluginPtr = Unmanaged<Plugin>.fromOpaque(pluginRawPtr)
+    let plugin = pluginPtr.takeUnretainedValue()
 
     guard let entry = plugin.methodsMap[methodName] else {
         let emptyBufferPtr = UnsafeMutablePointer<UInt8>.allocate(capacity: 0)
