@@ -41,8 +41,11 @@ class ConfigBuilder {
         remove_interface_implementation(builderPtr, interfaceUriPtr, implementationUriPtr)
     }
 
-    func addWrapper() {
+    func addPlugin<T: Plugin>(uri: Uri, plugin: T) {
+        let pluginPtr = Unmanaged.passRetained(plugin).toOpaque()
+        let uriPtr = uri.uri.cString(using: .utf8).unsafelyUnwrapped
 
+        add_plugin_wrapper(builderPtr, uriPtr, OpaquePointer(pluginPtr))
     }
 
     func build() -> OpaquePointer {
