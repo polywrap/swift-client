@@ -20,7 +20,7 @@ final class PolywrapClientTests: XCTestCase {
         }
     }
 
-    func invoke() throws {
+    func testInvoke() throws {
         let builder = ConfigBuilder()
         let uri = Uri("wrap://ens/counter.eth")!
         let counterPlugin = CounterPlugin()

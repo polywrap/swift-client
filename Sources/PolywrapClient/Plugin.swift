@@ -1,17 +1,17 @@
 import Foundation
-import PolywrapNativeClient
 import SwiftMsgpack
+import PolywrapNativeClient
 
 typealias WrapInvokeFunction = @convention(c) (
-        _ pluginPtr: UnsafeMutableRawPointer,
-        _ methodName: UnsafePointer<Int8>,
-        _ paramsBuffer: UnsafePointer<UInt8>?,
-        _ paramsLen: Int,
-        _ invoker: UnsafeRawPointer?
-) -> UnsafePointer<Buffer>
+        UnsafeRawPointer,
+        UnsafePointer<Int8>,
+        UnsafePointer<UInt8>,
+        UInt,
+        OpaquePointer
+) -> OpaquePointer
 
 let invoke_plugin: WrapInvokeFunction = { pluginRawPtr, methodName, paramsBuffer, paramsLen, invoker in
-    let bufferPointer = UnsafeBufferPointer(start: paramsBuffer, count: paramsLen)
+    let bufferPointer = UnsafeBufferPointer(start: paramsBuffer, count: Int(paramsLen))
     let encodedParams = Array(bufferPointer)
 
     let methodNameLength = strlen(methodName)
@@ -25,7 +25,7 @@ let invoke_plugin: WrapInvokeFunction = { pluginRawPtr, methodName, paramsBuffer
 
     guard let entry = plugin.methodsMap[methodName] else {
         let emptyBufferPtr = UnsafeMutablePointer<UInt8>.allocate(capacity: 0)
-        return create_buffer(emptyBufferPtr, 0)
+        return createBufferFunc(emptyBufferPtr, 0)
     }
 
     let decoder = MsgPackDecoder()
@@ -44,7 +44,7 @@ let invoke_plugin: WrapInvokeFunction = { pluginRawPtr, methodName, paramsBuffer
     }
 
     return resultBytes.withUnsafeMutableBufferPointer { bufferPointer in
-        create_buffer(bufferPointer.baseAddress, UInt(resultBytesCount))
+        createBufferFunc(bufferPointer.baseAddress!, UInt(resultBytesCount))
     }
 }
 
