@@ -10,30 +10,21 @@ typealias WrapInvokeFunction = @convention(c) (
 ) -> UnsafePointer<Int8>
 
 let invoke_plugin: WrapInvokeFunction = { pluginRawPtr, methodName, params, invoker in
-    let methodNameLength = strlen(methodName)
-    let methodNameBuffer = UnsafeBufferPointer(
-            start: methodName.withMemoryRebound(to: UInt8.self, capacity: methodNameLength) { $0 },
-            count: methodNameLength
-    )
-    let methodName = String(decoding: methodNameBuffer, as: UTF8.self)
+    let methodNameString = String(cString: methodName)
+    let paramsString = String(cString: params)
 
-    let paramsLength = strlen(params)
-    let paramsBuffer = UnsafeBufferPointer(
-            start: params.withMemoryRebound(to: UInt8.self, capacity: paramsLength) { $0 },
-            count: paramsLength
-    )
-    let params = String(decoding: paramsBuffer, as: UTF8.self)
     let pluginPtr = Unmanaged<Plugin>.fromOpaque(pluginRawPtr)
     let plugin = pluginPtr.takeUnretainedValue()
 
-    let entry = plugin.methodsMap[methodName]!
-
-    guard let paramsJsonData = params.data(using: .utf8) else {
-        fatalError("Failed to convert jsonString to Data.")
+    guard let entry = plugin.methodsMap[methodNameString] else {
+        fatalError("Method '\(methodNameString)' not found in methodsMap.")
     }
 
-    let invokeResult = (entry)(paramsJsonData)
+    guard let paramsJsonData = paramsString.data(using: .utf8) else {
+        fatalError("Failed to convert paramsString to Data.")
+    }
 
+    let invokeResult = entry(paramsJsonData)
 
     let encoder = JSONEncoder()
     encoder.outputFormatting = .prettyPrinted // Optional, for better readability
