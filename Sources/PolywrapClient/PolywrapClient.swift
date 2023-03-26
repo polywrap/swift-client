@@ -1,4 +1,5 @@
 import PolywrapNativeClient
+import Foundation
 
 public struct PolywrapClient {
     private let clientPtr: UnsafeMutableRawPointer
@@ -7,21 +8,30 @@ public struct PolywrapClient {
         clientPtr = clientConfigBuilder.build()
     }
 
-    func invoke(uri: Uri, method: String, args: String?, env: String?) -> Array<UInt8> {
+    func invoke<T: Codable>(uri: Uri, method: String, args: T?, env: String?) -> String {
         let uriPtr = uri.uri.cString(using: .utf8).unsafelyUnwrapped
         let methodPtr = method.cString(using: .utf8).unsafelyUnwrapped
 
-        var optArgs: UnsafePointer<Buffer>? = nil;
+        var optArgs: [CChar]? = nil;
 
         if let args = args {
-            optArgs = encodeFunc(args.cString(using: .utf8).unsafelyUnwrapped)
+            let encoder = JSONEncoder()
+            encoder.outputFormatting = .prettyPrinted // Optional, for better readability
+            let jsonData = try! encoder.encode(args)
+            let jsonString = String(data: jsonData, encoding: .utf8)!
+            optArgs = jsonString.cString(using: .utf8).unsafelyUnwrapped
         }
 
         let env = env?.cString(using: .utf8).unsafelyUnwrapped
 
-        let result = invokeRawFunc(clientPtr, uriPtr, methodPtr, optArgs!, env!);
+        let result = invokeRawFunc(clientPtr, uriPtr, methodPtr, optArgs, env);
 
-        let bufferPointer = UnsafeBufferPointer(start: result.pointee.data, count: Int(result.pointee.len))
-        return Array(bufferPointer)
+        let resultLength = strlen(result)
+        let resultBuffer = UnsafeBufferPointer(
+                start: result.withMemoryRebound(to: UInt8.self, capacity: resultLength) { $0 },
+                count: resultLength
+        )
+
+        return String(decoding: resultBuffer, as: UTF8.self)
     }
 }

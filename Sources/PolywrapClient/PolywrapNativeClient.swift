@@ -46,7 +46,7 @@ typealias SetEnvFunc = @convention(c) (UnsafeMutableRawPointer, UnsafePointer<In
 let setEnvSymbol = dlsym(nativeClientLib, "set_env")
 let setEnvFunc = unsafeBitCast(setEnvSymbol, to: SetEnvFunc.self)
 
-typealias AddPluginWrapperFunc = @convention(c) (UnsafeMutableRawPointer, UnsafePointer<Int8>, UnsafeMutableRawPointer, WrapInvokeFunction) -> Void
+typealias AddPluginWrapperFunc = @convention(c) (UnsafeMutableRawPointer, UnsafePointer<Int8>, UnsafeRawPointer, WrapInvokeFunction) -> Void
 let addPluginWrapperSymbol = dlsym(nativeClientLib, "add_plugin_wrapper")
 let addPluginWrapperFunc = unsafeBitCast(addPluginWrapperSymbol, to: AddPluginWrapperFunc.self)
 
@@ -70,15 +70,15 @@ typealias AddRedirectResolverFunc = @convention(c) (UnsafeMutableRawPointer, Uns
 let addRedirectResolverSymbol = dlsym(nativeClientLib, "add_redirect_resolver")
 let addRedirectResolverFunc = unsafeBitCast(addRedirectResolverSymbol, to: AddRedirectResolverFunc.self)
 
-typealias CreateBufferFunc = @convention(c) (UnsafeMutablePointer<UInt8>, UInt) -> OpaquePointer
+typealias CreateBufferFunc = @convention(c) (UnsafeMutablePointer<UInt8>, UInt) -> UnsafeRawPointer
 let createBufferSymbol = dlsym(nativeClientLib, "create_buffer")
 let createBufferFunc = unsafeBitCast(createBufferSymbol, to: CreateBufferFunc.self)
 
-typealias InvokeRawFunc = (UnsafeMutableRawPointer, UnsafePointer<Int8>, UnsafePointer<Int8>, UnsafePointer<Buffer>, UnsafePointer<Int8>) -> UnsafePointer<Buffer>
+typealias InvokeRawFunc = @convention(c) (UnsafeMutableRawPointer, UnsafePointer<Int8>, UnsafePointer<Int8>, UnsafePointer<Int8>?, UnsafePointer<Int8>?) -> UnsafePointer<Int8>
 let invokeRawSymbol = dlsym(nativeClientLib, "invoke_raw")
 let invokeRawFunc = unsafeBitCast(invokeRawSymbol, to: InvokeRawFunc.self)
 
-typealias EncodeFunc = (UnsafePointer<Int8>) -> UnsafePointer<Buffer>
+typealias EncodeFunc = @convention(c) (UnsafePointer<Int8>) -> UnsafeRawPointer
 let encodeSymbol = dlsym(nativeClientLib, "encode")
 let encodeFunc = unsafeBitCast(encodeSymbol, to: EncodeFunc.self)
 
