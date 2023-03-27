@@ -13,27 +13,13 @@ final class PolywrapClientTests: XCTestCase {
     class CounterPlugin: Plugin {
         var counter: Int = 5
 
-        func addMethod<T: Decodable, U: Codable>(closure: @escaping (T) -> U) -> (Decodable) -> Codable {
-            return { (args: Decodable) in
-                guard let typedArgs = args as? T else {
-                    fatalError("Invalid argument type")
-                }
-                return closure(typedArgs) as Codable
-            }
-        }
-
         override init() {
             super.init()
-            methodsMap["increment"] = { (args: Data) -> Codable in
-                let decoder = JSONDecoder()
-                let incrementArgs = try! decoder.decode(IncrementArgs.self, from: args)
-                return self.increment(args: incrementArgs)
-            }
+            super.addMethod(name: "increment", closure: increment)
         }
 
         func increment(args: IncrementArgs) -> IncrementResult {
             counter = counter + args.amount
-
             return IncrementResult(amount: counter)
         }
     }

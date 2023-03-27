@@ -41,4 +41,12 @@ let invoke_plugin: WrapInvokeFunction = { pluginRawPtr, methodName, params, invo
 
 class Plugin {
     public var methodsMap: [String: (_ args: Data) -> Codable] = [:]
+
+    func addMethod<T: Codable, U: Codable>(name: String, closure: @escaping (T) -> U) {
+        methodsMap[name] = { (args: Data) -> Codable in
+            let decoder = JSONDecoder()
+            let args = try! decoder.decode(T.self, from: args)
+            return (closure)(args)
+        }
+    }
 }
