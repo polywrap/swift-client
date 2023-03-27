@@ -1,5 +1,4 @@
 import Foundation
-import SwiftMsgpack
 import PolywrapNativeClient
 
 typealias WrapInvokeFunction = @convention(c) (
