@@ -34,14 +34,6 @@ typealias NewBuilderConfigFunc = @convention(c) () -> UnsafeMutableRawPointer
 let newBuilderConfigSymbol = dlsym(nativeClientLib, "new_builder_config")
 let newBuilderConfigFunc = unsafeBitCast(newBuilderConfigSymbol, to: NewBuilderConfigFunc.self)
 
-//typealias AddRedirectFunc = @convention(c) (UnsafeMutableRawPointer, UnsafePointer<Int8>, UnsafePointer<Int8>) -> Void
-//let addRedirectSymbol = dlsym(nativeClientLib, "add_redirect")
-//let addRedirectFunc = unsafeBitCast(addRedirectSymbol, to: AddRedirectFunc.self)
-//
-//typealias RemoveRedirectFunc = @convention(c) (UnsafeMutableRawPointer, UnsafePointer<Int8>) -> Void
-//let removeRedirectSymbol = dlsym(nativeClientLib, "remove_redirect")
-//let removeRedirectFunc = unsafeBitCast(removeRedirectSymbol, to: RemoveRedirectFunc.self)
-
 typealias AddEnvFunc = @convention(c) (UnsafeMutableRawPointer, UnsafePointer<Int8>, UnsafePointer<Int8>) -> Void
 let addEnvSymbol = dlsym(nativeClientLib, "add_env")
 let addEnvFunc = unsafeBitCast(addEnvSymbol, to: AddEnvFunc.self)
@@ -90,5 +82,11 @@ typealias EncodeFunc = @convention(c) (UnsafePointer<Int8>) -> UnsafeRawPointer
 let encodeSymbol = dlsym(nativeClientLib, "encode")
 let encodeFunc = unsafeBitCast(encodeSymbol, to: EncodeFunc.self)
 
+typealias AddRedirectFunc = @convention(c) (UnsafeMutableRawPointer, UnsafePointer<Int8>, UnsafePointer<Int8>) -> Void
+let addRedirectSymbol = dlsym(nativeClientLib, "add_redirect")
+let addRedirectFunc = unsafeBitCast(addRedirectSymbol, to: AddRedirectFunc.self)
 
+typealias RemoveRedirectFunc = @convention(c) (UnsafeMutableRawPointer, UnsafePointer<Int8>) -> Void
+let removeRedirectSymbol = dlsym(nativeClientLib, "remove_redirect")
+let removeRedirectFunc = unsafeBitCast(removeRedirectSymbol, to: RemoveRedirectFunc.self)
 
