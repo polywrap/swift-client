@@ -4,11 +4,11 @@ import PolywrapNativeClient
 public struct PolywrapClient {
     private let clientPtr: UnsafeMutableRawPointer
 
-    init(clientConfigBuilder: ConfigBuilder) {
+    public init(clientConfigBuilder: ConfigBuilder) {
         clientPtr = clientConfigBuilder.build()
     }
 
-    func invoke<T: Codable>(uri: Uri, method: String, args: T?, env: String?) -> String {
+    public func invoke<T: Codable>(uri: Uri, method: String, args: T?, env: String?) -> String {
         guard let uriPtr = uri.uri.cString(using: .utf8),
               let methodPtr = method.cString(using: .utf8) else {
             fatalError("Failed to convert strings to C strings.")

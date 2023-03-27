@@ -5,14 +5,14 @@ public struct Uri: Equatable, CustomStringConvertible {
     let path: String
     let uri: String
 
-    init?(_ uri: String) {
+    public init?(_ uri: String) {
         guard let parsedUri = Uri.fromString(uri: uri) else {
             return nil
         }
         self = parsedUri
     }
 
-    init(authority: String, path: String, uri: String) {
+    public init(authority: String, path: String, uri: String) {
         self.authority = authority
         self.path = path
         self.uri = uri

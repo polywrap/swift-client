@@ -1,10 +1,10 @@
 import Foundation
 import PolywrapNativeClient
 
-class ConfigBuilder {
+public class ConfigBuilder {
     let builderPtr: UnsafeMutableRawPointer
 
-    init() {
+    public init() {
         builderPtr = new_builder_config()
     }
 
@@ -43,7 +43,7 @@ class ConfigBuilder {
         removeInterfaceImplementationFunc(builderPtr, interfaceUriPtr, implementationUriPtr)
     }
 
-    func addEnv(uri: Uri, env: Data) {
+    public func addEnv(uri: Uri, env: Data) {
         guard let envString = String(data: env, encoding: .utf8),
               let envPtr = envString.cString(using: .utf8),
               let uriPtr = uri.uri.cString(using: .utf8) else {
@@ -53,7 +53,7 @@ class ConfigBuilder {
         add_env(builderPtr, uriPtr, envPtr)
     }
 
-    func removeEnv(uri: Uri) {
+    public func removeEnv(uri: Uri) {
         guard let uriPtr = uri.uri.cString(using: .utf8) else {
             fatalError("Failed to convert uri string to C string.")
         }
@@ -61,7 +61,7 @@ class ConfigBuilder {
         remove_env(builderPtr, uriPtr)
     }
 
-    func setEnv(uri: Uri, env: Data) {
+    public func setEnv(uri: Uri, env: Data) {
         guard let envString = String(data: env, encoding: .utf8),
               let envPtr = envString.cString(using: .utf8),
               let uriPtr = uri.uri.cString(using: .utf8) else {
@@ -71,7 +71,7 @@ class ConfigBuilder {
         set_env(builderPtr, uriPtr, envPtr)
     }
 
-    func addPlugin<T: Plugin>(uri: Uri, plugin: T) {
+    public func addPlugin<T: Plugin>(uri: Uri, plugin: T) {
         let pluginPtr = Unmanaged.passRetained(plugin).toOpaque()
 
         guard let uriPtr = uri.uri.cString(using: .utf8) else {
@@ -83,7 +83,7 @@ class ConfigBuilder {
         add_plugin_wrapper(builderPtr, uriPtr, pluginPtr, invokePluginFnPtr)
     }
 
-    func build() -> UnsafeMutableRawPointer {
+    public func build() -> UnsafeMutableRawPointer {
         create_client(builderPtr)
     }
 }

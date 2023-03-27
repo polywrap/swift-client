@@ -39,10 +39,11 @@ let invoke_plugin: WrapInvokeFunction = { pluginRawPtr, methodName, params, invo
     return UnsafePointer(buffer)
 }
 
-class Plugin {
+open class Plugin {
+    public init() {}
     public var methodsMap: [String: (_ args: Data) async -> Codable] = [:]
 
-    func addMethod<T: Codable, U: Codable>(name: String, closure: @escaping (T) async -> U) {
+    public func addMethod<T: Codable, U: Codable>(name: String, closure: @escaping (T) async -> U) {
         methodsMap[name] = { (args: Data) async -> Codable in
             let decoder = JSONDecoder()
             let args = try! decoder.decode(T.self, from: args)
