@@ -5,7 +5,7 @@ class ConfigBuilder {
     let builderPtr: UnsafeMutableRawPointer
 
     init() {
-        builderPtr = newBuilderConfigFunc()
+        builderPtr = new_builder_config()
     }
 
     func addRedirect(from: Uri, to: Uri) {
@@ -50,7 +50,7 @@ class ConfigBuilder {
             fatalError("Failed to convert strings to C strings.")
         }
 
-        addEnvFunc(builderPtr, uriPtr, envPtr)
+        add_env(builderPtr, uriPtr, envPtr)
     }
 
     func removeEnv(uri: Uri) {
@@ -58,7 +58,7 @@ class ConfigBuilder {
             fatalError("Failed to convert uri string to C string.")
         }
 
-        removeEnvFunc(builderPtr, uriPtr)
+        remove_env(builderPtr, uriPtr)
     }
 
     func setEnv(uri: Uri, env: Data) {
@@ -68,7 +68,7 @@ class ConfigBuilder {
             fatalError("Failed to convert strings to C strings.")
         }
 
-        setEnvFunc(builderPtr, uriPtr, envPtr)
+        set_env(builderPtr, uriPtr, envPtr)
     }
 
     func addPlugin<T: Plugin>(uri: Uri, plugin: T) {
@@ -80,10 +80,10 @@ class ConfigBuilder {
 
         let invokePluginFnPtr = unsafeBitCast(invoke_plugin, to: WrapInvokeFunction.self)
 
-        addPluginWrapperFunc(builderPtr, uriPtr, pluginPtr, invokePluginFnPtr)
+        add_plugin_wrapper(builderPtr, uriPtr, pluginPtr, invokePluginFnPtr)
     }
 
     func build() -> UnsafeMutableRawPointer {
-        createClientFunc(builderPtr)
+        create_client(builderPtr)
     }
 }

@@ -1,5 +1,4 @@
 import Foundation
-import PolywrapNativeClient
 
 typealias WrapInvokeFunction = @convention(c) (
         UnsafeRawPointer,

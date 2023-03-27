@@ -5,6 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "PolywrapClient",
+    platforms: [.iOS(.v15)],
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
@@ -20,9 +21,9 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
             name: "PolywrapClient",
-            dependencies: [
-            ]
+            dependencies: ["PolywrapNativeClient"]
         ),
+        .binaryTarget(name: "PolywrapNativeClient", path: "scripts/PolywrapNativeClient.xcframework"),
         .testTarget(
             name: "PolywrapClientTests",
             dependencies: [

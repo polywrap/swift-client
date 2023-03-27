@@ -1,5 +1,5 @@
-import PolywrapNativeClient
 import Foundation
+import PolywrapNativeClient
 
 public struct PolywrapClient {
     private let clientPtr: UnsafeMutableRawPointer
@@ -29,7 +29,7 @@ public struct PolywrapClient {
 
         let envPtr = env?.cString(using: .utf8)
 
-        let result = invokeRawFunc(clientPtr, uriPtr, methodPtr, optArgs, envPtr)
+        let result = invoke_raw(clientPtr, uriPtr, methodPtr, optArgs, envPtr)
         let resultString = String(cString: result)
         return resultString
     }
