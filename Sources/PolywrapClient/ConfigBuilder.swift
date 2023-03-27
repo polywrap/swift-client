@@ -8,6 +8,15 @@ class ConfigBuilder {
         builderPtr = newBuilderConfigFunc()
     }
 
+    //func addRedirect(from: Uri, to: Uri) {
+    //    guard let toPtr = to.uri.cString(using: .utf8),
+    //          let fromPtr = from.uri.cString(using: .utf8) else {
+    //        fatalError("Failed to convert URI strings to C strings.")
+     //   }
+
+    //    addEnvFunc(builderPtr, uriPtr, envPtr)
+    //}
+
     func addEnv(uri: Uri, env: Data) {
         guard let envString = String(data: env, encoding: .utf8),
               let envPtr = envString.cString(using: .utf8),

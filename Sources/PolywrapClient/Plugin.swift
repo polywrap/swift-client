@@ -24,7 +24,9 @@ let invoke_plugin: WrapInvokeFunction = { pluginRawPtr, methodName, params, invo
         fatalError("Failed to convert paramsString to Data.")
     }
 
-    let invokeResult = entry(paramsJsonData)
+    let invokeResult = runBlocking {
+        return await entry(paramsJsonData)
+    }
 
     let encoder = JSONEncoder()
     encoder.outputFormatting = .prettyPrinted // Optional, for better readability
@@ -40,13 +42,13 @@ let invoke_plugin: WrapInvokeFunction = { pluginRawPtr, methodName, params, invo
 }
 
 class Plugin {
-    public var methodsMap: [String: (_ args: Data) -> Codable] = [:]
+    public var methodsMap: [String: (_ args: Data) async -> Codable] = [:]
 
-    func addMethod<T: Codable, U: Codable>(name: String, closure: @escaping (T) -> U) {
-        methodsMap[name] = { (args: Data) -> Codable in
+    func addMethod<T: Codable, U: Codable>(name: String, closure: @escaping (T) async -> U) {
+        methodsMap[name] = { (args: Data) async -> Codable in
             let decoder = JSONDecoder()
             let args = try! decoder.decode(T.self, from: args)
-            return (closure)(args)
+            return await (closure)(args)
         }
     }
 }
