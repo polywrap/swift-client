@@ -43,15 +43,14 @@ final class PolywrapClientTests: XCTestCase {
         let counterUri = Uri("wrap://ens/counter.eth")!
         let counterPlugin = CounterPlugin()
 
-        let sleepUri = Uri("wrap://ens/counter.eth")!
-        let sleepPlugin = CounterPlugin()
+        let redirectUri = Uri("wrap://ens/foo.eth")!
 
         builder.addPlugin(uri: counterUri, plugin: counterPlugin)
-        builder.addPlugin(uri: sleepUri, plugin: sleepPlugin)
+        builder.addRedirect(from: redirectUri, to: counterUri)
 
         let client = PolywrapClient(clientConfigBuilder: builder)
         let args = IncrementArgs(amount: 4)
-        let sleepResult = client.invoke(uri: sleepUri, method: "sleep", args: SleepArgs(), env: nil)
+        let sleepResult = client.invoke(uri: redirectUri, method: "sleep", args: SleepArgs(), env: nil)
         let result = client.invoke(uri: counterUri, method: "increment", args: args, env: nil)
 
         print(result)

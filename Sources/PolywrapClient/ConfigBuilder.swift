@@ -25,6 +25,24 @@ class ConfigBuilder {
         removeRedirectFunc(builderPtr, fromPtr)
     }
 
+    func addInterfaceImplementation(interfaceUri: Uri, implementationUri: Uri) {
+        guard let interfaceUriPtr = interfaceUri.uri.cString(using: .utf8),
+              let implementationUriPtr = implementationUri.uri.cString(using: .utf8) else {
+            fatalError("Failed to convert strings to C strings.")
+        }
+
+        addInterfaceImplementationFunc(builderPtr, interfaceUriPtr, implementationUriPtr)
+    }
+
+    func removeInterfaceImplementation(interfaceUri: Uri, implementationUri: Uri) {
+        guard let interfaceUriPtr = interfaceUri.uri.cString(using: .utf8),
+              let implementationUriPtr = implementationUri.uri.cString(using: .utf8) else {
+            fatalError("Failed to convert strings to C strings.")
+        }
+
+        removeInterfaceImplementationFunc(builderPtr, interfaceUriPtr, implementationUriPtr)
+    }
+
     func addEnv(uri: Uri, env: Data) {
         guard let envString = String(data: env, encoding: .utf8),
               let envPtr = envString.cString(using: .utf8),

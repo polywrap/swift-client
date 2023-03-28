@@ -90,3 +90,10 @@ typealias RemoveRedirectFunc = @convention(c) (UnsafeMutableRawPointer, UnsafePo
 let removeRedirectSymbol = dlsym(nativeClientLib, "remove_redirect")
 let removeRedirectFunc = unsafeBitCast(removeRedirectSymbol, to: RemoveRedirectFunc.self)
 
+typealias AddInterfaceImplementationFunc = @convention(c) (UnsafeMutableRawPointer, UnsafePointer<Int8>, UnsafePointer<Int8>) -> Void
+let addInterfaceImplementationSymbol = dlsym(nativeClientLib, "add_interface_implementation")
+let addInterfaceImplementationFunc = unsafeBitCast(addInterfaceImplementationSymbol, to: AddInterfaceImplementationFunc.self)
+
+typealias RemoveInterfaceImplementationFunc = @convention(c) (UnsafeMutableRawPointer, UnsafePointer<Int8>, UnsafePointer<Int8>) -> Void
+let removeInterfaceImplementationSymbol = dlsym(nativeClientLib, "remove_interface_implementation")
+let removeInterfaceImplementationFunc = unsafeBitCast(removeInterfaceImplementationSymbol, to: RemoveInterfaceImplementationFunc.self)
