@@ -14,7 +14,7 @@ public class ConfigBuilder {
             fatalError("Failed to convert URI strings to C strings.")
         }
 
-        addRedirectFunc(builderPtr, fromPtr, toPtr)
+        add_redirect(builderPtr, fromPtr, toPtr)
     }
 
     func removeRedirect(from: Uri) {
@@ -22,7 +22,7 @@ public class ConfigBuilder {
             fatalError("Failed to convert URI strings to C strings.")
         }
 
-        removeRedirectFunc(builderPtr, fromPtr)
+        remove_redirect(builderPtr, fromPtr)
     }
 
     func addInterfaceImplementation(interfaceUri: Uri, implementationUri: Uri) {
@@ -31,7 +31,7 @@ public class ConfigBuilder {
             fatalError("Failed to convert strings to C strings.")
         }
 
-        addInterfaceImplementationFunc(builderPtr, interfaceUriPtr, implementationUriPtr)
+        add_interface_implementation(builderPtr, interfaceUriPtr, implementationUriPtr)
     }
 
     func removeInterfaceImplementation(interfaceUri: Uri, implementationUri: Uri) {
@@ -40,7 +40,7 @@ public class ConfigBuilder {
             fatalError("Failed to convert strings to C strings.")
         }
 
-        removeInterfaceImplementationFunc(builderPtr, interfaceUriPtr, implementationUriPtr)
+        remove_interface_implementation(builderPtr, interfaceUriPtr, implementationUriPtr)
     }
 
     public func addEnv(uri: Uri, env: Data) {
