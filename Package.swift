@@ -23,7 +23,7 @@ let package = Package(
             name: "PolywrapClient",
             dependencies: ["PolywrapNativeClient"]
         ),
-        .binaryTarget(name: "PolywrapNativeClient", path: "scripts/PolywrapNativeClient.xcframework"),
+        .binaryTarget(name: "PolywrapNativeClient", path: "Sources/PolywrapClient/Frameworks/PolywrapNativeClient.xcframework"),
         .testTarget(
             name: "PolywrapClientTests",
             dependencies: [
