@@ -8,7 +8,7 @@ public class ConfigBuilder {
         builderPtr = new_builder_config()
     }
 
-    func addRedirect(from: Uri, to: Uri) {
+    public func addRedirect(from: Uri, to: Uri) {
         guard let toPtr = to.uri.cString(using: .utf8),
               let fromPtr = from.uri.cString(using: .utf8) else {
             fatalError("Failed to convert URI strings to C strings.")
@@ -17,7 +17,7 @@ public class ConfigBuilder {
         add_redirect(builderPtr, fromPtr, toPtr)
     }
 
-    func removeRedirect(from: Uri) {
+    public func removeRedirect(from: Uri) {
         guard let fromPtr = from.uri.cString(using: .utf8) else {
             fatalError("Failed to convert URI strings to C strings.")
         }
@@ -25,7 +25,7 @@ public class ConfigBuilder {
         remove_redirect(builderPtr, fromPtr)
     }
 
-    func addInterfaceImplementation(interfaceUri: Uri, implementationUri: Uri) {
+    public func addInterfaceImplementation(interfaceUri: Uri, implementationUri: Uri) {
         guard let interfaceUriPtr = interfaceUri.uri.cString(using: .utf8),
               let implementationUriPtr = implementationUri.uri.cString(using: .utf8) else {
             fatalError("Failed to convert strings to C strings.")
@@ -34,7 +34,7 @@ public class ConfigBuilder {
         add_interface_implementation(builderPtr, interfaceUriPtr, implementationUriPtr)
     }
 
-    func removeInterfaceImplementation(interfaceUri: Uri, implementationUri: Uri) {
+    public func removeInterfaceImplementation(interfaceUri: Uri, implementationUri: Uri) {
         guard let interfaceUriPtr = interfaceUri.uri.cString(using: .utf8),
               let implementationUriPtr = implementationUri.uri.cString(using: .utf8) else {
             fatalError("Failed to convert strings to C strings.")
