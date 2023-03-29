@@ -1,4 +1,0 @@
-module PolywrapNativeClient {
-    umbrella header "polywrap_native_client.h"
-    export *
-}

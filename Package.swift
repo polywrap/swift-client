@@ -21,13 +21,20 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
             name: "PolywrapClient",
-            dependencies: ["PolywrapNativeClient"]
+            dependencies: ["PolywrapNativeClient"],
+            publicHeadersPath: "include",
+            cSettings: [ .headerSearchPath("include") ]
         ),
-        .binaryTarget(name: "PolywrapNativeClient", path: "Sources/PolywrapClient/Frameworks/PolywrapNativeClient.xcframework"),
+        .binaryTarget(
+            name: "PolywrapNativeClient",
+            path: "Sources/PolywrapClient/Frameworks/PolywrapNativeClient.xcframework"
+        ),
         .testTarget(
             name: "PolywrapClientTests",
             dependencies: [
-                "PolywrapClient"
-            ])
+                "PolywrapClient",
+                "PolywrapNativeClient"
+            ]
+        )
     ]
 )
