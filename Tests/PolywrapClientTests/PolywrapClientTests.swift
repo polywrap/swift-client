@@ -29,10 +29,12 @@ final class PolywrapClientTests: XCTestCase {
         }
 
         func sleep(args: SleepArgs) async -> SleepResult {
+            print("BEFORE SLEEP thread \(Thread.current)")
             print("before sleeping")
 
             try! await Task.sleep(nanoseconds: 6000000000)
             print("after sleeping for three seconds :)")
+            print("AFTER SLEEP thread \(Thread.current)")
 
             return SleepResult()
         }
@@ -51,8 +53,8 @@ final class PolywrapClientTests: XCTestCase {
         let client = PolywrapClient(clientConfigBuilder: builder)
         let args = IncrementArgs(amount: 4)
         let sleepResult = client.invoke(uri: redirectUri, method: "sleep", args: SleepArgs(), env: nil)
-        let result = client.invoke(uri: counterUri, method: "increment", args: args, env: nil)
+//        let result = client.invoke(uri: counterUri, method: "increment", args: args, env: nil)
 
-        print(result)
+//        print(result)
     }
 }

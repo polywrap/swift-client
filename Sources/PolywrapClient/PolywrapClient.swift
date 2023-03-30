@@ -9,6 +9,7 @@ public struct PolywrapClient {
     }
 
     func invoke<T: Codable>(uri: Uri, method: String, args: T?, env: String?) -> String {
+        print("CLIENT Current thread \(Thread.current)")
         guard let uriPtr = uri.uri.cString(using: .utf8),
               let methodPtr = method.cString(using: .utf8) else {
             fatalError("Failed to convert strings to C strings.")
@@ -30,6 +31,7 @@ public struct PolywrapClient {
         let envPtr = env?.cString(using: .utf8)
 
         let result = invokeRawFunc(clientPtr, uriPtr, methodPtr, optArgs, envPtr)
+        print("CLIENT AFTER INV Current thread \(Thread.current)")
         let resultString = String(cString: result)
         return resultString
     }
