@@ -1,19 +1,19 @@
 import Foundation
+import AsyncObjects
 
 private final class RunBlocking<T, Failure: Error> {
     fileprivate var value: Result<T, Failure>? = nil
-    fileprivate let semaphore = DispatchSemaphore(value: 0)
 }
 
 extension RunBlocking where Failure == Never {
     func runBlocking(_ operation: @Sendable @escaping () async -> T) -> T {
-        Task {
+        let op = TaskOperation {
             let result = await operation()
             self.value = .success(result)
-            self.semaphore.signal()
         }
 
-        semaphore.wait()
+        op.start()
+        op.waitUntilFinished()
 
         switch value {
         case let .success(value):
@@ -26,17 +26,17 @@ extension RunBlocking where Failure == Never {
 
 extension RunBlocking where Failure == Error {
     func runBlocking(_ operation: @Sendable @escaping () async throws -> T) throws -> T {
-        Task {
+        let op = TaskOperation {
             do {
                 let result = try await operation()
                 self.value = .success(result)
             } catch {
                 self.value = .failure(error)
             }
-            self.semaphore.signal()
         }
 
-        semaphore.wait()
+        op.start()
+        op.waitUntilFinished()
 
         switch value {
         case let .success(value):

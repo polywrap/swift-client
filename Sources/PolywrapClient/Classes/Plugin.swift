@@ -1,4 +1,6 @@
 import Foundation
+import PolywrapNativeClient
+import AsyncObjects
 
 typealias WrapInvokeFunction = @convention(c) (
         UnsafeRawPointer,
@@ -8,6 +10,7 @@ typealias WrapInvokeFunction = @convention(c) (
 ) -> UnsafePointer<Int8>
 
 let invoke_plugin: WrapInvokeFunction = { pluginRawPtr, methodName, params, invoker in
+    print("PLUGIN Current thread \(Thread.current)")
     let methodNameString = String(cString: methodName)
     let paramsString = String(cString: params)
 
