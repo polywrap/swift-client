@@ -8,7 +8,7 @@
 import Foundation
 
 public class Uri {
-    let ffiUri: FfiUri;
+    public var ffiUri: FfiUri;
 
     public init?(_ uri: String) {
         self.ffiUri = FfiUri.fromString(uri: uri)

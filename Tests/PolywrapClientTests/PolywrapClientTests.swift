@@ -9,3 +9,4 @@ final class PolywrapClientTests: XCTestCase {
         XCTAssertEqual(stringUri, "wrap://wrap/mock")
     }
 }
+

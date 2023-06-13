@@ -29,11 +29,12 @@ let package = Package(
             name: "PolywrapClientNative",
             path: "Sources/PolywrapClient/Frameworks/PolywrapClientNative.xcframework"
         ),
-//        .testTarget(
-//            name: "PolywrapClientTests",
-//            dependencies: [
-//                "PolywrapClient"
-//            ]
-//        )
+        .testTarget(
+            name: "PolywrapClientTests",
+            dependencies: [
+                "PolywrapClient"
+            ],
+            cSettings: [ .headerSearchPath("../../Sources/PolywrapClient/include")]
+        )
     ]
 )
