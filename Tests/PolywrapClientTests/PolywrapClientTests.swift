@@ -1,12 +1,26 @@
+//
+//  PolywrapClientTests.swift
+//  
+//
+//  Created by Cesar Brazon on 16/6/23.
+//
+
 import XCTest
 import PolywrapClient
 
 
 final class PolywrapClientTests: XCTestCase {
-    func testUri() throws {
-        let uri = Uri("wrap/mock")
-        let stringUri = uri?.ffiUri.toStringUri()
-        XCTAssertEqual(stringUri, "wrap://wrap/mock")
+    func invoke() throws {
+//        let embedded_wrapper = WasmPackage(module:
+//        let static_resolver = StaticResolver([
+//          uri: embedded_wrapper
+//        ])
+//        let config = ClientConfig(
+//          resolver: static_resolver,
+//          interfaces: nil,
+//          env: nil
+//        )
+//        let client = PolywrapClient(config)
     }
 }
 

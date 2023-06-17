@@ -7,7 +7,7 @@ public class PolywrapClient {
     public init(_ config: BuilderConfig) {
         self.nativeClient = config.builder.build()
     }
-    
+
     public func invoke<T: Codable, R: Codable>(
         uri: Uri,
         method: String,

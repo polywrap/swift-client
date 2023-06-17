@@ -27,7 +27,7 @@ let package = Package(
         ),
         .binaryTarget(
             name: "PolywrapClientNative",
-            path: "Sources/PolywrapClient/Frameworks/PolywrapClientNative.xcframework"
+            path: "Frameworks/PolywrapClientNative.xcframework"
         ),
         .testTarget(
             name: "PolywrapClientTests",

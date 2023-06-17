@@ -19,13 +19,13 @@ private extension RustBuffer {
     }
 
     static func from(_ ptr: UnsafeBufferPointer<UInt8>) -> RustBuffer {
-        try! rustCall { ffi_polywrap_native_b3fa_rustbuffer_from_bytes(ForeignBytes(bufferPointer: ptr), $0) }
+        try! rustCall { ffi_polywrap_native_b98b_rustbuffer_from_bytes(ForeignBytes(bufferPointer: ptr), $0) }
     }
 
     // Frees the buffer in place.
     // The buffer must not be used after this is called.
     func deallocate() {
-        try! rustCall { ffi_polywrap_native_b3fa_rustbuffer_free(self, $0) }
+        try! rustCall { ffi_polywrap_native_b98b_rustbuffer_free(self, $0) }
     }
 }
 
@@ -352,6 +352,73 @@ private struct FfiConverterString: FfiConverter {
     }
 }
 
+public protocol FFIAbortHandlerWrappingProtocol {
+    func abort(msg: String)
+}
+
+public class FfiAbortHandlerWrapping: FFIAbortHandlerWrappingProtocol {
+    fileprivate let pointer: UnsafeMutableRawPointer
+
+    // TODO: We'd like this to be `private` but for Swifty reasons,
+    // we can't implement `FfiConverter` without making this `required` and we can't
+    // make it `required` without making it `public`.
+    required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
+        self.pointer = pointer
+    }
+
+    public convenience init(abortHandler: FfiAbortHandler) {
+        self.init(unsafeFromRawPointer: try!
+
+            rustCall {
+                polywrap_native_b98b_FFIAbortHandlerWrapping_new(
+                    FfiConverterCallbackInterfaceFfiAbortHandler.lower(abortHandler), $0
+                )
+            })
+    }
+
+    deinit {
+        try! rustCall { ffi_polywrap_native_b98b_FFIAbortHandlerWrapping_object_free(pointer, $0) }
+    }
+
+    public func abort(msg: String) {
+        try!
+            rustCall {
+                polywrap_native_b98b_FFIAbortHandlerWrapping_abort(self.pointer,
+                                                                   FfiConverterString.lower(msg), $0)
+            }
+    }
+}
+
+public struct FfiConverterTypeFfiAbortHandlerWrapping: FfiConverter {
+    typealias FfiType = UnsafeMutableRawPointer
+    typealias SwiftType = FfiAbortHandlerWrapping
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> FfiAbortHandlerWrapping {
+        let v: UInt64 = try readInt(&buf)
+        // The Rust code won't compile if a pointer won't fit in a UInt64.
+        // We have to go via `UInt` because that's the thing that's the size of a pointer.
+        let ptr = UnsafeMutableRawPointer(bitPattern: UInt(truncatingIfNeeded: v))
+        if ptr == nil {
+            throw UniffiInternalError.unexpectedNullPointer
+        }
+        return try lift(ptr!)
+    }
+
+    public static func write(_ value: FfiAbortHandlerWrapping, into buf: inout [UInt8]) {
+        // This fiddling is because `Int` is the thing that's the same size as a pointer.
+        // The Rust code won't compile if a pointer won't fit in a `UInt64`.
+        writeInt(&buf, UInt64(bitPattern: Int64(Int(bitPattern: lower(value)))))
+    }
+
+    public static func lift(_ pointer: UnsafeMutableRawPointer) throws -> FfiAbortHandlerWrapping {
+        return FfiAbortHandlerWrapping(unsafeFromRawPointer: pointer)
+    }
+
+    public static func lower(_ value: FfiAbortHandlerWrapping) -> UnsafeMutableRawPointer {
+        return value.pointer
+    }
+}
+
 public protocol FFIBuilderConfigProtocol {
     func addEnv(uri: FfiUri, env: [UInt8])
     func removeEnv(uri: FfiUri)
@@ -381,18 +448,18 @@ public class FfiBuilderConfig: FFIBuilderConfigProtocol {
         self.init(unsafeFromRawPointer: try!
 
             rustCall {
-                polywrap_native_b3fa_FFIBuilderConfig_new($0)
+                polywrap_native_b98b_FFIBuilderConfig_new($0)
             })
     }
 
     deinit {
-        try! rustCall { ffi_polywrap_native_b3fa_FFIBuilderConfig_object_free(pointer, $0) }
+        try! rustCall { ffi_polywrap_native_b98b_FFIBuilderConfig_object_free(pointer, $0) }
     }
 
     public func addEnv(uri: FfiUri, env: [UInt8]) {
         try!
             rustCall {
-                polywrap_native_b3fa_FFIBuilderConfig_add_env(self.pointer,
+                polywrap_native_b98b_FFIBuilderConfig_add_env(self.pointer,
                                                               FfiConverterTypeFfiUri.lower(uri),
                                                               FfiConverterSequenceUInt8.lower(env), $0)
             }
@@ -401,7 +468,7 @@ public class FfiBuilderConfig: FFIBuilderConfigProtocol {
     public func removeEnv(uri: FfiUri) {
         try!
             rustCall {
-                polywrap_native_b3fa_FFIBuilderConfig_remove_env(self.pointer,
+                polywrap_native_b98b_FFIBuilderConfig_remove_env(self.pointer,
                                                                  FfiConverterTypeFfiUri.lower(uri), $0)
             }
     }
@@ -409,7 +476,7 @@ public class FfiBuilderConfig: FFIBuilderConfigProtocol {
     public func addInterfaceImplementation(interfaceUri: FfiUri, implementationUri: FfiUri) {
         try!
             rustCall {
-                polywrap_native_b3fa_FFIBuilderConfig_add_interface_implementation(self.pointer,
+                polywrap_native_b98b_FFIBuilderConfig_add_interface_implementation(self.pointer,
                                                                                    FfiConverterTypeFfiUri.lower(interfaceUri),
                                                                                    FfiConverterTypeFfiUri.lower(implementationUri), $0)
             }
@@ -418,7 +485,7 @@ public class FfiBuilderConfig: FFIBuilderConfigProtocol {
     public func removeInterfaceImplementation(interfaceUri: FfiUri, implementationUri: FfiUri) {
         try!
             rustCall {
-                polywrap_native_b3fa_FFIBuilderConfig_remove_interface_implementation(self.pointer,
+                polywrap_native_b98b_FFIBuilderConfig_remove_interface_implementation(self.pointer,
                                                                                       FfiConverterTypeFfiUri.lower(interfaceUri),
                                                                                       FfiConverterTypeFfiUri.lower(implementationUri), $0)
             }
@@ -427,7 +494,7 @@ public class FfiBuilderConfig: FFIBuilderConfigProtocol {
     public func addWrapper(uri: FfiUri, wrapper: FfiWrapper) {
         try!
             rustCall {
-                polywrap_native_b3fa_FFIBuilderConfig_add_wrapper(self.pointer,
+                polywrap_native_b98b_FFIBuilderConfig_add_wrapper(self.pointer,
                                                                   FfiConverterTypeFfiUri.lower(uri),
                                                                   FfiConverterCallbackInterfaceFfiWrapper.lower(wrapper), $0)
             }
@@ -436,7 +503,7 @@ public class FfiBuilderConfig: FFIBuilderConfigProtocol {
     public func removeWrapper(uri: FfiUri) {
         try!
             rustCall {
-                polywrap_native_b3fa_FFIBuilderConfig_remove_wrapper(self.pointer,
+                polywrap_native_b98b_FFIBuilderConfig_remove_wrapper(self.pointer,
                                                                      FfiConverterTypeFfiUri.lower(uri), $0)
             }
     }
@@ -444,7 +511,7 @@ public class FfiBuilderConfig: FFIBuilderConfigProtocol {
     public func addPackage(uri: FfiUri, package: FfiWrapPackage) {
         try!
             rustCall {
-                polywrap_native_b3fa_FFIBuilderConfig_add_package(self.pointer,
+                polywrap_native_b98b_FFIBuilderConfig_add_package(self.pointer,
                                                                   FfiConverterTypeFfiUri.lower(uri),
                                                                   FfiConverterCallbackInterfaceFfiWrapPackage.lower(package), $0)
             }
@@ -453,7 +520,7 @@ public class FfiBuilderConfig: FFIBuilderConfigProtocol {
     public func removePackage(uri: FfiUri) {
         try!
             rustCall {
-                polywrap_native_b3fa_FFIBuilderConfig_remove_package(self.pointer,
+                polywrap_native_b98b_FFIBuilderConfig_remove_package(self.pointer,
                                                                      FfiConverterTypeFfiUri.lower(uri), $0)
             }
     }
@@ -461,7 +528,7 @@ public class FfiBuilderConfig: FFIBuilderConfigProtocol {
     public func addRedirect(from: FfiUri, to: FfiUri) {
         try!
             rustCall {
-                polywrap_native_b3fa_FFIBuilderConfig_add_redirect(self.pointer,
+                polywrap_native_b98b_FFIBuilderConfig_add_redirect(self.pointer,
                                                                    FfiConverterTypeFfiUri.lower(from),
                                                                    FfiConverterTypeFfiUri.lower(to), $0)
             }
@@ -470,7 +537,7 @@ public class FfiBuilderConfig: FFIBuilderConfigProtocol {
     public func removeRedirect(from: FfiUri) {
         try!
             rustCall {
-                polywrap_native_b3fa_FFIBuilderConfig_remove_redirect(self.pointer,
+                polywrap_native_b98b_FFIBuilderConfig_remove_redirect(self.pointer,
                                                                       FfiConverterTypeFfiUri.lower(from), $0)
             }
     }
@@ -478,7 +545,7 @@ public class FfiBuilderConfig: FFIBuilderConfigProtocol {
     public func addResolver(resolver: FfiUriResolver) {
         try!
             rustCall {
-                polywrap_native_b3fa_FFIBuilderConfig_add_resolver(self.pointer,
+                polywrap_native_b98b_FFIBuilderConfig_add_resolver(self.pointer,
                                                                    FfiConverterCallbackInterfaceFfiUriResolver.lower(resolver), $0)
             }
     }
@@ -487,7 +554,7 @@ public class FfiBuilderConfig: FFIBuilderConfigProtocol {
         return try! FfiConverterTypeFfiClient.lift(
             try!
                 rustCall {
-                    polywrap_native_b3fa_FFIBuilderConfig_build(self.pointer, $0)
+                    polywrap_native_b98b_FFIBuilderConfig_build(self.pointer, $0)
                 }
         )
     }
@@ -528,6 +595,7 @@ public protocol FFIClientProtocol {
     func getImplementations(uri: FfiUri) throws -> [FfiUri]
     func getInterfaces() -> [String: [FfiUri]]?
     func getEnvByUri(uri: FfiUri) -> [UInt8]?
+    func asInvoker() -> FfiInvoker
     func invokeWrapperRaw(wrapper: FfiWrapper, uri: FfiUri, method: String, args: [UInt8]?, env: [UInt8]?, resolutionContext: FfiUriResolutionContext?) throws -> [UInt8]
     func loadWrapper(uri: FfiUri, resolutionContext: FfiUriResolutionContext?) throws -> FfiWrapper
 }
@@ -543,13 +611,13 @@ public class FfiClient: FFIClientProtocol {
     }
 
     deinit {
-        try! rustCall { ffi_polywrap_native_b3fa_FFIClient_object_free(pointer, $0) }
+        try! rustCall { ffi_polywrap_native_b98b_FFIClient_object_free(pointer, $0) }
     }
 
     public func invokeRaw(uri: FfiUri, method: String, args: [UInt8]?, env: [UInt8]?, resolutionContext: FfiUriResolutionContext?) throws -> [UInt8] {
         return try FfiConverterSequenceUInt8.lift(
             rustCallWithError(FfiConverterTypeFfiError.self) {
-                polywrap_native_b3fa_FFIClient_invoke_raw(self.pointer,
+                polywrap_native_b98b_FFIClient_invoke_raw(self.pointer,
                                                           FfiConverterTypeFfiUri.lower(uri),
                                                           FfiConverterString.lower(method),
                                                           FfiConverterOptionSequenceUInt8.lower(args),
@@ -562,7 +630,7 @@ public class FfiClient: FFIClientProtocol {
     public func getImplementations(uri: FfiUri) throws -> [FfiUri] {
         return try FfiConverterSequenceTypeFfiUri.lift(
             rustCallWithError(FfiConverterTypeFfiError.self) {
-                polywrap_native_b3fa_FFIClient_get_implementations(self.pointer,
+                polywrap_native_b98b_FFIClient_get_implementations(self.pointer,
                                                                    FfiConverterTypeFfiUri.lower(uri), $0)
             }
         )
@@ -572,7 +640,7 @@ public class FfiClient: FFIClientProtocol {
         return try! FfiConverterOptionDictionaryStringSequenceTypeFfiUri.lift(
             try!
                 rustCall {
-                    polywrap_native_b3fa_FFIClient_get_interfaces(self.pointer, $0)
+                    polywrap_native_b98b_FFIClient_get_interfaces(self.pointer, $0)
                 }
         )
     }
@@ -581,8 +649,17 @@ public class FfiClient: FFIClientProtocol {
         return try! FfiConverterOptionSequenceUInt8.lift(
             try!
                 rustCall {
-                    polywrap_native_b3fa_FFIClient_get_env_by_uri(self.pointer,
+                    polywrap_native_b98b_FFIClient_get_env_by_uri(self.pointer,
                                                                   FfiConverterTypeFfiUri.lower(uri), $0)
+                }
+        )
+    }
+
+    public func asInvoker() -> FfiInvoker {
+        return try! FfiConverterTypeFfiInvoker.lift(
+            try!
+                rustCall {
+                    polywrap_native_b98b_FFIClient_as_invoker(self.pointer, $0)
                 }
         )
     }
@@ -590,7 +667,7 @@ public class FfiClient: FFIClientProtocol {
     public func invokeWrapperRaw(wrapper: FfiWrapper, uri: FfiUri, method: String, args: [UInt8]?, env: [UInt8]?, resolutionContext: FfiUriResolutionContext?) throws -> [UInt8] {
         return try FfiConverterSequenceUInt8.lift(
             rustCallWithError(FfiConverterTypeFfiError.self) {
-                polywrap_native_b3fa_FFIClient_invoke_wrapper_raw(self.pointer,
+                polywrap_native_b98b_FFIClient_invoke_wrapper_raw(self.pointer,
                                                                   FfiConverterCallbackInterfaceFfiWrapper.lower(wrapper),
                                                                   FfiConverterTypeFfiUri.lower(uri),
                                                                   FfiConverterString.lower(method),
@@ -604,7 +681,7 @@ public class FfiClient: FFIClientProtocol {
     public func loadWrapper(uri: FfiUri, resolutionContext: FfiUriResolutionContext?) throws -> FfiWrapper {
         return try FfiConverterCallbackInterfaceFfiWrapper.lift(
             rustCallWithError(FfiConverterTypeFfiError.self) {
-                polywrap_native_b3fa_FFIClient_load_wrapper(self.pointer,
+                polywrap_native_b98b_FFIClient_load_wrapper(self.pointer,
                                                             FfiConverterTypeFfiUri.lower(uri),
                                                             FfiConverterOptionTypeFfiUriResolutionContext.lower(resolutionContext), $0)
             }
@@ -642,6 +719,99 @@ public struct FfiConverterTypeFfiClient: FfiConverter {
     }
 }
 
+public protocol FFIInvokerProtocol {
+    func invokeRaw(uri: FfiUri, method: String, args: [UInt8]?, env: [UInt8]?, resolutionContext: FfiUriResolutionContext?) throws -> [UInt8]
+    func getImplementations(uri: FfiUri) throws -> [FfiUri]
+    func getInterfaces() -> [String: [FfiUri]]?
+    func getEnvByUri(uri: FfiUri) -> [UInt8]?
+}
+
+public class FfiInvoker: FFIInvokerProtocol {
+    fileprivate let pointer: UnsafeMutableRawPointer
+
+    // TODO: We'd like this to be `private` but for Swifty reasons,
+    // we can't implement `FfiConverter` without making this `required` and we can't
+    // make it `required` without making it `public`.
+    required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
+        self.pointer = pointer
+    }
+
+    deinit {
+        try! rustCall { ffi_polywrap_native_b98b_FFIInvoker_object_free(pointer, $0) }
+    }
+
+    public func invokeRaw(uri: FfiUri, method: String, args: [UInt8]?, env: [UInt8]?, resolutionContext: FfiUriResolutionContext?) throws -> [UInt8] {
+        return try FfiConverterSequenceUInt8.lift(
+            rustCallWithError(FfiConverterTypeFfiError.self) {
+                polywrap_native_b98b_FFIInvoker_invoke_raw(self.pointer,
+                                                           FfiConverterTypeFfiUri.lower(uri),
+                                                           FfiConverterString.lower(method),
+                                                           FfiConverterOptionSequenceUInt8.lower(args),
+                                                           FfiConverterOptionSequenceUInt8.lower(env),
+                                                           FfiConverterOptionTypeFfiUriResolutionContext.lower(resolutionContext), $0)
+            }
+        )
+    }
+
+    public func getImplementations(uri: FfiUri) throws -> [FfiUri] {
+        return try FfiConverterSequenceTypeFfiUri.lift(
+            rustCallWithError(FfiConverterTypeFfiError.self) {
+                polywrap_native_b98b_FFIInvoker_get_implementations(self.pointer,
+                                                                    FfiConverterTypeFfiUri.lower(uri), $0)
+            }
+        )
+    }
+
+    public func getInterfaces() -> [String: [FfiUri]]? {
+        return try! FfiConverterOptionDictionaryStringSequenceTypeFfiUri.lift(
+            try!
+                rustCall {
+                    polywrap_native_b98b_FFIInvoker_get_interfaces(self.pointer, $0)
+                }
+        )
+    }
+
+    public func getEnvByUri(uri: FfiUri) -> [UInt8]? {
+        return try! FfiConverterOptionSequenceUInt8.lift(
+            try!
+                rustCall {
+                    polywrap_native_b98b_FFIInvoker_get_env_by_uri(self.pointer,
+                                                                   FfiConverterTypeFfiUri.lower(uri), $0)
+                }
+        )
+    }
+}
+
+public struct FfiConverterTypeFfiInvoker: FfiConverter {
+    typealias FfiType = UnsafeMutableRawPointer
+    typealias SwiftType = FfiInvoker
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> FfiInvoker {
+        let v: UInt64 = try readInt(&buf)
+        // The Rust code won't compile if a pointer won't fit in a UInt64.
+        // We have to go via `UInt` because that's the thing that's the size of a pointer.
+        let ptr = UnsafeMutableRawPointer(bitPattern: UInt(truncatingIfNeeded: v))
+        if ptr == nil {
+            throw UniffiInternalError.unexpectedNullPointer
+        }
+        return try lift(ptr!)
+    }
+
+    public static func write(_ value: FfiInvoker, into buf: inout [UInt8]) {
+        // This fiddling is because `Int` is the thing that's the same size as a pointer.
+        // The Rust code won't compile if a pointer won't fit in a `UInt64`.
+        writeInt(&buf, UInt64(bitPattern: Int64(Int(bitPattern: lower(value)))))
+    }
+
+    public static func lift(_ pointer: UnsafeMutableRawPointer) throws -> FfiInvoker {
+        return FfiInvoker(unsafeFromRawPointer: pointer)
+    }
+
+    public static func lower(_ value: FfiInvoker) -> UnsafeMutableRawPointer {
+        return value.pointer
+    }
+}
+
 public protocol FFIRecursiveUriResolverProtocol {
     func tryResolveUri(uri: FfiUri, invoker: FfiInvoker, resolutionContext: FfiUriResolutionContext) throws -> FfiUriPackageOrWrapper
 }
@@ -660,22 +830,22 @@ public class FfiRecursiveUriResolver: FFIRecursiveUriResolverProtocol {
         self.init(unsafeFromRawPointer: try!
 
             rustCall {
-                polywrap_native_b3fa_FFIRecursiveUriResolver_new(
+                polywrap_native_b98b_FFIRecursiveUriResolver_new(
                     FfiConverterCallbackInterfaceFfiUriResolver.lower(uriResolver), $0
                 )
             })
     }
 
     deinit {
-        try! rustCall { ffi_polywrap_native_b3fa_FFIRecursiveUriResolver_object_free(pointer, $0) }
+        try! rustCall { ffi_polywrap_native_b98b_FFIRecursiveUriResolver_object_free(pointer, $0) }
     }
 
     public func tryResolveUri(uri: FfiUri, invoker: FfiInvoker, resolutionContext: FfiUriResolutionContext) throws -> FfiUriPackageOrWrapper {
         return try FfiConverterCallbackInterfaceFfiUriPackageOrWrapper.lift(
             rustCallWithError(FfiConverterTypeFfiError.self) {
-                polywrap_native_b3fa_FFIRecursiveUriResolver_try_resolve_uri(self.pointer,
+                polywrap_native_b98b_FFIRecursiveUriResolver_try_resolve_uri(self.pointer,
                                                                              FfiConverterTypeFfiUri.lower(uri),
-                                                                             FfiConverterCallbackInterfaceFfiInvoker.lower(invoker),
+                                                                             FfiConverterTypeFfiInvoker.lower(invoker),
                                                                              FfiConverterTypeFfiUriResolutionContext.lower(resolutionContext), $0)
             }
         )
@@ -730,22 +900,22 @@ public class FfiStaticUriResolver: FFIStaticUriResolverProtocol {
         self.init(unsafeFromRawPointer: try!
 
             rustCall {
-                polywrap_native_b3fa_FFIStaticUriResolver_new(
+                polywrap_native_b98b_FFIStaticUriResolver_new(
                     FfiConverterDictionaryStringCallbackInterfaceFfiUriPackageOrWrapper.lower(uriMap), $0
                 )
             })
     }
 
     deinit {
-        try! rustCall { ffi_polywrap_native_b3fa_FFIStaticUriResolver_object_free(pointer, $0) }
+        try! rustCall { ffi_polywrap_native_b98b_FFIStaticUriResolver_object_free(pointer, $0) }
     }
 
     public func tryResolveUri(uri: FfiUri, invoker: FfiInvoker, resolutionContext: FfiUriResolutionContext) throws -> FfiUriPackageOrWrapper {
         return try FfiConverterCallbackInterfaceFfiUriPackageOrWrapper.lift(
             rustCallWithError(FfiConverterTypeFfiError.self) {
-                polywrap_native_b3fa_FFIStaticUriResolver_try_resolve_uri(self.pointer,
+                polywrap_native_b98b_FFIStaticUriResolver_try_resolve_uri(self.pointer,
                                                                           FfiConverterTypeFfiUri.lower(uri),
-                                                                          FfiConverterCallbackInterfaceFfiInvoker.lower(invoker),
+                                                                          FfiConverterTypeFfiInvoker.lower(invoker),
                                                                           FfiConverterTypeFfiUriResolutionContext.lower(resolutionContext), $0)
             }
         )
@@ -800,7 +970,7 @@ public class FfiUri: FFIUriProtocol {
         self.init(unsafeFromRawPointer: try!
 
             rustCall {
-                polywrap_native_b3fa_FFIUri_new(
+                polywrap_native_b98b_FFIUri_new(
                     FfiConverterString.lower(authority),
                     FfiConverterString.lower(path),
                     FfiConverterString.lower(uri), $0
@@ -809,14 +979,14 @@ public class FfiUri: FFIUriProtocol {
     }
 
     deinit {
-        try! rustCall { ffi_polywrap_native_b3fa_FFIUri_object_free(pointer, $0) }
+        try! rustCall { ffi_polywrap_native_b98b_FFIUri_object_free(pointer, $0) }
     }
 
     public static func fromString(uri: String) -> FfiUri {
         return FfiUri(unsafeFromRawPointer: try!
 
             rustCall {
-                polywrap_native_b3fa_FFIUri_from_string(
+                polywrap_native_b98b_FFIUri_from_string(
                     FfiConverterString.lower(uri), $0
                 )
             })
@@ -826,7 +996,7 @@ public class FfiUri: FFIUriProtocol {
         return try! FfiConverterString.lift(
             try!
                 rustCall {
-                    polywrap_native_b3fa_FFIUri_to_string_uri(self.pointer, $0)
+                    polywrap_native_b98b_FFIUri_to_string_uri(self.pointer, $0)
                 }
         )
     }
@@ -889,18 +1059,18 @@ public class FfiUriResolutionContext: FFIUriResolutionContextProtocol {
         self.init(unsafeFromRawPointer: try!
 
             rustCall {
-                polywrap_native_b3fa_FFIUriResolutionContext_new($0)
+                polywrap_native_b98b_FFIUriResolutionContext_new($0)
             })
     }
 
     deinit {
-        try! rustCall { ffi_polywrap_native_b3fa_FFIUriResolutionContext_object_free(pointer, $0) }
+        try! rustCall { ffi_polywrap_native_b98b_FFIUriResolutionContext_object_free(pointer, $0) }
     }
 
     public func setResolutionPath(resolutionPath: [String]) {
         try!
             rustCall {
-                polywrap_native_b3fa_FFIUriResolutionContext_set_resolution_path(self.pointer,
+                polywrap_native_b98b_FFIUriResolutionContext_set_resolution_path(self.pointer,
                                                                                  FfiConverterSequenceString.lower(resolutionPath), $0)
             }
     }
@@ -908,7 +1078,7 @@ public class FfiUriResolutionContext: FFIUriResolutionContextProtocol {
     public func setHistory(history: [FfiUriResolutionStep]) {
         try!
             rustCall {
-                polywrap_native_b3fa_FFIUriResolutionContext_set_history(self.pointer,
+                polywrap_native_b98b_FFIUriResolutionContext_set_history(self.pointer,
                                                                          FfiConverterSequenceTypeFfiUriResolutionStep.lower(history), $0)
             }
     }
@@ -916,7 +1086,7 @@ public class FfiUriResolutionContext: FFIUriResolutionContextProtocol {
     public func setResolvingUriMap(resolvingUriMap: [String: Bool]) {
         try!
             rustCall {
-                polywrap_native_b3fa_FFIUriResolutionContext_set_resolving_uri_map(self.pointer,
+                polywrap_native_b98b_FFIUriResolutionContext_set_resolving_uri_map(self.pointer,
                                                                                    FfiConverterDictionaryStringBool.lower(resolvingUriMap), $0)
             }
     }
@@ -924,7 +1094,7 @@ public class FfiUriResolutionContext: FFIUriResolutionContextProtocol {
     public func setStartResolving(uri: FfiUri) {
         try!
             rustCall {
-                polywrap_native_b3fa_FFIUriResolutionContext_set_start_resolving(self.pointer,
+                polywrap_native_b98b_FFIUriResolutionContext_set_start_resolving(self.pointer,
                                                                                  FfiConverterTypeFfiUri.lower(uri), $0)
             }
     }
@@ -932,7 +1102,7 @@ public class FfiUriResolutionContext: FFIUriResolutionContextProtocol {
     public func setStopResolving(uri: FfiUri) {
         try!
             rustCall {
-                polywrap_native_b3fa_FFIUriResolutionContext_set_stop_resolving(self.pointer,
+                polywrap_native_b98b_FFIUriResolutionContext_set_stop_resolving(self.pointer,
                                                                                 FfiConverterTypeFfiUri.lower(uri), $0)
             }
     }
@@ -940,7 +1110,7 @@ public class FfiUriResolutionContext: FFIUriResolutionContextProtocol {
     public func trackStep(step: FfiUriResolutionStep) {
         try!
             rustCall {
-                polywrap_native_b3fa_FFIUriResolutionContext_track_step(self.pointer,
+                polywrap_native_b98b_FFIUriResolutionContext_track_step(self.pointer,
                                                                         FfiConverterTypeFfiUriResolutionStep.lower(step), $0)
             }
     }
@@ -949,7 +1119,7 @@ public class FfiUriResolutionContext: FFIUriResolutionContextProtocol {
         return try! FfiConverterSequenceTypeFfiUriResolutionStep.lift(
             try!
                 rustCall {
-                    polywrap_native_b3fa_FFIUriResolutionContext_get_history(self.pointer, $0)
+                    polywrap_native_b98b_FFIUriResolutionContext_get_history(self.pointer, $0)
                 }
         )
     }
@@ -958,7 +1128,7 @@ public class FfiUriResolutionContext: FFIUriResolutionContextProtocol {
         return try! FfiConverterSequenceTypeFfiUri.lift(
             try!
                 rustCall {
-                    polywrap_native_b3fa_FFIUriResolutionContext_get_resolution_path(self.pointer, $0)
+                    polywrap_native_b98b_FFIUriResolutionContext_get_resolution_path(self.pointer, $0)
                 }
         )
     }
@@ -967,7 +1137,7 @@ public class FfiUriResolutionContext: FFIUriResolutionContextProtocol {
         return try! FfiConverterTypeFfiUriResolutionContext.lift(
             try!
                 rustCall {
-                    polywrap_native_b3fa_FFIUriResolutionContext_create_sub_history_context(self.pointer, $0)
+                    polywrap_native_b98b_FFIUriResolutionContext_create_sub_history_context(self.pointer, $0)
                 }
         )
     }
@@ -976,7 +1146,7 @@ public class FfiUriResolutionContext: FFIUriResolutionContextProtocol {
         return try! FfiConverterTypeFfiUriResolutionContext.lift(
             try!
                 rustCall {
-                    polywrap_native_b3fa_FFIUriResolutionContext_create_sub_context(self.pointer, $0)
+                    polywrap_native_b98b_FFIUriResolutionContext_create_sub_context(self.pointer, $0)
                 }
         )
     }
@@ -1013,7 +1183,7 @@ public struct FfiConverterTypeFfiUriResolutionContext: FfiConverter {
 }
 
 public protocol FFIWasmWrapperProtocol {
-    func invoke(method: String, args: [UInt8]?, env: [UInt8]?, invoker: FfiInvoker, abortHandler: FfiAbortHandler?) throws -> [UInt8]
+    func invoke(method: String, args: [UInt8]?, env: [UInt8]?, invoker: FfiInvoker, abortHandler: FfiAbortHandlerWrapping?) throws -> [UInt8]
 }
 
 public class FfiWasmWrapper: FFIWasmWrapperProtocol {
@@ -1030,25 +1200,25 @@ public class FfiWasmWrapper: FFIWasmWrapperProtocol {
         self.init(unsafeFromRawPointer: try!
 
             rustCall {
-                polywrap_native_b3fa_FFIWasmWrapper_new(
+                polywrap_native_b98b_FFIWasmWrapper_new(
                     FfiConverterSequenceUInt8.lower(wasmModule), $0
                 )
             })
     }
 
     deinit {
-        try! rustCall { ffi_polywrap_native_b3fa_FFIWasmWrapper_object_free(pointer, $0) }
+        try! rustCall { ffi_polywrap_native_b98b_FFIWasmWrapper_object_free(pointer, $0) }
     }
 
-    public func invoke(method: String, args: [UInt8]?, env: [UInt8]?, invoker: FfiInvoker, abortHandler: FfiAbortHandler?) throws -> [UInt8] {
+    public func invoke(method: String, args: [UInt8]?, env: [UInt8]?, invoker: FfiInvoker, abortHandler: FfiAbortHandlerWrapping?) throws -> [UInt8] {
         return try FfiConverterSequenceUInt8.lift(
             rustCallWithError(FfiConverterTypeFfiError.self) {
-                polywrap_native_b3fa_FFIWasmWrapper_invoke(self.pointer,
+                polywrap_native_b98b_FFIWasmWrapper_invoke(self.pointer,
                                                            FfiConverterString.lower(method),
                                                            FfiConverterOptionSequenceUInt8.lower(args),
                                                            FfiConverterOptionSequenceUInt8.lower(env),
-                                                           FfiConverterCallbackInterfaceFfiInvoker.lower(invoker),
-                                                           FfiConverterOptionCallbackInterfaceFfiAbortHandler.lower(abortHandler), $0)
+                                                           FfiConverterTypeFfiInvoker.lower(invoker),
+                                                           FfiConverterOptionTypeFfiAbortHandlerWrapping.lower(abortHandler), $0)
             }
         )
     }
@@ -1180,9 +1350,10 @@ public enum FfiError {
     case WrapperError(err: String)
     case WrapperCreateError(err: String)
     case InvokeError(uri: String, method: String, err: String)
-    case LoadWrapperError(err: String)
+    case LoadWrapperError(uri: String, err: String)
     case WasmWrapperError(err: String)
     case ResolutionError(err: String)
+    case UriNotFoundError(uri: String)
     case MsgpackError(err: String)
     case ManifestError(err: String)
     case FileReadError(err: String)
@@ -1217,6 +1388,7 @@ public struct FfiConverterTypeFfiError: FfiConverterRustBuffer {
                 err: FfiConverterString.read(from: &buf)
             )
         case 6: return try .LoadWrapperError(
+                uri: FfiConverterString.read(from: &buf),
                 err: FfiConverterString.read(from: &buf)
             )
         case 7: return try .WasmWrapperError(
@@ -1225,25 +1397,28 @@ public struct FfiConverterTypeFfiError: FfiConverterRustBuffer {
         case 8: return try .ResolutionError(
                 err: FfiConverterString.read(from: &buf)
             )
-        case 9: return try .MsgpackError(
+        case 9: return try .UriNotFoundError(
+                uri: FfiConverterString.read(from: &buf)
+            )
+        case 10: return try .MsgpackError(
                 err: FfiConverterString.read(from: &buf)
             )
-        case 10: return try .ManifestError(
+        case 11: return try .ManifestError(
                 err: FfiConverterString.read(from: &buf)
             )
-        case 11: return try .FileReadError(
+        case 12: return try .FileReadError(
                 err: FfiConverterString.read(from: &buf)
             )
-        case 12: return try .ResolverError(
+        case 13: return try .ResolverError(
                 err: FfiConverterString.read(from: &buf)
             )
-        case 13: return try .PluginError(
+        case 14: return try .PluginError(
                 err: FfiConverterString.read(from: &buf)
             )
-        case 14: return try .RuntimeError(
+        case 15: return try .RuntimeError(
                 err: FfiConverterString.read(from: &buf)
             )
-        case 15: return try .OtherError(
+        case 16: return try .OtherError(
                 err: FfiConverterString.read(from: &buf)
             )
 
@@ -1276,8 +1451,9 @@ public struct FfiConverterTypeFfiError: FfiConverterRustBuffer {
             FfiConverterString.write(method, into: &buf)
             FfiConverterString.write(err, into: &buf)
 
-        case let .LoadWrapperError(err):
+        case let .LoadWrapperError(uri, err):
             writeInt(&buf, Int32(6))
+            FfiConverterString.write(uri, into: &buf)
             FfiConverterString.write(err, into: &buf)
 
         case let .WasmWrapperError(err):
@@ -1288,32 +1464,36 @@ public struct FfiConverterTypeFfiError: FfiConverterRustBuffer {
             writeInt(&buf, Int32(8))
             FfiConverterString.write(err, into: &buf)
 
-        case let .MsgpackError(err):
+        case let .UriNotFoundError(uri):
             writeInt(&buf, Int32(9))
-            FfiConverterString.write(err, into: &buf)
+            FfiConverterString.write(uri, into: &buf)
 
-        case let .ManifestError(err):
+        case let .MsgpackError(err):
             writeInt(&buf, Int32(10))
             FfiConverterString.write(err, into: &buf)
 
-        case let .FileReadError(err):
+        case let .ManifestError(err):
             writeInt(&buf, Int32(11))
             FfiConverterString.write(err, into: &buf)
 
-        case let .ResolverError(err):
+        case let .FileReadError(err):
             writeInt(&buf, Int32(12))
             FfiConverterString.write(err, into: &buf)
 
-        case let .PluginError(err):
+        case let .ResolverError(err):
             writeInt(&buf, Int32(13))
             FfiConverterString.write(err, into: &buf)
 
-        case let .RuntimeError(err):
+        case let .PluginError(err):
             writeInt(&buf, Int32(14))
             FfiConverterString.write(err, into: &buf)
 
-        case let .OtherError(err):
+        case let .RuntimeError(err):
             writeInt(&buf, Int32(15))
+            FfiConverterString.write(err, into: &buf)
+
+        case let .OtherError(err):
+            writeInt(&buf, Int32(16))
             FfiConverterString.write(err, into: &buf)
         }
     }
@@ -1446,7 +1626,7 @@ private enum FfiConverterCallbackInterfaceFfiAbortHandler {
     private static var callbackInitialized = false
     private static func initCallback() {
         try! rustCall { (err: UnsafeMutablePointer<RustCallStatus>) in
-            ffi_polywrap_native_b3fa_FFIAbortHandler_init_callback(foreignCallbackCallbackInterfaceFfiAbortHandler, err)
+            ffi_polywrap_native_b98b_FFIAbortHandler_init_callback(foreignCallbackCallbackInterfaceFfiAbortHandler, err)
         }
     }
 
@@ -1466,192 +1646,6 @@ private enum FfiConverterCallbackInterfaceFfiAbortHandler {
 
 extension FfiConverterCallbackInterfaceFfiAbortHandler: FfiConverter {
     typealias SwiftType = FfiAbortHandler
-    // We can use Handle as the FfiType because it's a typealias to UInt64
-    typealias FfiType = UniFFICallbackHandle
-
-    public static func lift(_ handle: UniFFICallbackHandle) throws -> SwiftType {
-        ensureCallbackinitialized()
-        guard let callback = handleMap.get(handle: handle) else {
-            throw UniffiInternalError.unexpectedStaleHandle
-        }
-        return callback
-    }
-
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
-        ensureCallbackinitialized()
-        let handle: UniFFICallbackHandle = try readInt(&buf)
-        return try lift(handle)
-    }
-
-    public static func lower(_ v: SwiftType) -> UniFFICallbackHandle {
-        ensureCallbackinitialized()
-        return handleMap.insert(obj: v)
-    }
-
-    public static func write(_ v: SwiftType, into buf: inout [UInt8]) {
-        ensureCallbackinitialized()
-        writeInt(&buf, lower(v))
-    }
-}
-
-// Declaration and FfiConverters for FfiInvoker Callback Interface
-
-public protocol FfiInvoker: AnyObject {
-    func invokeRaw(uri: FfiUri, method: String, args: [UInt8]?, env: [UInt8]?, resolutionContext: FfiUriResolutionContext?) throws -> [UInt8]
-    func getImplementations(uri: FfiUri) throws -> [FfiUri]
-    func getInterfaces() -> [String: [FfiUri]]?
-    func getEnvByUri(uri: FfiUri) -> [UInt8]?
-}
-
-// The ForeignCallback that is passed to Rust.
-private let foreignCallbackCallbackInterfaceFfiInvoker: ForeignCallback =
-    { (handle: UniFFICallbackHandle, method: Int32, args: RustBuffer, out_buf: UnsafeMutablePointer<RustBuffer>) -> Int32 in
-        func invokeInvokeRaw(_ swiftCallbackInterface: FfiInvoker, _ args: RustBuffer) throws -> RustBuffer {
-            defer { args.deallocate() }
-
-            var reader = createReader(data: Data(rustBuffer: args))
-            let result = try swiftCallbackInterface.invokeRaw(
-                uri: FfiConverterTypeFfiUri.read(from: &reader),
-                method: FfiConverterString.read(from: &reader),
-                args: FfiConverterOptionSequenceUInt8.read(from: &reader),
-                env: FfiConverterOptionSequenceUInt8.read(from: &reader),
-                resolutionContext: FfiConverterOptionTypeFfiUriResolutionContext.read(from: &reader)
-            )
-            var writer = [UInt8]()
-            FfiConverterSequenceUInt8.write(result, into: &writer)
-            return RustBuffer(bytes: writer) // TODO: catch errors and report them back to Rust.
-            // https://github.com/mozilla/uniffi-rs/issues/351
-        }
-        func invokeGetImplementations(_ swiftCallbackInterface: FfiInvoker, _ args: RustBuffer) throws -> RustBuffer {
-            defer { args.deallocate() }
-
-            var reader = createReader(data: Data(rustBuffer: args))
-            let result = try swiftCallbackInterface.getImplementations(
-                uri: FfiConverterTypeFfiUri.read(from: &reader)
-            )
-            var writer = [UInt8]()
-            FfiConverterSequenceTypeFfiUri.write(result, into: &writer)
-            return RustBuffer(bytes: writer) // TODO: catch errors and report them back to Rust.
-            // https://github.com/mozilla/uniffi-rs/issues/351
-        }
-        func invokeGetInterfaces(_ swiftCallbackInterface: FfiInvoker, _ args: RustBuffer) throws -> RustBuffer {
-            defer { args.deallocate() }
-            let result = swiftCallbackInterface.getInterfaces()
-            var writer = [UInt8]()
-            FfiConverterOptionDictionaryStringSequenceTypeFfiUri.write(result, into: &writer)
-            return RustBuffer(bytes: writer) // TODO: catch errors and report them back to Rust.
-            // https://github.com/mozilla/uniffi-rs/issues/351
-        }
-        func invokeGetEnvByUri(_ swiftCallbackInterface: FfiInvoker, _ args: RustBuffer) throws -> RustBuffer {
-            defer { args.deallocate() }
-
-            var reader = createReader(data: Data(rustBuffer: args))
-            let result = try swiftCallbackInterface.getEnvByUri(
-                uri: FfiConverterTypeFfiUri.read(from: &reader)
-            )
-            var writer = [UInt8]()
-            FfiConverterOptionSequenceUInt8.write(result, into: &writer)
-            return RustBuffer(bytes: writer) // TODO: catch errors and report them back to Rust.
-            // https://github.com/mozilla/uniffi-rs/issues/351
-        }
-
-        let cb: FfiInvoker
-        do {
-            cb = try FfiConverterCallbackInterfaceFfiInvoker.lift(handle)
-        } catch {
-            out_buf.pointee = FfiConverterString.lower("FFIInvoker: Invalid handle")
-            return -1
-        }
-
-        switch method {
-        case IDX_CALLBACK_FREE:
-            FfiConverterCallbackInterfaceFfiInvoker.drop(handle: handle)
-            // No return value.
-            // See docs of ForeignCallback in `uniffi/src/ffi/foreigncallbacks.rs`
-            return 0
-        case 1:
-            do {
-                out_buf.pointee = try invokeInvokeRaw(cb, args)
-                // Value written to out buffer.
-                // See docs of ForeignCallback in `uniffi/src/ffi/foreigncallbacks.rs`
-                return 1
-            } catch let error as FfiError {
-                out_buf.pointee = FfiConverterTypeFfiError.lower(error)
-                return -2
-            } catch {
-                out_buf.pointee = FfiConverterString.lower(String(describing: error))
-                return -1
-            }
-        case 2:
-            do {
-                out_buf.pointee = try invokeGetImplementations(cb, args)
-                // Value written to out buffer.
-                // See docs of ForeignCallback in `uniffi/src/ffi/foreigncallbacks.rs`
-                return 1
-            } catch let error as FfiError {
-                out_buf.pointee = FfiConverterTypeFfiError.lower(error)
-                return -2
-            } catch {
-                out_buf.pointee = FfiConverterString.lower(String(describing: error))
-                return -1
-            }
-        case 3:
-            do {
-                out_buf.pointee = try invokeGetInterfaces(cb, args)
-                // Value written to out buffer.
-                // See docs of ForeignCallback in `uniffi/src/ffi/foreigncallbacks.rs`
-                return 1
-            } catch {
-                out_buf.pointee = FfiConverterString.lower(String(describing: error))
-                return -1
-            }
-        case 4:
-            do {
-                out_buf.pointee = try invokeGetEnvByUri(cb, args)
-                // Value written to out buffer.
-                // See docs of ForeignCallback in `uniffi/src/ffi/foreigncallbacks.rs`
-                return 1
-            } catch {
-                out_buf.pointee = FfiConverterString.lower(String(describing: error))
-                return -1
-            }
-
-        // This should never happen, because an out of bounds method index won't
-        // ever be used. Once we can catch errors, we should return an InternalError.
-        // https://github.com/mozilla/uniffi-rs/issues/351
-        default:
-            // An unexpected error happened.
-            // See docs of ForeignCallback in `uniffi/src/ffi/foreigncallbacks.rs`
-            return -1
-        }
-    }
-
-// FfiConverter protocol for callback interfaces
-private enum FfiConverterCallbackInterfaceFfiInvoker {
-    // Initialize our callback method with the scaffolding code
-    private static var callbackInitialized = false
-    private static func initCallback() {
-        try! rustCall { (err: UnsafeMutablePointer<RustCallStatus>) in
-            ffi_polywrap_native_b3fa_FFIInvoker_init_callback(foreignCallbackCallbackInterfaceFfiInvoker, err)
-        }
-    }
-
-    private static func ensureCallbackinitialized() {
-        if !callbackInitialized {
-            initCallback()
-            callbackInitialized = true
-        }
-    }
-
-    static func drop(handle: UniFFICallbackHandle) {
-        handleMap.remove(handle: handle)
-    }
-
-    private static var handleMap = UniFFICallbackHandleMap<FfiInvoker>()
-}
-
-extension FfiConverterCallbackInterfaceFfiInvoker: FfiConverter {
-    typealias SwiftType = FfiInvoker
     // We can use Handle as the FfiType because it's a typealias to UInt64
     typealias FfiType = UniFFICallbackHandle
 
@@ -1796,7 +1790,7 @@ private enum FfiConverterCallbackInterfaceFfiUriPackageOrWrapper {
     private static var callbackInitialized = false
     private static func initCallback() {
         try! rustCall { (err: UnsafeMutablePointer<RustCallStatus>) in
-            ffi_polywrap_native_b3fa_FFIUriPackageOrWrapper_init_callback(foreignCallbackCallbackInterfaceFfiUriPackageOrWrapper, err)
+            ffi_polywrap_native_b98b_FFIUriPackageOrWrapper_init_callback(foreignCallbackCallbackInterfaceFfiUriPackageOrWrapper, err)
         }
     }
 
@@ -1859,7 +1853,7 @@ private let foreignCallbackCallbackInterfaceFfiUriResolver: ForeignCallback =
             var reader = createReader(data: Data(rustBuffer: args))
             let result = try swiftCallbackInterface.tryResolveUri(
                 uri: FfiConverterTypeFfiUri.read(from: &reader),
-                invoker: FfiConverterCallbackInterfaceFfiInvoker.read(from: &reader),
+                invoker: FfiConverterTypeFfiInvoker.read(from: &reader),
                 resolutionContext: FfiConverterTypeFfiUriResolutionContext.read(from: &reader)
             )
             var writer = [UInt8]()
@@ -1912,7 +1906,7 @@ private enum FfiConverterCallbackInterfaceFfiUriResolver {
     private static var callbackInitialized = false
     private static func initCallback() {
         try! rustCall { (err: UnsafeMutablePointer<RustCallStatus>) in
-            ffi_polywrap_native_b3fa_FFIUriResolver_init_callback(foreignCallbackCallbackInterfaceFfiUriResolver, err)
+            ffi_polywrap_native_b98b_FFIUriResolver_init_callback(foreignCallbackCallbackInterfaceFfiUriResolver, err)
         }
     }
 
@@ -2038,7 +2032,7 @@ private enum FfiConverterCallbackInterfaceFfiUriWrapPackage {
     private static var callbackInitialized = false
     private static func initCallback() {
         try! rustCall { (err: UnsafeMutablePointer<RustCallStatus>) in
-            ffi_polywrap_native_b3fa_FFIUriWrapPackage_init_callback(foreignCallbackCallbackInterfaceFfiUriWrapPackage, err)
+            ffi_polywrap_native_b98b_FFIUriWrapPackage_init_callback(foreignCallbackCallbackInterfaceFfiUriWrapPackage, err)
         }
     }
 
@@ -2164,7 +2158,7 @@ private enum FfiConverterCallbackInterfaceFfiUriWrapper {
     private static var callbackInitialized = false
     private static func initCallback() {
         try! rustCall { (err: UnsafeMutablePointer<RustCallStatus>) in
-            ffi_polywrap_native_b3fa_FFIUriWrapper_init_callback(foreignCallbackCallbackInterfaceFfiUriWrapper, err)
+            ffi_polywrap_native_b98b_FFIUriWrapper_init_callback(foreignCallbackCallbackInterfaceFfiUriWrapper, err)
         }
     }
 
@@ -2274,7 +2268,7 @@ private enum FfiConverterCallbackInterfaceFfiWrapPackage {
     private static var callbackInitialized = false
     private static func initCallback() {
         try! rustCall { (err: UnsafeMutablePointer<RustCallStatus>) in
-            ffi_polywrap_native_b3fa_FFIWrapPackage_init_callback(foreignCallbackCallbackInterfaceFfiWrapPackage, err)
+            ffi_polywrap_native_b98b_FFIWrapPackage_init_callback(foreignCallbackCallbackInterfaceFfiWrapPackage, err)
         }
     }
 
@@ -2325,7 +2319,7 @@ extension FfiConverterCallbackInterfaceFfiWrapPackage: FfiConverter {
 // Declaration and FfiConverters for FfiWrapper Callback Interface
 
 public protocol FfiWrapper: AnyObject {
-    func invoke(method: String, args: [UInt8]?, env: [UInt8]?, invoker: FfiInvoker, abortHandler: FfiAbortHandler?) throws -> [UInt8]
+    func invoke(method: String, args: [UInt8]?, env: [UInt8]?, invoker: FfiInvoker, abortHandler: FfiAbortHandlerWrapping?) throws -> [UInt8]
 }
 
 // The ForeignCallback that is passed to Rust.
@@ -2339,8 +2333,8 @@ private let foreignCallbackCallbackInterfaceFfiWrapper: ForeignCallback =
                 method: FfiConverterString.read(from: &reader),
                 args: FfiConverterOptionSequenceUInt8.read(from: &reader),
                 env: FfiConverterOptionSequenceUInt8.read(from: &reader),
-                invoker: FfiConverterCallbackInterfaceFfiInvoker.read(from: &reader),
-                abortHandler: FfiConverterOptionCallbackInterfaceFfiAbortHandler.read(from: &reader)
+                invoker: FfiConverterTypeFfiInvoker.read(from: &reader),
+                abortHandler: FfiConverterOptionTypeFfiAbortHandlerWrapping.read(from: &reader)
             )
             var writer = [UInt8]()
             FfiConverterSequenceUInt8.write(result, into: &writer)
@@ -2392,7 +2386,7 @@ private enum FfiConverterCallbackInterfaceFfiWrapper {
     private static var callbackInitialized = false
     private static func initCallback() {
         try! rustCall { (err: UnsafeMutablePointer<RustCallStatus>) in
-            ffi_polywrap_native_b3fa_FFIWrapper_init_callback(foreignCallbackCallbackInterfaceFfiWrapper, err)
+            ffi_polywrap_native_b98b_FFIWrapper_init_callback(foreignCallbackCallbackInterfaceFfiWrapper, err)
         }
     }
 
@@ -2461,6 +2455,27 @@ private struct FfiConverterOptionString: FfiConverterRustBuffer {
     }
 }
 
+private struct FfiConverterOptionTypeFfiAbortHandlerWrapping: FfiConverterRustBuffer {
+    typealias SwiftType = FfiAbortHandlerWrapping?
+
+    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+        guard let value = value else {
+            writeInt(&buf, Int8(0))
+            return
+        }
+        writeInt(&buf, Int8(1))
+        FfiConverterTypeFfiAbortHandlerWrapping.write(value, into: &buf)
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
+        switch try readInt(&buf) as Int8 {
+        case 0: return nil
+        case 1: return try FfiConverterTypeFfiAbortHandlerWrapping.read(from: &buf)
+        default: throw UniffiInternalError.unexpectedOptionalTag
+        }
+    }
+}
+
 private struct FfiConverterOptionTypeFfiUriResolutionContext: FfiConverterRustBuffer {
     typealias SwiftType = FfiUriResolutionContext?
 
@@ -2477,27 +2492,6 @@ private struct FfiConverterOptionTypeFfiUriResolutionContext: FfiConverterRustBu
         switch try readInt(&buf) as Int8 {
         case 0: return nil
         case 1: return try FfiConverterTypeFfiUriResolutionContext.read(from: &buf)
-        default: throw UniffiInternalError.unexpectedOptionalTag
-        }
-    }
-}
-
-private struct FfiConverterOptionCallbackInterfaceFfiAbortHandler: FfiConverterRustBuffer {
-    typealias SwiftType = FfiAbortHandler?
-
-    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
-        guard let value = value else {
-            writeInt(&buf, Int8(0))
-            return
-        }
-        writeInt(&buf, Int8(1))
-        FfiConverterCallbackInterfaceFfiAbortHandler.write(value, into: &buf)
-    }
-
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
-        switch try readInt(&buf) as Int8 {
-        case 0: return nil
-        case 1: return try FfiConverterCallbackInterfaceFfiAbortHandler.read(from: &buf)
         default: throw UniffiInternalError.unexpectedOptionalTag
         }
     }

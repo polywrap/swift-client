@@ -5,5 +5,5 @@
 xcuserdata/
 DerivedData/
 .netrc
-Sources/PolywrapClient/Frameworks/PolywrapClientNative.xcframework/*/PolywrapClientNative.a
+/Frameworks/PolywrapClientNative.xcframework/*/PolywrapClientNative.a
 .swiftpm
