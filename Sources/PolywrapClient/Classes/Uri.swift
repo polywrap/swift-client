@@ -8,13 +8,13 @@
 import Foundation
 
 public class Uri {
-    public var ffiUri: FfiUri;
+    public var ffi: FfiUri;
 
     public init?(_ uri: String) {
-        self.ffiUri = FfiUri.fromString(uri: uri)
+        self.ffi = FfiUri.fromString(uri: uri)
     }
     
     public init?(_ authority: String, _ path: String, uri: String) {
-        self.ffiUri = FfiUri(authority: authority, path: path, uri: uri)
+        self.ffi = FfiUri(authority: authority, path: path, uri: uri)
     }
 }

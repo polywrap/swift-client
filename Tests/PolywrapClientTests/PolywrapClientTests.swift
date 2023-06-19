@@ -11,7 +11,8 @@ import PolywrapClient
 
 final class PolywrapClientTests: XCTestCase {
     func invoke() throws {
-//        let embedded_wrapper = WasmPackage(module:
+//        let wasmModuleBytes: [UInt8] = [0]
+//        let embedded_wrapper = WasmPackage(module: wasmModuleBytes)
 //        let static_resolver = StaticResolver([
 //          uri: embedded_wrapper
 //        ])

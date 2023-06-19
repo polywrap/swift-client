@@ -22,8 +22,8 @@ let package = Package(
         .target(
             name: "PolywrapClient",
             dependencies: ["PolywrapClientNative", "MessagePacker"],
-            publicHeadersPath: "include",
-            cSettings: [ .headerSearchPath("include") ]
+            publicHeadersPath: "Resources/include",
+            cSettings: [ .headerSearchPath("Resources/include") ]
         ),
         .binaryTarget(
             name: "PolywrapClientNative",
@@ -34,7 +34,7 @@ let package = Package(
             dependencies: [
                 "PolywrapClient"
             ],
-            cSettings: [ .headerSearchPath("../../Sources/PolywrapClient/include")]
+            cSettings: [ .headerSearchPath("../../Sources/PolywrapClient/Resources/include")]
         )
     ]
 )

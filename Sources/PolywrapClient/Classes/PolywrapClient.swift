@@ -1,13 +1,7 @@
 import PolywrapClientNative
 
 
-public class PolywrapClient {
-    let nativeClient: FfiClient
-
-    public init(_ config: BuilderConfig) {
-        self.nativeClient = config.builder.build()
-    }
-
+public class PolywrapClient: FfiClient {
     public func invoke<T: Codable, R: Codable>(
         uri: Uri,
         method: String,
@@ -16,8 +10,8 @@ public class PolywrapClient {
     ) throws -> R {
         let encoded_args = try! encode(value: args)
         let encoded_env = try! encode(value: env)
-        let result = try self.nativeClient.invokeRaw(
-            uri: uri.ffiUri,
+        let result = try self.invokeRaw(
+            uri: uri.ffi,
             method: method,
             args: encoded_args,
             env: encoded_env,
