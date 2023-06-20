@@ -17,9 +17,9 @@ public class BuilderConfig: FfiBuilderConfig {
         self.removeEnv(uri: uri.ffi)
     }
     
-//    public func addPackage(uri: _ uri: Uri, _ package: WrapPackage) {
-//        self.addPackage(uri: uri.ffi, package: <#T##FfiWrapPackage#>)
-//    }
+    public func addWrapper(_ uri: Uri, _ wrapper: WasmWrapper) {
+        self.addWrapper(uri: uri.ffi, wrapper: wrapper)
+    }
     
     public override func build() -> PolywrapClient {
         self.build()

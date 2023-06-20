@@ -7,9 +7,13 @@
 
 import Foundation
 
-public class WasmWrapper {
+public class WasmWrapper: FfiWrapper {
     public let ffi: FfiWasmWrapper
-    
+
+    public func invoke(method: String, args: [UInt8]?, env: [UInt8]?, invoker: FfiInvoker, abortHandler: FfiAbortHandlerWrapping?) throws -> [UInt8] {
+        try self.ffi.invoke(method: method, args: args, env: env, invoker: invoker, abortHandler: abortHandler)
+    }
+        
     public init(module: [UInt8]!) {
         self.ffi = FfiWasmWrapper(wasmModule: module)
     }

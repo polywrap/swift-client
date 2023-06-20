@@ -21,7 +21,8 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
             name: "PolywrapClient",
-            dependencies: ["PolywrapClientNative", "MessagePacker"],
+            dependencies: ["MessagePacker"],
+            exclude: ["Resources/wrappers"],
             publicHeadersPath: "Resources/include",
             cSettings: [ .headerSearchPath("Resources/include") ]
         ),
@@ -34,6 +35,7 @@ let package = Package(
             dependencies: [
                 "PolywrapClient"
             ],
+            resources: [.copy("Resources/wrappers")], // This line is added
             cSettings: [ .headerSearchPath("../../Sources/PolywrapClient/Resources/include")]
         )
     ]

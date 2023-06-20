@@ -6,9 +6,14 @@
 //
 
 import Foundation
-public class WrapPackage {
+public class WasmPackage {
+    public let ffi: FfiWasmWrapper
+
+    public init(_ module: [UInt8]) {
+        self.ffi = FfiWasmWrapper(wasmModule: module)
+    }
+
 //    public func createWrapper() throws -> FfiWrapper {
-//        let wasmModule: [UInt8] = [0]
-//        return WasmWrapper(wasmModule: wasmModule)
+//        return WasmWrapper(wasmModule: )
 //    }
 }
