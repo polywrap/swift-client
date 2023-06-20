@@ -21,10 +21,9 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
             name: "PolywrapClient",
-            dependencies: ["MessagePacker"],
-            exclude: ["Resources/wrappers"],
-            publicHeadersPath: "Resources/include",
-            cSettings: [ .headerSearchPath("Resources/include") ]
+            dependencies: ["MessagePacker", "PolywrapClientNative"],
+            publicHeadersPath: "include",
+            cSettings: [ .headerSearchPath("include") ]
         ),
         .binaryTarget(
             name: "PolywrapClientNative",
@@ -33,10 +32,10 @@ let package = Package(
         .testTarget(
             name: "PolywrapClientTests",
             dependencies: [
-                "PolywrapClient"
+                "PolywrapClient",
             ],
-            resources: [.copy("Resources/wrappers")], // This line is added
-            cSettings: [ .headerSearchPath("../../Sources/PolywrapClient/Resources/include")]
+            resources: [.process("wrap.wasm")], // This line is added
+            cSettings: [ .headerSearchPath("../../Sources/PolywrapClient/include")]
         )
     ]
 )
