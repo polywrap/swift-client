@@ -22,12 +22,11 @@ public class PluginWrapper: FfiWrapper {
         invoker: FfiInvoker,
         abortHandler _: FfiAbortHandlerWrapping?
     ) throws -> [UInt8] {
-//        self.instance._wrap_invoke(
-//            method: method,
-//            args: args,
-//            env: env,
-//            invoker: invoker
-//        )
-        [0]
+        self.instance._wrap_invoke(
+            method: method,
+            args: args!,
+            env: env,
+            invoker: invoker
+        )
     }
 }

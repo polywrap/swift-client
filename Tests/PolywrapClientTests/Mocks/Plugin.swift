@@ -8,16 +8,24 @@
 import Foundation
 import PolywrapClient
 
-public class MockPlugin: PluginModule {
-    let value: Int;
+public struct AddArgs: Codable {
+    var a: Int
+    var b: Int
     
-    public init(_ value: Int) {
-        self.value = value
-        super.init()
+    public init(a: Int, b: Int) {
+        self.a = a
+        self.b = b
     }
+}
 
-    public func add(_ args: AddArgs) -> Int {
-        args.a + args.b
+public class MockPlugin: PluginModule {
+    public init(_ value: Int) {
+        super.init()
+        super.addMethod(name: "add", closure: add)
+    }
+    
+    public func add(_ args: AddArgs, _ env: Codable?, _ invoker: FfiInvoker) -> Int {
+        return args.a + args.b
     }
 }
 

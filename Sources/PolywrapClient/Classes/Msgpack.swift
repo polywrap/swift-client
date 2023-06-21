@@ -9,8 +9,6 @@ import Foundation
 import MessagePacker
 
 public func encode<T: Encodable>(value: T) throws -> [UInt8] {
-    let encoder = MessagePackEncoder()
-    
     let data = try! MessagePackEncoder().encode(value)
     return [UInt8](data)
 }

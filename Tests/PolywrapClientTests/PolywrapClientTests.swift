@@ -8,16 +8,6 @@
 import XCTest
 @testable import PolywrapClient
 
-public struct AddArgs: Codable {
-    var a: Int
-    var b: Int
-    
-    public init(a: Int, b: Int) {
-        self.a = a
-        self.b = b
-    }
-}
-
 final class PolywrapClientTests: XCTestCase {
     func testWrapInvoke() throws {
         if let bytes = readModuleBytes() {
@@ -40,8 +30,8 @@ final class PolywrapClientTests: XCTestCase {
         let builder = BuilderConfig()
         builder.addPackage(uri, wrapPackage)
         let client = builder.build()
-        let t: Int? = try? client.invoke(uri: uri, method: "add", args: AddArgs(a: 1, b: 2), env: nil)
-        print(t)
+        let result: Int = try! client.invoke(uri: uri, method: "add", args: AddArgs(a: 1, b: 2), env: nil)
+        XCTAssertEqual(result, 3)
     }
 }
 

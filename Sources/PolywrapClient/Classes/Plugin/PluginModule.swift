@@ -6,28 +6,55 @@
 //
 
 import Foundation
+import MessagePacker
+
+public typealias PluginMethod = (
+    _ args: [UInt8],
+    _ env: [UInt8]?,
+    _ invoker: FfiInvoker
+) -> Encodable
+
 
 open class PluginModule {
+    public var methodsMap: [
+        String: PluginMethod
+    ] = [:]
+
     public init() {}
-//    public var methodsMap: [String: (_ args: Codable?) async -> Codable] = [:]
-//
-//    public func addMethod<U: Codable>(name: String, closure: @escaping (Codable?) async -> U) {
-//        methodsMap[name] = { (args: Codable?) async -> Codable in
-//            return await (closure)(args)
-//        }
-//    }
+    
+    public func addMethod<T: Codable, U: Codable>(
+        name: String,
+        closure: @escaping (
+            _ args: T,
+            _ env: Codable?,
+            _ invoker: FfiInvoker
+        ) -> U
+    ) {
+        methodsMap[name] = {(
+            _ args: [UInt8],
+            _ env: [UInt8]?,
+            _ invoker: FfiInvoker
+        ) -> Encodable in
+            let decoded_args = try! MessagePackDecoder().decode(T.self, from: Data(args))
+
+            return (closure)(decoded_args, nil, invoker)
+        
+        }
+    }
 
     public func _wrap_invoke(
         method: String,
-        args: Codable?,
-        env: Codable?,
+        args: [UInt8],
+        env: [UInt8]?,
         invoker: FfiInvoker
     ) -> [UInt8] {
-        
-//        guard let fn = self.methodsMap[method] else {
-//            fatalError("Method '\(method)' not found in methodsMap.")
-//        }
-        [0]
-        
+        guard let fn = self.methodsMap[method] else {
+            fatalError("Method '\(method)' not found in methodsMap.")
+        }
+
+        let result = fn(args, env, invoker)
+
+        let encoded_result = try! encode(value: result)
+        return encoded_result
     }
 }
