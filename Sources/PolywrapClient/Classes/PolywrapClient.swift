@@ -7,10 +7,10 @@ public class PolywrapClient {
         self.ffi = client
     }
     
-    public func invoke<T: Codable, R: Codable>(
+    public func invoke<T: Encodable, R: Decodable>(
         uri: Uri,
         method: String,
-        args: T,
+        args: T?,
         env: T?
     ) throws -> R {
         let encoded_args = try! encode(value: args)

@@ -34,7 +34,7 @@ let package = Package(
             dependencies: [
                 "PolywrapClient",
             ],
-            resources: [.process("wrap.wasm")], // This line is added
+            resources: [ .copy("Cases") ],
             cSettings: [ .headerSearchPath("../../Sources/PolywrapClient/include")]
         )
     ]

@@ -6,45 +6,23 @@
 //
 
 import XCTest
-import PolywrapClient
+@testable import PolywrapClient
 
+public struct AddArgs: Codable {
+    var a: Int
+    var b: Int
+    
+    public init(a: Int, b: Int) {
+        self.a = a
+        self.b = b
+    }
+}
 
 final class PolywrapClientTests: XCTestCase {
-    
-    func readModuleBytes() -> [UInt8]? {
-        guard let url = Bundle.module.url(forResource: "wrap", withExtension: "wasm") else {
-            print("File not found")
-            return nil
-        }
-        do {
-            let data = try Data(contentsOf: url)
-            var byteArray = [UInt8](repeating: 0, count: data.count)
-            data.copyBytes(to: &byteArray, count: data.count)
-            return byteArray
-        } catch {
-            print("Unable to load file: \(error)")
-            return nil
-        }
-    }
-
-    struct AddArgs: Codable {
-        var a: Int
-        var b: Int
-        
-        public init(a: Int, b: Int) {
-            self.a = a
-            self.b = b
-        }
-    }
-
-    func testInvoke() throws {
+    func testWrapInvoke() throws {
         if let bytes = readModuleBytes() {
             let embedded_wrapper = WasmWrapper(module: bytes)
             let uri = Uri("wrap://wrap/embedded")!
-//            let uri_wrapper = UriWrapper(uriValue: uri, wrap: embedded_wrapper)
-//            let static_resolver = StaticResolver([
-//                uri.ffi.toStringUri(): uri_wrapper
-//            ])
             let builder = BuilderConfig()
             builder.addWrapper(uri, embedded_wrapper)
             let client = builder.build()
@@ -53,6 +31,17 @@ final class PolywrapClientTests: XCTestCase {
         } else {
             fatalError("WASM Module not found")
         }
+    }
+    
+    func testPluginInvoker() throws {
+        let mockPlugin = MockPlugin(7)
+        let wrapPackage = PluginPackage(mockPlugin)
+        let uri = Uri("wrap://plugin/mock")!
+        let builder = BuilderConfig()
+        builder.addPackage(uri, wrapPackage)
+        let client = builder.build()
+        let t: Int? = try? client.invoke(uri: uri, method: "add", args: AddArgs(a: 1, b: 2), env: nil)
+        print(t)
     }
 }
 
