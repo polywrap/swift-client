@@ -19,8 +19,7 @@ public class PluginWrapper: FfiWrapper {
         method: String,
         args: [UInt8]?,
         env: [UInt8]?,
-        invoker: FfiInvoker,
-        abortHandler _: FfiAbortHandlerWrapping?
+        invoker: FfiInvoker
     ) throws -> [UInt8] {
         self.instance._wrap_invoke(
             method: method,

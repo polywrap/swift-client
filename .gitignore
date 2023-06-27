@@ -11,5 +11,4 @@ DerivedData/
 !/Sources/PolywrapClient/include/module.modulemap
 /Sources/PolywrapClient/Resources/wrappers
 /Frameworks/PolywrapClientNative.xcframework/*/PolywrapClientNative.framework/PolywrapClientNative.a
-/Frameworks/PolywrapClientNative.xcframework/*/Headers/
-/Frameworks/PolywrapClientNative.xcframework/*/Modules/
+/Frameworks/PolywrapClientNative.xcframework/*/PolywrapClientNative.framework/Headers/

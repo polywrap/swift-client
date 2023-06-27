@@ -10,7 +10,7 @@ import Foundation
 public class StaticResolver {
     let resolver: FfiStaticUriResolver;
     
-    public init(_ uriMap: [String: FfiUriPackageOrWrapper]) {
-        resolver = FfiStaticUriResolver(uriMap: uriMap)
+    public init(_ uriMap: [String: FfiUriPackageOrWrapper]) throws {
+        resolver = try! FfiStaticUriResolver(uriMap: uriMap)
     }
 }
