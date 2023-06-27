@@ -18,15 +18,13 @@ public class WasmWrapper: FfiWrapper {
         method: String,
         args: [UInt8]?,
         env: [UInt8]?,
-        invoker: FfiInvoker,
-        abortHandler: FfiAbortHandlerWrapping?
+        invoker: FfiInvoker
     ) throws -> [UInt8] {
         try self.ffi.invoke(
             method: method,
             args: args,
             env: env,
-            invoker: invoker,
-            abortHandler: abortHandler
+            invoker: invoker
         )
     }
 }

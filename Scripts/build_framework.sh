@@ -1,9 +1,5 @@
 set -e # Helps to give error info
 
-# Project paths
-RUST_PROJ="/Users/cesar/dev/polywrap/rust-client/packages/native"
-IOS_PROJ="/Users/cesar/dev/polywrap/swift/PolywrapClient"
-
 LOCAL_UDL="src/polywrap_native.udl"
 UDL_NAME="polywrap_native"
 FRAMEWORK_NAME="PolywrapClientNative"
