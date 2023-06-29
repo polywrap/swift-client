@@ -7,8 +7,6 @@ DerivedData/
 .netrc
 /Frameworks/PolywrapClientNative.xcframework/*/PolywrapClientNative.a
 .swiftpm
-/Sources/PolywrapClient/include/*
-!/Sources/PolywrapClient/include/module.modulemap
 /Sources/PolywrapClient/Resources/wrappers
 /Frameworks/PolywrapClientNative.xcframework/*/PolywrapClientNative.framework/PolywrapClientNative.a
 /Frameworks/PolywrapClientNative.xcframework/*/PolywrapClientNative.framework/Headers/
