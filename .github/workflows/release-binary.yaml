@@ -1,0 +1,81 @@
+name: Release binary
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  Release-Binary:
+    runs-on: macOS-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          path: "swift-client"
+
+      - name: Set IOS_PROJ environment variable
+        run: echo "IOS_PROJ=$(pwd)/swift-client" >> $GITHUB_ENV
+        working-directory: ${{ github.workspace }}
+
+      - name: Clone Rust project repository
+        uses: actions/checkout@v2
+        with:
+          repository: polywrap/rust-client
+          path: "rust-client"
+
+      - name: Set RUST_PROJ environment variable
+        run: echo "RUST_PROJ=$(pwd)/rust-client/packages/native" >> $GITHUB_ENV
+        working-directory: ${{ github.workspace }}
+
+      - name: Install Rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: 1.69.0
+          override: true
+
+      - name: Add Rust targets
+        run: |
+          rustup target add aarch64-apple-ios
+          rustup target add aarch64-apple-ios-sim
+          rustup target add x86_64-apple-ios
+
+      - name: Install SwiftFormat
+        run: brew install swiftformat
+
+      - name: Check lipo
+        run: command -v lipo
+
+      - name: Build Project
+        run: ./Scripts/build_framework.sh
+        working-directory: ${{ github.workspace }}/swift-client
+        env:
+          RUST_PROJ: ${{ env.RUST_PROJ }}
+          IOS_PROJ: ${{ env.IOS_PROJ }}
+
+      - name: Zip xcframework
+        run: |
+          zip -r PolywrapClientNative.xcframework.zip Frameworks/PolywrapClientNative.xcframework
+        working-directory: ${{ env.IOS_PROJ }}
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+
+      - name: Upload Release Asset
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} 
+          asset_path: ${{ env.IOS_PROJ }}/PolywrapClientNative.xcframework.zip
+          asset_name: PolywrapClientNative.xcframework.zip
+          asset_content_type: application/zip
