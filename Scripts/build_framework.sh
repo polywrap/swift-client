@@ -13,15 +13,19 @@ cd "$RUST_PROJ"
 cargo build --target aarch64-apple-ios
 cargo build --target aarch64-apple-ios-sim
 cargo build --target x86_64-apple-ios
+cargo build --target x86_64-apple-darwin # For macOS w/Intel
 
 IOS_ARM64_FRAMEWORK="$BUILD_PATH/ios-arm64/$FRAMEWORK_NAME.framework"
 IOS_SIM_FRAMEWORK="$BUILD_PATH/ios-arm64_x86_64-simulator/$FRAMEWORK_NAME.framework"
+MACOS_FRAMEWORK="$BUILD_PATH/macos-x86_64/$FRAMEWORK_NAME.framework"
 
 # Remove old files if they exist
 rm -rf "$IOS_ARM64_FRAMEWORK/Headers"
 rm -rf "$IOS_ARM64_FRAMEWORK/$FRAMEWORK_NAME.a"
 rm -rf "$IOS_SIM_FRAMEWORK/Headers"
 rm -rf "$IOS_SIM_FRAMEWORK/$FRAMEWORK_NAME.a"
+rm -rf "$MACOS_FRAMEWORK/Headers"
+rm -rf "$MACOS_FRAMEWORK/$FRAMEWORK_NAME.a"
 rm -rf "$IOS_PROJ/Sources/PolywrapClient/include/${UDL_NAME}FFI.h"
 
 rm -rf ../../target/universal.a
@@ -48,6 +52,10 @@ mkdir "$IOS_SIM_FRAMEWORK/Headers"
 cp "$IOS_PROJ/Sources/PolywrapClient/include/.cache/${UDL_NAME}FFI.h" \
     "$IOS_SIM_FRAMEWORK/Headers/${UDL_NAME}FFI.h"
 
+mkdir "$MACOS_FRAMEWORK/Headers"
+cp "$IOS_PROJ/Sources/PolywrapClient/include/.cache/${UDL_NAME}FFI.h" \
+    "$MACOS_FRAMEWORK/Headers/${UDL_NAME}FFI.h"
+
 cp "$IOS_PROJ/Sources/PolywrapClient/include/.cache/${UDL_NAME}FFI.h" "$IOS_PROJ/Sources/PolywrapClient/include/${UDL_NAME}FFI.h"
 
 # Move binaries
@@ -55,6 +63,8 @@ cp "../../target/aarch64-apple-ios/debug/lib${UDL_NAME}.a" \
     "$IOS_ARM64_FRAMEWORK/$FRAMEWORK_NAME.a"
 cp ../../target/universal.a \
     "$IOS_SIM_FRAMEWORK/$FRAMEWORK_NAME.a"
+cp "../../target/x86_64-apple-darwin/debug/lib${UDL_NAME}.a" \
+    "$MACOS_FRAMEWORK/$FRAMEWORK_NAME.a"
 
 # Move swift interface
 sed "s/${UDL_NAME}FFI/$FRAMEWORK_NAME/g" "$IOS_PROJ/Sources/PolywrapClient/include/.cache/$UDL_NAME.swift" > "$IOS_PROJ/Sources/PolywrapClient/include/$SWIFT_INTERFACE.swift"
