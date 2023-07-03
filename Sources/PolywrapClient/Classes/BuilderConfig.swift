@@ -14,9 +14,9 @@ public class BuilderConfig {
         self.ffi = FfiBuilderConfig()
     }
 
-    public func addEnv<T: Codable>(_ uri: Uri, env: T) throws {
-        let env_as_msgpack = try! encode(value: env)
-        self.ffi.addEnv(uri: uri.ffi, env: env_as_msgpack)
+    public func addEnv<T: Encodable>(_ uri: Uri, _ env: T) throws {
+        let encoded_env = try encode(value: env)
+        self.ffi.addEnv(uri: uri.ffi, env: encoded_env)
     }
     
     public func removeEnv(_ uri: Uri) {
@@ -37,6 +37,10 @@ public class BuilderConfig {
     
     public func removePackage(_ uri: Uri) {
         self.ffi.removePackage(uri: uri.ffi)
+    }
+    
+    public func addInterfaceImplementations(_ uri: Uri, _ implementationUris: [String]) {
+//        self.ffi.addInterfaceImplementation(interfaceUri: <#T##FfiUri#>, implementationUri: <#T##FfiUri#>)
     }
     
     public func build() -> PolywrapClient {

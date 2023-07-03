@@ -13,8 +13,8 @@ public class PolywrapClient {
         args: T?,
         env: T?
     ) throws -> R {
-        let encoded_args = try! encode(value: args)
-        let encoded_env = try! encode(value: env)
+        let encoded_args = try encode(value: args)
+        let encoded_env = try encode(value: env)
         let result = try self.ffi.invokeRaw(
             uri: uri.ffi,
             method: method,
@@ -23,6 +23,13 @@ public class PolywrapClient {
             resolutionContext: nil
         )
         
-        return try! decode(value: result)
+        return try decode(value: result)
+    }
+    
+    public func getEnvByUri<T: Decodable>(_ uri: Uri) throws -> T? {
+        guard let env = self.ffi.getEnvByUri(uri: uri.ffi) else {
+            return nil
+        }
+        return try decode(value: env)
     }
 }

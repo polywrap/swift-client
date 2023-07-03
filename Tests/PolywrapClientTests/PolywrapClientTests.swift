@@ -10,13 +10,13 @@ import XCTest
 
 final class PolywrapClientTests: XCTestCase {
     func testWrapInvoke() throws {
-        if let bytes = readModuleBytes() {
+        if let bytes = fileReader(Bundle.module, "Cases/subinvoke") {
             let embedded_wrapper = WasmWrapper(module: bytes)
-            let uri = Uri("wrap://wrap/embedded")!
+            let uri = try Uri("wrap://wrap/embedded")
             let builder = BuilderConfig()
             builder.addWrapper(uri, embedded_wrapper)
             let client = builder.build()
-            let result: Int = try! client.invoke(uri: uri, method: "add", args: AddArgs(a: 1, b: 2), env: nil)
+            let result: Int = try client.invoke(uri: uri, method: "add", args: AddArgs(a: 1, b: 2), env: nil)
             XCTAssertEqual(result, 3)
         } else {
             fatalError("WASM Module not found")
@@ -26,11 +26,11 @@ final class PolywrapClientTests: XCTestCase {
     func testPluginInvoker() throws {
         let mockPlugin = MockPlugin(7)
         let wrapPackage = PluginPackage(mockPlugin)
-        let uri = Uri("wrap://plugin/mock")!
+        let uri = try Uri("wrap://plugin/mock")
         let builder = BuilderConfig()
         builder.addPackage(uri, wrapPackage)
         let client = builder.build()
-        let result: Int = try! client.invoke(uri: uri, method: "add", args: AddArgs(a: 1, b: 2), env: nil)
+        let result: Int = try client.invoke(uri: uri, method: "add", args: AddArgs(a: 1, b: 2), env: nil)
         XCTAssertEqual(result, 3)
     }
 }

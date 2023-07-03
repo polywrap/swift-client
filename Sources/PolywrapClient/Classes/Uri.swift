@@ -10,11 +10,11 @@ import Foundation
 public class Uri {
     public let ffi: FfiUri;
 
-    public init?(_ uri: String) {
-        self.ffi = FfiUri.fromString(uri: uri)
+    public init(_ uri: String) throws {
+        self.ffi = try ffiUriFromString(uri: uri)
     }
     
-    public init?(_ authority: String, _ path: String, uri: String) {
+    public init(_ authority: String, _ path: String, uri: String) {
         self.ffi = FfiUri(authority: authority, path: path, uri: uri)
     }
 }

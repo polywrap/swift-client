@@ -4,8 +4,8 @@ import PolywrapClient
 
 final class UriTests: XCTestCase {
     func create_uri() throws {
-        let uri = Uri("wrap/mock")
-        let stringUri = uri?.ffi.toStringUri()
+        let uri = try! Uri("wrap/mock")
+        let stringUri = uri.ffi.toString()
         XCTAssertEqual(stringUri, "wrap://wrap/mock")
     }
 }
