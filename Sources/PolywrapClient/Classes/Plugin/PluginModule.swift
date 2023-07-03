@@ -12,8 +12,11 @@ public typealias PluginMethod = (
     _ args: [UInt8],
     _ env: [UInt8]?,
     _ invoker: FfiInvoker
-) -> Encodable
+) throws -> Encodable
 
+enum PluginError: Error {
+    case methodNotFound
+}
 
 open class PluginModule {
     public var methodsMap: [
@@ -22,22 +25,24 @@ open class PluginModule {
 
     public init() {}
     
-    public func addMethod<T: Codable, U: Codable>(
+    public func addMethod<T: Codable, E: Codable, R: Codable>(
         name: String,
         closure: @escaping (
             _ args: T,
-            _ env: Codable?,
+            _ env: E?,
             _ invoker: FfiInvoker
-        ) -> U
+        ) throws -> R
     ) {
         methodsMap[name] = {(
             _ args: [UInt8],
             _ env: [UInt8]?,
             _ invoker: FfiInvoker
-        ) -> Encodable in
-            let decoded_args = try! MessagePackDecoder().decode(T.self, from: Data(args))
-
-            return (closure)(decoded_args, nil, invoker)
+        ) throws -> Encodable in
+            let decoder = MessagePackDecoder()
+            let decoded_args = try decoder.decode(T.self, from: Data(args))
+//            if let
+//            let decoded_env = try decoder.decode(E.self, from: Data(env))
+            return try (closure)(decoded_args, nil, invoker)
         
         }
     }
@@ -47,14 +52,13 @@ open class PluginModule {
         args: [UInt8],
         env: [UInt8]?,
         invoker: FfiInvoker
-    ) -> [UInt8] {
+    ) throws -> [UInt8] {
         guard let fn = self.methodsMap[method] else {
-            fatalError("Method '\(method)' not found in methodsMap.")
+            throw PluginError.methodNotFound
         }
 
-        let result = fn(args, env, invoker)
+        let result = try fn(args, env, invoker)
 
-        let encoded_result = try! encode(value: result)
-        return encoded_result
+        return try encode(value: result)
     }
 }

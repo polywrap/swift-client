@@ -32,4 +32,11 @@ public class PolywrapClient {
         }
         return try decode(value: env)
     }
+    
+    public func getImplementations(_ uri: Uri) throws -> [Uri] {
+        let implementations = try self.ffi.getImplementations(uri: uri.ffi)
+        return try implementations.compactMap { implementationUri -> Uri in
+            return try Uri(ffi: implementationUri)
+        }
+    }
 }
