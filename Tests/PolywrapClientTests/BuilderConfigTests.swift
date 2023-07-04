@@ -11,7 +11,7 @@ import PolywrapClient
 
 final class BuiderConfigTests: XCTestCase {
     func add_env() throws {
-        let builder = BuilderConfig()
+//        let builder = BuilderConfig()
 //        builder.addEnv(<#T##Uri#>, env: <#T##T#>)
 //        builder.builder.addEnv(uri: <#T##FfiUri#>, env: <#T##[UInt8]#>)
     }

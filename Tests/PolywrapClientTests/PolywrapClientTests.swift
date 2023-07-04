@@ -22,6 +22,9 @@ final class PolywrapClientTests: XCTestCase {
     
     func testPluginInvoke() throws {
         let mockPlugin = MockPlugin(7)
+
+        mockPlugin.addMethod(name: "add", closure: mockPlugin.add)
+
         let wrapPackage = PluginPackage(mockPlugin)
         let uri = try Uri("wrap://plugin/mock")
         let builder = BuilderConfig().addPackage(uri, wrapPackage)
@@ -32,6 +35,9 @@ final class PolywrapClientTests: XCTestCase {
     
     func testPluginStatefulInvoke() throws {
         let mockPlugin = MockPlugin(7)
+        
+        mockPlugin.addMethod(name: "plusOne", closure: mockPlugin.plusOne)
+
         let wrapPackage = PluginPackage(mockPlugin)
         let uri = try Uri("wrap://plugin/mock")
         let builder = BuilderConfig().addPackage(uri, wrapPackage)
@@ -43,6 +49,7 @@ final class PolywrapClientTests: XCTestCase {
         XCTAssertEqual(resultTwo, 9)
         let resultThree: Int = try client.invoke(uri: uri, method: "plusOne", args: nil as PlusOneArgs?, env: nil)
         XCTAssertEqual(resultThree, 10)
+        XCTAssertEqual(mockPlugin.counter, 10)
     }
 }
 

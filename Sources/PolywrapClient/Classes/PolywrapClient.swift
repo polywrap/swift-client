@@ -7,6 +7,23 @@ public class PolywrapClient {
         self.ffi = client
     }
     
+    public func invoke<R: Decodable>(
+        uri: Uri,
+        method: String
+    ) throws -> R {
+        let encoded_args: [UInt8]? = nil
+        let encoded_env: [UInt8]? = nil
+        let result = try self.ffi.invokeRaw(
+            uri: uri.ffi,
+            method: method,
+            args: encoded_args,
+            env: encoded_env,
+            resolutionContext: nil
+        )
+        
+        return try decode(value: result)
+    }
+    
     public func invoke<T: Encodable, R: Decodable>(
         uri: Uri,
         method: String,

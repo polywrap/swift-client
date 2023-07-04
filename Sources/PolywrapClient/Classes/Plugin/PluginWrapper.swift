@@ -23,6 +23,20 @@ public class PluginWrapper: FfiWrapper {
     ) throws -> [UInt8] {
         try self.instance._wrap_invoke(
             method: method,
+            args: args,
+            env: env,
+            invoker: Invoker(invoker)
+        )
+    }
+    
+    public func invoke(
+        method: String,
+        args: [UInt8]?,
+        env: [UInt8]?,
+        invoker: Invoker
+    ) throws -> [UInt8] {
+        try self.instance._wrap_invoke(
+            method: method,
             args: args!,
             env: env,
             invoker: invoker
