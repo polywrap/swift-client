@@ -78,6 +78,17 @@ public class BuilderConfig {
     //     return self
     // }
     
+    public func addSystemDefault() -> Self {
+        self.ffi.addSystemDefaults()
+        return self
+    }
+    
+    public func addWeb3Default() -> Self {
+        self.ffi.addWeb3Defaults()
+        return self
+    }
+    
+    
     public func build() -> PolywrapClient {
         let ffiClient = self.ffi.build()
         return PolywrapClient(client: ffiClient)

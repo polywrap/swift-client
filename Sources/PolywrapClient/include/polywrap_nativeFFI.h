@@ -46,263 +46,271 @@ typedef struct RustCallStatus {
 // ⚠️ increment the version suffix in all instances of UNIFFI_SHARED_HEADER_V4 in this file.           ⚠️
 #endif // def UNIFFI_SHARED_H
 
-void ffi_polywrap_native_1715_FFIUri_object_free(
+void ffi_polywrap_native_4639_FFIUri_object_free(
       void*_Nonnull ptr,
     RustCallStatus *_Nonnull out_status
     );
-void*_Nonnull polywrap_native_1715_FFIUri_new(
+void*_Nonnull polywrap_native_4639_FFIUri_new(
       RustBuffer authority,RustBuffer path,RustBuffer uri,
     RustCallStatus *_Nonnull out_status
     );
-RustBuffer polywrap_native_1715_FFIUri_authority(
+RustBuffer polywrap_native_4639_FFIUri_authority(
       void*_Nonnull ptr,
     RustCallStatus *_Nonnull out_status
     );
-RustBuffer polywrap_native_1715_FFIUri_path(
+RustBuffer polywrap_native_4639_FFIUri_path(
       void*_Nonnull ptr,
     RustCallStatus *_Nonnull out_status
     );
-RustBuffer polywrap_native_1715_FFIUri_to_string_uri(
+RustBuffer polywrap_native_4639_FFIUri_to_string_uri(
       void*_Nonnull ptr,
     RustCallStatus *_Nonnull out_status
     );
-void ffi_polywrap_native_1715_FFIInvoker_object_free(
+void ffi_polywrap_native_4639_FFIInvoker_object_free(
       void*_Nonnull ptr,
     RustCallStatus *_Nonnull out_status
     );
-RustBuffer polywrap_native_1715_FFIInvoker_invoke_raw(
+RustBuffer polywrap_native_4639_FFIInvoker_invoke_raw(
       void*_Nonnull ptr,void*_Nonnull uri,RustBuffer method,RustBuffer args,RustBuffer env,RustBuffer resolution_context,
     RustCallStatus *_Nonnull out_status
     );
-RustBuffer polywrap_native_1715_FFIInvoker_get_implementations(
+RustBuffer polywrap_native_4639_FFIInvoker_get_implementations(
       void*_Nonnull ptr,void*_Nonnull uri,
     RustCallStatus *_Nonnull out_status
     );
-RustBuffer polywrap_native_1715_FFIInvoker_get_interfaces(
+RustBuffer polywrap_native_4639_FFIInvoker_get_interfaces(
       void*_Nonnull ptr,
     RustCallStatus *_Nonnull out_status
     );
-RustBuffer polywrap_native_1715_FFIInvoker_get_env_by_uri(
+RustBuffer polywrap_native_4639_FFIInvoker_get_env_by_uri(
       void*_Nonnull ptr,void*_Nonnull uri,
     RustCallStatus *_Nonnull out_status
     );
-void ffi_polywrap_native_1715_FFIWasmWrapper_object_free(
+void ffi_polywrap_native_4639_FFIWasmWrapper_object_free(
       void*_Nonnull ptr,
     RustCallStatus *_Nonnull out_status
     );
-void*_Nonnull polywrap_native_1715_FFIWasmWrapper_new(
+void*_Nonnull polywrap_native_4639_FFIWasmWrapper_new(
       RustBuffer wasm_module,
     RustCallStatus *_Nonnull out_status
     );
-RustBuffer polywrap_native_1715_FFIWasmWrapper_invoke(
+RustBuffer polywrap_native_4639_FFIWasmWrapper_invoke(
       void*_Nonnull ptr,RustBuffer method,RustBuffer args,RustBuffer env,void*_Nonnull invoker,
     RustCallStatus *_Nonnull out_status
     );
-void ffi_polywrap_native_1715_FFIStaticUriResolver_object_free(
+void ffi_polywrap_native_4639_FFIStaticUriResolver_object_free(
       void*_Nonnull ptr,
     RustCallStatus *_Nonnull out_status
     );
-void*_Nonnull polywrap_native_1715_FFIStaticUriResolver_new(
+void*_Nonnull polywrap_native_4639_FFIStaticUriResolver_new(
       RustBuffer uri_map,
     RustCallStatus *_Nonnull out_status
     );
-uint64_t polywrap_native_1715_FFIStaticUriResolver_try_resolve_uri(
+uint64_t polywrap_native_4639_FFIStaticUriResolver_try_resolve_uri(
       void*_Nonnull ptr,void*_Nonnull uri,void*_Nonnull invoker,void*_Nonnull resolution_context,
     RustCallStatus *_Nonnull out_status
     );
-void ffi_polywrap_native_1715_FFIRecursiveUriResolver_object_free(
+void ffi_polywrap_native_4639_FFIRecursiveUriResolver_object_free(
       void*_Nonnull ptr,
     RustCallStatus *_Nonnull out_status
     );
-void*_Nonnull polywrap_native_1715_FFIRecursiveUriResolver_new(
+void*_Nonnull polywrap_native_4639_FFIRecursiveUriResolver_new(
       uint64_t uri_resolver,
     RustCallStatus *_Nonnull out_status
     );
-uint64_t polywrap_native_1715_FFIRecursiveUriResolver_try_resolve_uri(
+uint64_t polywrap_native_4639_FFIRecursiveUriResolver_try_resolve_uri(
       void*_Nonnull ptr,void*_Nonnull uri,void*_Nonnull invoker,void*_Nonnull resolution_context,
     RustCallStatus *_Nonnull out_status
     );
-void ffi_polywrap_native_1715_FFIUriResolutionContext_object_free(
+void ffi_polywrap_native_4639_FFIUriResolutionContext_object_free(
       void*_Nonnull ptr,
     RustCallStatus *_Nonnull out_status
     );
-void*_Nonnull polywrap_native_1715_FFIUriResolutionContext_new(
+void*_Nonnull polywrap_native_4639_FFIUriResolutionContext_new(
       
     RustCallStatus *_Nonnull out_status
     );
-void polywrap_native_1715_FFIUriResolutionContext_set_resolution_path(
+void polywrap_native_4639_FFIUriResolutionContext_set_resolution_path(
       void*_Nonnull ptr,RustBuffer resolution_path,
     RustCallStatus *_Nonnull out_status
     );
-void polywrap_native_1715_FFIUriResolutionContext_set_history(
+void polywrap_native_4639_FFIUriResolutionContext_set_history(
       void*_Nonnull ptr,RustBuffer history,
     RustCallStatus *_Nonnull out_status
     );
-void polywrap_native_1715_FFIUriResolutionContext_set_resolving_uri_map(
+void polywrap_native_4639_FFIUriResolutionContext_set_resolving_uri_map(
       void*_Nonnull ptr,RustBuffer resolving_uri_map,
     RustCallStatus *_Nonnull out_status
     );
-void polywrap_native_1715_FFIUriResolutionContext_set_start_resolving(
+void polywrap_native_4639_FFIUriResolutionContext_set_start_resolving(
       void*_Nonnull ptr,void*_Nonnull uri,
     RustCallStatus *_Nonnull out_status
     );
-void polywrap_native_1715_FFIUriResolutionContext_set_stop_resolving(
+void polywrap_native_4639_FFIUriResolutionContext_set_stop_resolving(
       void*_Nonnull ptr,void*_Nonnull uri,
     RustCallStatus *_Nonnull out_status
     );
-void polywrap_native_1715_FFIUriResolutionContext_track_step(
+void polywrap_native_4639_FFIUriResolutionContext_track_step(
       void*_Nonnull ptr,RustBuffer step,
     RustCallStatus *_Nonnull out_status
     );
-RustBuffer polywrap_native_1715_FFIUriResolutionContext_get_history(
+RustBuffer polywrap_native_4639_FFIUriResolutionContext_get_history(
       void*_Nonnull ptr,
     RustCallStatus *_Nonnull out_status
     );
-RustBuffer polywrap_native_1715_FFIUriResolutionContext_get_resolution_path(
+RustBuffer polywrap_native_4639_FFIUriResolutionContext_get_resolution_path(
       void*_Nonnull ptr,
     RustCallStatus *_Nonnull out_status
     );
-void*_Nonnull polywrap_native_1715_FFIUriResolutionContext_create_sub_history_context(
+void*_Nonnull polywrap_native_4639_FFIUriResolutionContext_create_sub_history_context(
       void*_Nonnull ptr,
     RustCallStatus *_Nonnull out_status
     );
-void*_Nonnull polywrap_native_1715_FFIUriResolutionContext_create_sub_context(
+void*_Nonnull polywrap_native_4639_FFIUriResolutionContext_create_sub_context(
       void*_Nonnull ptr,
     RustCallStatus *_Nonnull out_status
     );
-void ffi_polywrap_native_1715_FFIClient_object_free(
+void ffi_polywrap_native_4639_FFIClient_object_free(
       void*_Nonnull ptr,
     RustCallStatus *_Nonnull out_status
     );
-RustBuffer polywrap_native_1715_FFIClient_invoke_raw(
+RustBuffer polywrap_native_4639_FFIClient_invoke_raw(
       void*_Nonnull ptr,void*_Nonnull uri,RustBuffer method,RustBuffer args,RustBuffer env,RustBuffer resolution_context,
     RustCallStatus *_Nonnull out_status
     );
-RustBuffer polywrap_native_1715_FFIClient_get_implementations(
+RustBuffer polywrap_native_4639_FFIClient_get_implementations(
       void*_Nonnull ptr,void*_Nonnull uri,
     RustCallStatus *_Nonnull out_status
     );
-RustBuffer polywrap_native_1715_FFIClient_get_interfaces(
+RustBuffer polywrap_native_4639_FFIClient_get_interfaces(
       void*_Nonnull ptr,
     RustCallStatus *_Nonnull out_status
     );
-RustBuffer polywrap_native_1715_FFIClient_get_env_by_uri(
+RustBuffer polywrap_native_4639_FFIClient_get_env_by_uri(
       void*_Nonnull ptr,void*_Nonnull uri,
     RustCallStatus *_Nonnull out_status
     );
-void*_Nonnull polywrap_native_1715_FFIClient_as_invoker(
+void*_Nonnull polywrap_native_4639_FFIClient_as_invoker(
       void*_Nonnull ptr,
     RustCallStatus *_Nonnull out_status
     );
-RustBuffer polywrap_native_1715_FFIClient_invoke_wrapper_raw(
+RustBuffer polywrap_native_4639_FFIClient_invoke_wrapper_raw(
       void*_Nonnull ptr,uint64_t wrapper,void*_Nonnull uri,RustBuffer method,RustBuffer args,RustBuffer env,RustBuffer resolution_context,
     RustCallStatus *_Nonnull out_status
     );
-uint64_t polywrap_native_1715_FFIClient_load_wrapper(
+uint64_t polywrap_native_4639_FFIClient_load_wrapper(
       void*_Nonnull ptr,void*_Nonnull uri,RustBuffer resolution_context,
     RustCallStatus *_Nonnull out_status
     );
-void ffi_polywrap_native_1715_FFIBuilderConfig_object_free(
+void ffi_polywrap_native_4639_FFIBuilderConfig_object_free(
       void*_Nonnull ptr,
     RustCallStatus *_Nonnull out_status
     );
-void*_Nonnull polywrap_native_1715_FFIBuilderConfig_new(
+void*_Nonnull polywrap_native_4639_FFIBuilderConfig_new(
       
     RustCallStatus *_Nonnull out_status
     );
-void polywrap_native_1715_FFIBuilderConfig_add_env(
+void polywrap_native_4639_FFIBuilderConfig_add_env(
       void*_Nonnull ptr,void*_Nonnull uri,RustBuffer env,
     RustCallStatus *_Nonnull out_status
     );
-void polywrap_native_1715_FFIBuilderConfig_remove_env(
+void polywrap_native_4639_FFIBuilderConfig_remove_env(
       void*_Nonnull ptr,void*_Nonnull uri,
     RustCallStatus *_Nonnull out_status
     );
-void polywrap_native_1715_FFIBuilderConfig_add_interface_implementations(
+void polywrap_native_4639_FFIBuilderConfig_add_interface_implementations(
       void*_Nonnull ptr,void*_Nonnull interface_uri,RustBuffer implementation_uris,
     RustCallStatus *_Nonnull out_status
     );
-void polywrap_native_1715_FFIBuilderConfig_add_interface_implementation(
+void polywrap_native_4639_FFIBuilderConfig_add_interface_implementation(
       void*_Nonnull ptr,void*_Nonnull interface_uri,void*_Nonnull implementation_uri,
     RustCallStatus *_Nonnull out_status
     );
-void polywrap_native_1715_FFIBuilderConfig_remove_interface_implementation(
+void polywrap_native_4639_FFIBuilderConfig_remove_interface_implementation(
       void*_Nonnull ptr,void*_Nonnull interface_uri,void*_Nonnull implementation_uri,
     RustCallStatus *_Nonnull out_status
     );
-void polywrap_native_1715_FFIBuilderConfig_add_wrapper(
+void polywrap_native_4639_FFIBuilderConfig_add_wrapper(
       void*_Nonnull ptr,void*_Nonnull uri,uint64_t wrapper,
     RustCallStatus *_Nonnull out_status
     );
-void polywrap_native_1715_FFIBuilderConfig_remove_wrapper(
+void polywrap_native_4639_FFIBuilderConfig_remove_wrapper(
       void*_Nonnull ptr,void*_Nonnull uri,
     RustCallStatus *_Nonnull out_status
     );
-void polywrap_native_1715_FFIBuilderConfig_add_package(
+void polywrap_native_4639_FFIBuilderConfig_add_package(
       void*_Nonnull ptr,void*_Nonnull uri,uint64_t package,
     RustCallStatus *_Nonnull out_status
     );
-void polywrap_native_1715_FFIBuilderConfig_remove_package(
+void polywrap_native_4639_FFIBuilderConfig_remove_package(
       void*_Nonnull ptr,void*_Nonnull uri,
     RustCallStatus *_Nonnull out_status
     );
-void polywrap_native_1715_FFIBuilderConfig_add_redirect(
+void polywrap_native_4639_FFIBuilderConfig_add_redirect(
       void*_Nonnull ptr,void*_Nonnull from,void*_Nonnull to,
     RustCallStatus *_Nonnull out_status
     );
-void polywrap_native_1715_FFIBuilderConfig_remove_redirect(
+void polywrap_native_4639_FFIBuilderConfig_remove_redirect(
       void*_Nonnull ptr,void*_Nonnull from,
     RustCallStatus *_Nonnull out_status
     );
-void polywrap_native_1715_FFIBuilderConfig_add_resolver(
+void polywrap_native_4639_FFIBuilderConfig_add_resolver(
       void*_Nonnull ptr,uint64_t resolver,
     RustCallStatus *_Nonnull out_status
     );
-void*_Nonnull polywrap_native_1715_FFIBuilderConfig_build(
+void polywrap_native_4639_FFIBuilderConfig_add_system_defaults(
       void*_Nonnull ptr,
     RustCallStatus *_Nonnull out_status
     );
-void ffi_polywrap_native_1715_FFIWrapper_init_callback(
+void polywrap_native_4639_FFIBuilderConfig_add_web3_defaults(
+      void*_Nonnull ptr,
+    RustCallStatus *_Nonnull out_status
+    );
+void*_Nonnull polywrap_native_4639_FFIBuilderConfig_build(
+      void*_Nonnull ptr,
+    RustCallStatus *_Nonnull out_status
+    );
+void ffi_polywrap_native_4639_FFIWrapper_init_callback(
       ForeignCallback  _Nonnull callback_stub,
     RustCallStatus *_Nonnull out_status
     );
-void ffi_polywrap_native_1715_FFIWrapPackage_init_callback(
+void ffi_polywrap_native_4639_FFIWrapPackage_init_callback(
       ForeignCallback  _Nonnull callback_stub,
     RustCallStatus *_Nonnull out_status
     );
-void ffi_polywrap_native_1715_FFIUriResolver_init_callback(
+void ffi_polywrap_native_4639_FFIUriResolver_init_callback(
       ForeignCallback  _Nonnull callback_stub,
     RustCallStatus *_Nonnull out_status
     );
-void ffi_polywrap_native_1715_FFIUriWrapper_init_callback(
+void ffi_polywrap_native_4639_FFIUriWrapper_init_callback(
       ForeignCallback  _Nonnull callback_stub,
     RustCallStatus *_Nonnull out_status
     );
-void ffi_polywrap_native_1715_FFIUriWrapPackage_init_callback(
+void ffi_polywrap_native_4639_FFIUriWrapPackage_init_callback(
       ForeignCallback  _Nonnull callback_stub,
     RustCallStatus *_Nonnull out_status
     );
-void ffi_polywrap_native_1715_FFIUriPackageOrWrapper_init_callback(
+void ffi_polywrap_native_4639_FFIUriPackageOrWrapper_init_callback(
       ForeignCallback  _Nonnull callback_stub,
     RustCallStatus *_Nonnull out_status
     );
-void*_Nonnull polywrap_native_1715_ffi_uri_from_string(
+void*_Nonnull polywrap_native_4639_ffi_uri_from_string(
       RustBuffer uri,
     RustCallStatus *_Nonnull out_status
     );
-RustBuffer ffi_polywrap_native_1715_rustbuffer_alloc(
+RustBuffer ffi_polywrap_native_4639_rustbuffer_alloc(
       int32_t size,
     RustCallStatus *_Nonnull out_status
     );
-RustBuffer ffi_polywrap_native_1715_rustbuffer_from_bytes(
+RustBuffer ffi_polywrap_native_4639_rustbuffer_from_bytes(
       ForeignBytes bytes,
     RustCallStatus *_Nonnull out_status
     );
-void ffi_polywrap_native_1715_rustbuffer_free(
+void ffi_polywrap_native_4639_rustbuffer_free(
       RustBuffer buf,
     RustCallStatus *_Nonnull out_status
     );
-RustBuffer ffi_polywrap_native_1715_rustbuffer_reserve(
+RustBuffer ffi_polywrap_native_4639_rustbuffer_reserve(
       RustBuffer buf,int32_t additional,
     RustCallStatus *_Nonnull out_status
     );
