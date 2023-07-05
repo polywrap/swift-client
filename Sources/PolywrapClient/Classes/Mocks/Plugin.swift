@@ -45,7 +45,7 @@ public class MockPlugin: PluginModule {
     }
 }
 
-class MemoryStoragePlugin: PluginModule {
+public class MemoryStoragePlugin: PluginModule {
     private var value: Int
 
     public override init() {
@@ -53,12 +53,12 @@ class MemoryStoragePlugin: PluginModule {
     }
 
     public func getData(_: EmptyArgs, _: EmptyEnv?, _: Invoker) async throws -> Int {
-        try await Task.sleep(nanoseconds: UInt64(5 * Double(NSEC_PER_SEC)))
+        try await Task.sleep(nanoseconds: UInt64(50 * 1_000_000))
         return self.value
     }
 
     public func setData(args: SetDataArgs, _: EmptyEnv?, _: Invoker) async throws -> Bool {
-        try await Task.sleep(nanoseconds: UInt64(5 * Double(NSEC_PER_SEC)))
+        try await Task.sleep(nanoseconds: UInt64(50 * 1_000_000))
         self.value = args.value
         return true
     }
