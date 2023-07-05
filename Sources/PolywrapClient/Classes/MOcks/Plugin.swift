@@ -17,6 +17,13 @@ public struct AddArgs: Codable {
     }
 }
 
+public struct SetDataArgs: Codable {
+    public var value: Int
+    public init(_ value: Int) {
+        self.value = value
+    }
+}
+
 public struct EmptyArgs: Codable {}
 public struct EmptyEnv: Codable {}
 public struct PlusOneArgs: Codable {}
@@ -43,27 +50,21 @@ class MemoryStoragePlugin: PluginModule {
 
     public override init() {
         self.value = 0
-        super.init()
     }
 
-    public func getData(_: [String: Any]) async throws -> Int {
-        try await sleep(ms: 50)
+    public func getData(_: EmptyArgs, _: EmptyEnv?, _: Invoker) async throws -> Int {
+        try await Task.sleep(nanoseconds: UInt64(5 * Double(NSEC_PER_SEC)))
         return self.value
     }
 
-    public func setData(args: [String: Int]) async throws -> Bool {
-        try await sleep(ms: 50)
-        guard let val = args["value"] else {
-            return false
-        }
-        self.value = val
+    public func setData(args: SetDataArgs, _: EmptyEnv?, _: Invoker) async throws -> Bool {
+        try await Task.sleep(nanoseconds: UInt64(5 * Double(NSEC_PER_SEC)))
+        self.value = args.value
         return true
     }
 
-    public func sleep(ms: Int) async throws {
-        let duration = DispatchTimeInterval.milliseconds(ms)
-        let deadline = DispatchTime.now().advanced(by: duration)
-        try await Task.sleep(nanoseconds: UInt64(deadline.uptimeNanoseconds))
+    func sleep(ms: Int) async throws {
+        try await Task.sleep(nanoseconds: UInt64(ms))
     }
 }
 

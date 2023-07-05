@@ -16,12 +16,24 @@ public typealias PluginMethod = (
     _ invoker: Invoker
 ) throws -> Encodable?
 
+public typealias PluginAsyncMethod = (
+    _ args: [UInt8],
+    _ env: [UInt8]?,
+    _ invoker: Invoker
+) async throws -> Encodable?
+
+public enum MethodType {
+    case async(PluginAsyncMethod)
+    case sync(PluginMethod)
+}
+
 enum PluginError: Error {
     case methodNotFound
 }
 
 open class PluginModule {
-    public var methodsMap: [String: PluginMethod] = [:]
+    public var methodsMap: [String: MethodType] = [:]
+    public var asyncMethodsMap: [String: MethodType] = [:]
 
     public init() {}
     
@@ -37,7 +49,7 @@ open class PluginModule {
         name: String,
         closure: @escaping (_ args: T, _ env: E?, _ invoker: Invoker) throws -> R
     ) {
-        methodsMap[name] = {(_ args: [UInt8], _ env: [UInt8]?, _ invoker: Invoker) throws -> Encodable? in
+        methodsMap[name] = MethodType.sync({(_ args: [UInt8], _ env: [UInt8]?, _ invoker: Invoker) throws -> Encodable? in
             let decodedArgs: T? = try self.decode(args)
             let decodedEnv: E? = try self.decode(env)
             guard let sanitizedArgs = decodedArgs else {
@@ -45,14 +57,14 @@ open class PluginModule {
             }
             
             return try closure(sanitizedArgs, decodedEnv, invoker)
-        }
+        })
     }
 
     public func addVoidMethod<T: Codable, E: Codable>(
         name: String,
         closure: @escaping (_ args: T, _ env: E?, _ invoker: Invoker) throws -> Void
     ) {
-        methodsMap[name] = { args, env, invoker in
+        methodsMap[name] = MethodType.sync({ args, env, invoker in
             let decodedArgs: T? = try self.decode(args)
             let decodedEnv: E? = try self.decode(env)
 
@@ -61,7 +73,22 @@ open class PluginModule {
             }
             try closure(sanitizedArgs, decodedEnv, invoker)
             return AnyEncodable(VoidCodable())
-        }
+        })
+    }
+    
+    public func addAsyncMethod<T: Codable, E: Codable, R: Codable>(
+        name: String,
+        closure: @escaping (_ args: T, _ env: E?, _ invoker: Invoker) async throws -> R
+    ) {
+        methodsMap[name] = MethodType.async({(_ args: [UInt8], _ env: [UInt8]?, _ invoker: Invoker) async throws -> Encodable? in
+            let decodedArgs: T? = try self.decode(args)
+            let decodedEnv: E? = try self.decode(env)
+            guard let sanitizedArgs = decodedArgs else {
+                return [] as [UInt8]
+            }
+
+            return try await closure(sanitizedArgs, decodedEnv, invoker)
+        })
     }
     
     public func _wrap_invoke(
@@ -75,7 +102,17 @@ open class PluginModule {
         }
 
         let sanitizedArgs = args ?? [] as [UInt8]
-        let result = try fn(sanitizedArgs, env, invoker)
+        let result: Encodable?
+        
+        switch fn {
+        case .sync(let syncMethod):
+            result = try syncMethod(sanitizedArgs, env, invoker)
+        case .async(let asyncMethod):
+            result = try runBlocking {
+                return try await asyncMethod(sanitizedArgs, env, invoker)
+            }
+        }
+        
         if let result = result {
             return try encode(value: AnyEncodable(result))
         } else {

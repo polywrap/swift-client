@@ -50,5 +50,22 @@ final class PolywrapClientTests: XCTestCase {
         let _: VoidCodable? = try client.invoke(uri: uri, method: "increment")
         XCTAssertEqual(mockPlugin.counter, 10)
     }
+    
+    func testPluginAsyncInvoke() throws {
+        let memoryStoragePlugin = MemoryStoragePlugin()
+        memoryStoragePlugin.addAsyncMethod(name: "getData", closure: memoryStoragePlugin.getData)
+        memoryStoragePlugin.addAsyncMethod(name: "setData", closure: memoryStoragePlugin.setData)
+        
+        let wrapPackage = PluginPackage(memoryStoragePlugin)
+        let uri = try Uri("wrap://plugin/memory-storage")
+        let builder = BuilderConfig().addPackage(uri, wrapPackage)
+        let client = builder.build()
+        
+        let result: Bool = try client.invoke(uri: uri, method: "setData", args: SetDataArgs(5000), env: nil)
+        XCTAssertEqual(result, true)
+        let data: Int = try client.invoke(uri: uri, method: "getData")
+        XCTAssertEqual(data, 5000)
+    }
+
 }
 
