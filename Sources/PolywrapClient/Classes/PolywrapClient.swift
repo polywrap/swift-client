@@ -7,6 +7,7 @@ public class PolywrapClient {
         self.ffi = client
     }
     
+    // Invoke without args and env
     public func invoke<R: Decodable>(
         uri: Uri,
         method: String
@@ -24,6 +25,7 @@ public class PolywrapClient {
         return try decode(value: result)
     }
     
+    // Invoke with args and env
     public func invoke<T: Encodable, R: Decodable>(
         uri: Uri,
         method: String,
@@ -56,4 +58,8 @@ public class PolywrapClient {
             return try Uri(ffi: implementationUri)
         }
     }
+    
+//    public func tryResolveUri(_ uri: Uri, _ resolutionContext: FfiUriResolutionContext?) throws -> <#Return Type#> {
+//        return try self.ffi.loadWrapper(uri: uri.ffi, resolutionContext: resolutionContext)
+//    }
 }

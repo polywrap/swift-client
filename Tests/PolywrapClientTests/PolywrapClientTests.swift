@@ -8,6 +8,7 @@
 import XCTest
 @testable import PolywrapClient
 
+struct EmptyResponse:Codable {}
 final class PolywrapClientTests: XCTestCase {
     func testWrapInvoke() throws {
         let reader = ResourceReader(bundle: Bundle.module)
@@ -35,20 +36,18 @@ final class PolywrapClientTests: XCTestCase {
     
     func testPluginStatefulInvoke() throws {
         let mockPlugin = MockPlugin(7)
-        
-        mockPlugin.addMethod(name: "plusOne", closure: mockPlugin.plusOne)
+        mockPlugin.addVoidMethod(name: "increment", closure: mockPlugin.increment)
 
         let wrapPackage = PluginPackage(mockPlugin)
         let uri = try Uri("wrap://plugin/mock")
         let builder = BuilderConfig().addPackage(uri, wrapPackage)
         let client = builder.build()
 
-        let result: Int = try client.invoke(uri: uri, method: "plusOne", args: nil as PlusOneArgs?, env: nil)
-        XCTAssertEqual(result, 8)
-        let resultTwo: Int = try client.invoke(uri: uri, method: "plusOne", args: nil as PlusOneArgs?, env: nil)
-        XCTAssertEqual(resultTwo, 9)
-        let resultThree: Int = try client.invoke(uri: uri, method: "plusOne", args: nil as PlusOneArgs?, env: nil)
-        XCTAssertEqual(resultThree, 10)
+        let _: VoidCodable? = try client.invoke(uri: uri, method: "increment")
+        XCTAssertEqual(mockPlugin.counter, 8)
+        let _: VoidCodable? = try client.invoke(uri: uri, method: "increment")
+        XCTAssertEqual(mockPlugin.counter, 9)
+        let _: VoidCodable? = try client.invoke(uri: uri, method: "increment")
         XCTAssertEqual(mockPlugin.counter, 10)
     }
 }

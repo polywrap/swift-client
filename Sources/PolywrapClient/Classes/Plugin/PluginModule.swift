@@ -11,7 +11,7 @@ import MessagePacker
 public struct VoidCodable: Codable {}
 
 public typealias PluginMethod = (
-    _ args: [UInt8]?,
+    _ args: [UInt8],
     _ env: [UInt8]?,
     _ invoker: Invoker
 ) throws -> Encodable?
@@ -35,23 +35,31 @@ open class PluginModule {
     
     public func addMethod<T: Codable, E: Codable, R: Codable>(
         name: String,
-        closure: @escaping (_ args: T?, _ env: E?, _ invoker: Invoker) throws -> R
+        closure: @escaping (_ args: T, _ env: E?, _ invoker: Invoker) throws -> R
     ) {
-        methodsMap[name] = { [weak self] args, env, invoker in
-            let decodedArgs: T? = try self?.decode(args)
-            let decodedEnv: E? = try self?.decode(env)
-            return try closure(decodedArgs, decodedEnv, invoker)
+        methodsMap[name] = {(_ args: [UInt8], _ env: [UInt8]?, _ invoker: Invoker) throws -> Encodable? in
+            let decodedArgs: T? = try self.decode(args)
+            let decodedEnv: E? = try self.decode(env)
+            guard let sanitizedArgs = decodedArgs else {
+                return [] as [UInt8]
+            }
+            
+            return try closure(sanitizedArgs, decodedEnv, invoker)
         }
     }
 
     public func addVoidMethod<T: Codable, E: Codable>(
         name: String,
-        closure: @escaping (_ args: T?, _ env: E?, _ invoker: Invoker) throws -> Void
+        closure: @escaping (_ args: T, _ env: E?, _ invoker: Invoker) throws -> Void
     ) {
-        methodsMap[name] = { [weak self] args, env, invoker in
-            let decodedArgs: T? = try self?.decode(args)
-            let decodedEnv: E? = try self?.decode(env)
-            try closure(decodedArgs, decodedEnv, invoker)
+        methodsMap[name] = { args, env, invoker in
+            let decodedArgs: T? = try self.decode(args)
+            let decodedEnv: E? = try self.decode(env)
+
+            guard let sanitizedArgs = decodedArgs else {
+                return [] as [UInt8]
+            }
+            try closure(sanitizedArgs, decodedEnv, invoker)
             return AnyEncodable(VoidCodable())
         }
     }
@@ -66,7 +74,8 @@ open class PluginModule {
             throw PluginError.methodNotFound
         }
 
-        let result = try fn(args, env, invoker)
+        let sanitizedArgs = args ?? [] as [UInt8]
+        let result = try fn(sanitizedArgs, env, invoker)
         if let result = result {
             return try encode(value: AnyEncodable(result))
         } else {

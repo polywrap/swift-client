@@ -37,7 +37,7 @@ public class PluginWrapper: FfiWrapper {
     ) throws -> [UInt8] {
         try self.instance._wrap_invoke(
             method: method,
-            args: args!,
+            args: args,
             env: env,
             invoker: invoker
         )

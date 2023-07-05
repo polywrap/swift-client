@@ -45,17 +45,38 @@ public class BuilderConfig {
         return self
     }
     
-    public func addInterfaceImplementations(_ uri: Uri, _ implementationUris: [String]) throws -> Self {
-        let uriArray = try implementationUris.compactMap { implementationUri -> FfiUri? in
-            guard let uri = try? Uri(implementationUri) else {
-                throw FfiError.UriParseError(err: "Error parsing implementation uri \(implementationUri)")
-            }
-            return uri.ffi
-        }
-        self.ffi.addInterfaceImplementations(interfaceUri: uri.ffi, implementationUri: uriArray)
+    public func addRedirect(_ from: Uri, _ to: Uri) -> Self {
+        self.ffi.addRedirect(from: from.ffi, to: to.ffi)
         return self
     }
 
+    public func removeRedirect(_ from: Uri, _ to: Uri) -> Self {
+        self.ffi.removeRedirect(from: from.ffi)
+        return self
+    }
+    
+    public func addInterfaceImplementation(_ uri: Uri, _ implementationUri: Uri) -> Self {
+        self.ffi.addInterfaceImplementation(interfaceUri: uri.ffi, implementationUri: implementationUri.ffi)
+        return self
+    }
+    
+    public func addInterfaceImplementations(_ uri: Uri, _ implementationUris: [Uri]) -> Self {
+        let uriArray = implementationUris.compactMap { implementationUri -> FfiUri? in
+            return implementationUri.ffi
+        }
+        self.ffi.addInterfaceImplementations(interfaceUri: uri.ffi, implementationUris: uriArray)
+        return self
+    }
+    
+    public func removeInterfaceImplementation(_ uri: Uri, _ implementationUri: Uri) -> Self {
+        self.ffi.removeInterfaceImplementation(interfaceUri: uri.ffi, implementationUri: implementationUri.ffi)
+        return self
+    }
+
+    // public func addResolver(_ resolver: FfiUriResolver) -> Self {
+    //     self.ffi.addResolver(resolver: resolver)
+    //     return self
+    // }
     
     public func build() -> PolywrapClient {
         let ffiClient = self.ffi.build()
