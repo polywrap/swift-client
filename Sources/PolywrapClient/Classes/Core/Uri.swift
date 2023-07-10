@@ -7,11 +7,19 @@
 
 import Foundation
 
+enum UriError: Error {
+    case ParseError(String)
+}
+
 public class Uri {
     public let ffi: FfiUri;
 
     public init(_ uri: String) throws {
-        self.ffi = try ffiUriFromString(uri: uri)
+        do {
+            self.ffi = try ffiUriFromString(uri: uri)
+        } catch {
+            throw UriError.ParseError("Invalid URI Received: \(uri)")
+        }
     }
     
     public init(ffi: FfiUri) throws {
