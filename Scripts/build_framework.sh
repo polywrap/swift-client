@@ -14,10 +14,11 @@ cargo build --target aarch64-apple-ios
 cargo build --target aarch64-apple-ios-sim
 cargo build --target x86_64-apple-ios
 cargo build --target x86_64-apple-darwin # For macOS w/Intel
+cargo build --target aarch64-apple-darwin # For macOS w/M1
 
 IOS_ARM64_FRAMEWORK="$BUILD_PATH/ios-arm64/$FRAMEWORK_NAME.framework"
-IOS_SIM_FRAMEWORK="$BUILD_PATH/ios-arm64_x86_64-simulator/$FRAMEWORK_NAME.framework"
-MACOS_FRAMEWORK="$BUILD_PATH/macos-x86_64/$FRAMEWORK_NAME.framework"
+IOS_SIM_FRAMEWORK="$BUILD_PATH/ios-simulator/$FRAMEWORK_NAME.framework"
+MACOS_FRAMEWORK="$BUILD_PATH/macos/$FRAMEWORK_NAME.framework"
 
 # Remove old files if they exist
 rm -rf "$IOS_ARM64_FRAMEWORK/Headers"
@@ -26,6 +27,7 @@ rm -rf "$IOS_SIM_FRAMEWORK/Headers"
 rm -rf "$IOS_SIM_FRAMEWORK/$FRAMEWORK_NAME.a"
 rm -rf "$MACOS_FRAMEWORK/Headers"
 rm -rf "$MACOS_FRAMEWORK/$FRAMEWORK_NAME.a"
+
 rm -rf "$IOS_PROJ/Sources/PolywrapClient/include/${UDL_NAME}FFI.h"
 
 rm -rf ../../target/universal.a
@@ -42,6 +44,12 @@ lipo -create \
     "../../target/aarch64-apple-ios-sim/debug/lib${UDL_NAME}.a" \
     "../../target/x86_64-apple-ios/debug/lib${UDL_NAME}.a" \
     -output ../../target/universal.a
+
+# Make fat lib for mac
+lipo -create \
+    "../../target/aarch64-apple-darwin/debug/lib${UDL_NAME}.a" \
+    "../../target/x86_64-apple-darwin/debug/lib${UDL_NAME}.a" \
+    -output ../../target/universal_mac.a
 
 # Move headers
 mkdir "$IOS_ARM64_FRAMEWORK/Headers"
@@ -63,7 +71,7 @@ cp "../../target/aarch64-apple-ios/debug/lib${UDL_NAME}.a" \
     "$IOS_ARM64_FRAMEWORK/$FRAMEWORK_NAME.a"
 cp ../../target/universal.a \
     "$IOS_SIM_FRAMEWORK/$FRAMEWORK_NAME.a"
-cp "../../target/x86_64-apple-darwin/debug/lib${UDL_NAME}.a" \
+cp "../../target/universal_mac.a" \
     "$MACOS_FRAMEWORK/$FRAMEWORK_NAME.a"
 
 # Move swift interface
