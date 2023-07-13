@@ -27,6 +27,7 @@ rm -rf "$IOS_SIM_FRAMEWORK/Headers/${UDL_NAME}FFI.h"
 rm -rf "$IOS_SIM_FRAMEWORK/$FRAMEWORK_NAME.a"
 rm -rf "$MACOS_FRAMEWORK/Headers/${UDL_NAME}FFI.h"
 rm -rf "$MACOS_FRAMEWORK/$FRAMEWORK_NAME.a"
+rm "$IOS_PROJ/Sources/PolywrapClient/$SWIFT_INTERFACE.swift"
 
 rm -rf ../../target/universal.a
 rm -rf include/ios/*
@@ -50,15 +51,12 @@ lipo -create \
     -output ../../target/universal_mac.a
 
 # Move headers
-mkdir "$IOS_ARM64_FRAMEWORK/Headers"
 cp "$IOS_PROJ/Sources/PolywrapClient/.cache/${UDL_NAME}FFI.h" \
     "$IOS_ARM64_FRAMEWORK/Headers/${UDL_NAME}FFI.h"
 
-mkdir "$IOS_SIM_FRAMEWORK/Headers"
 cp "$IOS_PROJ/Sources/PolywrapClient/.cache/${UDL_NAME}FFI.h" \
     "$IOS_SIM_FRAMEWORK/Headers/${UDL_NAME}FFI.h"
 
-mkdir "$MACOS_FRAMEWORK/Headers"
 cp "$IOS_PROJ/Sources/PolywrapClient/.cache/${UDL_NAME}FFI.h" \
     "$MACOS_FRAMEWORK/Headers/${UDL_NAME}FFI.h"
 
