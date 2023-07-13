@@ -10,7 +10,7 @@ let package = Package(
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
             name: "PolywrapClient",
-            targets: ["PolywrapClient", "PolywrapClientNative"]),
+            targets: ["PolywrapClient"]),
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
@@ -22,22 +22,20 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
             name: "PolywrapClient",
-            dependencies: ["MessagePacker", "PolywrapClientNative", "AsyncObjects"],
-            publicHeadersPath: "include",
-            cSettings: [ .headerSearchPath("include") ]
+            dependencies: ["MessagePacker", "PolywrapClientNative", "AsyncObjects"]
         ),
         .binaryTarget(
             name: "PolywrapClientNative",
-            url: "https://github.com/polywrap/swift-client/releases/download/v0.0.2/PolywrapClientNative.xcframework.zip",
-            checksum: "e6496955aab8fe74ffa5897449d6fc9d7c272bc84f716c4f1cd33bf9ddf4463e"
+            path: "Frameworks/PolywrapClientNative.xcframework"
+            // url: "https://github.com/polywrap/swift-client/releases/download/v0.0.2/PolywrapClientNative.xcframework.zip",
+            // checksum: "e6496955aab8fe74ffa5897449d6fc9d7c272bc84f716c4f1cd33bf9ddf4463e"
         ),
         .testTarget(
             name: "PolywrapClientTests",
             dependencies: [
-                "PolywrapClient",
+                "PolywrapClient"
             ],
-            resources: [ .copy("Cases") ],
-            cSettings: [ .headerSearchPath("../../Sources/PolywrapClient/include")]
+            resources: [ .copy("Cases") ]
         )
     ]
 )
