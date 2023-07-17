@@ -24,10 +24,10 @@ jobs:
         with:
           timeout_minutes: 30
           max_attempts: 5
-          command: xcodebuild -scheme PolywrapClient -derivedDataPath Build/ -destination 'platform=macOS' -enableCodeCoverage YES clean build
+          command: xcodebuild -scheme PolywrapClient -derivedDataPath Build/ -destination 'platform=macOS' clean build
 
       - name: Test
-        run: xcodebuild -scheme PolywrapClient -derivedDataPath Build/ -destination 'platform=macOS' test
+        run: xcodebuild -scheme PolywrapClient -derivedDataPath Build/ -destination 'platform=macOS' -enableCodeCoverage YES test
 
       - name: Generate Coverage Info
         run: |
