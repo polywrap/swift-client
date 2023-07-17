@@ -12,7 +12,11 @@ jobs:
   build-and-test:
     runs-on: macOS-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
+      - name: Generate cases
+        run: |
+          cd Scripts
+          ./generate_cases.sh
       - name: Build and Test
         uses: nick-fields/retry@v2
         with:
