@@ -22,10 +22,16 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
             name: "PolywrapClient",
-            dependencies: ["MessagePacker", "PolywrapClientNative", "AsyncObjects"]
+            dependencies: ["MessagePacker", "PolywrapClientNative", "AsyncObjects"],
+            path: "Source"
+        ),
+        .target(
+            name: "PolywrapClientNative",
+            dependencies: ["PolywrapClientNativeBinary"],
+            path: "Native"
         ),
         .binaryTarget(
-            name: "PolywrapClientNative",
+            name: "PolywrapClientNativeBinary",
             url: "https://github.com/polywrap/swift-client/releases/download/v0.0.3/PolywrapClientNative.xcframework.zip",
             checksum: "4dfbc7f12c4ebbd9e1c62c637775e12c449addce2572452da912c6d137904a4d"
         ),
@@ -34,6 +40,7 @@ let package = Package(
             dependencies: [
                 "PolywrapClient"
             ],
+            path: "Tests",
             resources: [ .copy("Cases") ]
         )
     ]

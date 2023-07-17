@@ -5,9 +5,9 @@
 xcuserdata/
 DerivedData/
 .netrc
-/Frameworks/PolywrapClientNative.xcframework/*/PolywrapClientNative.a
+/Native/Frameworks/PolywrapClientNative.xcframework/*/PolywrapClientNative.a
+/Native/Frameworks/PolywrapClientNative.xcframework/*/Headers/*.h
 .swiftpm
-/Sources/PolywrapClient/Resources/wrappers
-/Frameworks/PolywrapClientNative.xcframework/*/Headers/*.h
+/Tests/Cases
 cov.info
 /Build
