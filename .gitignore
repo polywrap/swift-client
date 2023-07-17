@@ -9,3 +9,5 @@ DerivedData/
 .swiftpm
 /Sources/PolywrapClient/Resources/wrappers
 /Frameworks/PolywrapClientNative.xcframework/*/Headers/*.h
+cov.info
+/Build

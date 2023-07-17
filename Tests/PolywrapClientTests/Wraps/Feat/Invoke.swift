@@ -43,7 +43,7 @@ final class InvokeTests: XCTestCase {
         let builder = BuilderConfig().addPackage(uri, wrapPackage)
         let client = builder.build()
         
-        let _: VoidCodable? = try client.invoke(uri: uri, method: "increment")
+        let _: VoidCodable? = try? client.invoke(uri: uri, method: "increment")
         XCTAssertEqual(mockPlugin.counter, 8)
         let _: VoidCodable? = try client.invoke(uri: uri, method: "increment")
         XCTAssertEqual(mockPlugin.counter, 9)

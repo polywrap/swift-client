@@ -33,7 +33,6 @@ enum PluginError: Error {
 
 open class PluginModule {
     public var methodsMap: [String: MethodType] = [:]
-    public var asyncMethodsMap: [String: MethodType] = [:]
 
     public init() {}
     

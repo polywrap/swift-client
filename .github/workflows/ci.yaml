@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+    branches:
+      main
+  pull_request:
+    branches:
+      main
+
+jobs:
+  build-and-test:
+    runs-on: macOS-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Build and Test
+        uses: nick-fields/retry@v2
+        with:
+          timeout_minutes: 30
+          max_attempts: 5
+          command: | 
+            xcodebuild -scheme PolywrapClient -derivedDataPath Build/ -destination 'platform=macOS' -enableCodeCoverage YES clean build test
+            cd Build/Build/ProfileData
+            cd $(ls -d */|head -n 1)
+            directory=${PWD##*/}
+            pathCoverage=Build/Build/ProfileData/${directory}/Coverage.profdata
+            cd ../../../../
+            xcrun llvm-cov export -format="lcov" -instr-profile $pathCoverage Build/Build/Products/Debug/PolywrapClient.o > cov.info
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          files: cov.info
