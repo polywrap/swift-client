@@ -9,11 +9,11 @@ import XCTest
 import PolywrapClient
 
 
-final class BuiderConfigTests: XCTestCase {
-    func add_env() throws {
+//final class BuiderConfigTests: XCTestCase {
+//    func add_env() throws {
+//        let uri = try Uri("wrap/mock")
 //        let builder = BuilderConfig()
-//        builder.addEnv(<#T##Uri#>, env: <#T##T#>)
-//        builder.builder.addEnv(uri: <#T##FfiUri#>, env: <#T##[UInt8]#>)
-    }
-}
+//        let b = try builder.addEnv(uri, ["key": "value"])
+//    }
+//}
 
