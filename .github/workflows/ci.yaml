@@ -3,7 +3,7 @@ name: CI
 on:
   push:
     branches:
-      [main, chore/add-coverage-and-improve-tests]
+      main
   pull_request:
     branches:
       main
