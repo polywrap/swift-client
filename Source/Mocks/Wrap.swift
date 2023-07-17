@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import PolywrapClientNativeLib
 
 public class MockWrap: FfiWrapper {
     public func invoke(method: String, args: [UInt8]?, env: [UInt8]?, invoker: FfiInvoker) throws -> [UInt8] {

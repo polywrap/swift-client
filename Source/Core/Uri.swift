@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import PolywrapClientNativeLib
 
 enum UriError: Error {
     case ParseError(String)

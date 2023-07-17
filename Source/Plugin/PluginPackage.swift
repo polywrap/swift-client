@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import PolywrapClientNativeLib
 
 public class PluginPackage: FfiWrapPackage {
     let module: PluginModule;

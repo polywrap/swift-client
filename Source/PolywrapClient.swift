@@ -1,5 +1,4 @@
-import PolywrapClientNative
-
+import PolywrapClientNativeLib
 
 public class PolywrapClient {
     public let ffi: FfiClient
