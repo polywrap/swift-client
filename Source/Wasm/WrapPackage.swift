@@ -48,6 +48,9 @@ public class WasmPackage: FfiWrapPackage {
     }
 
     public func createWrapper() throws -> FfiWrapper {
+        if self.module == nil {
+            try self.getModule()
+        }
         return WasmWrapper(module: self.module)
     }
 }

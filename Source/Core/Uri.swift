@@ -8,7 +8,7 @@
 import Foundation
 import PolywrapClientNativeLib
 
-public enum UriError: Error {
+public enum UriError: Error, Equatable {
     case parseError(String)
 }
 
