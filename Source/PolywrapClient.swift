@@ -1,12 +1,23 @@
 import PolywrapClientNativeLib
 
+/// `PolywrapClient` provides methods to interact with the WRAP standard in Swift
 public class PolywrapClient {
     public let ffi: FfiClient
+    /// Creates a new `PolywrapClient`.
+    ///
+    /// - Parameters:
+    ///   - client: An `FfiClient` object.
     public init(client: FfiClient) {
         self.ffi = client
     }
 
-    // Invoke without args and env
+    /// Invokes a method without any arguments or environment variables.
+    ///
+    /// - Parameters:
+    ///   - uri: A `Uri` object.
+    ///   - method: The name of the method to invoke.
+    /// - Throws: If the invocation fails.
+    /// - Returns: A value of type `R`.
     public func invoke<R: Decodable>(
         uri: Uri,
         method: String
@@ -24,7 +35,15 @@ public class PolywrapClient {
         return try decode(value: result)
     }
 
-    // Invoke with args and env
+    /// Invokes a method with arguments and environment variables.
+    ///
+    /// - Parameters:
+    ///   - uri: A `Uri` object.
+    ///   - method: The name of the method to invoke.
+    ///   - args: The arguments for the method.
+    ///   - env: The environment variables for the method.
+    /// - Throws: If the invocation fails.
+    /// - Returns: A value of type `R`.
     public func invoke<T: Encodable, R: Decodable>(
         uri: Uri,
         method: String,
@@ -44,6 +63,12 @@ public class PolywrapClient {
         return try decode(value: result)
     }
 
+    /// Retrieves environment variables by Uri.
+    ///
+    /// - Parameters:
+    ///   - uri: A `Uri` object.
+    /// - Throws: If the retrieval fails.
+    /// - Returns: A value of type `T` or `nil` if no environment variables exist.
     public func getEnvByUri<T: Decodable>(_ uri: Uri) throws -> T? {
         guard let env = self.ffi.getEnvByUri(uri: uri.ffi) else {
             return nil
@@ -51,6 +76,12 @@ public class PolywrapClient {
         return try decode(value: env)
     }
 
+    /// Retrieves implementations by Uri.
+    ///
+    /// - Parameters:
+    ///   - uri: A `Uri` object.
+    /// - Throws: If the retrieval fails.
+    /// - Returns: An array of `Uri` objects.
     public func getImplementations(_ uri: Uri) throws -> [Uri] {
         let implementations = try self.ffi.getImplementations(uri: uri.ffi)
         return try implementations.compactMap { implementationUri -> Uri in
