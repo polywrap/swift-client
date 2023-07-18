@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import PolywrapClient
 
 public struct AddArgs: Codable {
     var a: Int
