@@ -9,9 +9,9 @@ import Foundation
 import PolywrapClientNativeLib
 
 public class StaticResolver {
-    let resolver: FfiStaticUriResolver;
-    
+    let resolver: FfiStaticUriResolver
+
     public init(_ uriMap: [String: FfiUriPackageOrWrapper]) throws {
-        resolver = try! FfiStaticUriResolver(uriMap: uriMap)
+        resolver = try? FfiStaticUriResolver(uriMap: uriMap)
     }
 }

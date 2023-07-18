@@ -17,12 +17,12 @@ public enum WasmPackageError: Error {
 public class WasmPackage: FfiWrapPackage {
     public let reader: Reader?
     public var module: [UInt8]?
-    
+
     public init(reader: Reader?, module: [UInt8]?) {
         self.reader = reader
         self.module = module
     }
-    
+
     public func getModule() throws -> [UInt8] {
         if let module = self.module {
             return module

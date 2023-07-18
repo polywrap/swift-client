@@ -36,7 +36,7 @@ open class PluginModule {
     public var methodsMap: [String: MethodType] = [:]
 
     public init() {}
-    
+
     private func decode<T: Codable>(_ bytes: [UInt8]?) throws -> T? {
         guard let bytes = bytes else {
             return nil
@@ -44,7 +44,7 @@ open class PluginModule {
         let decoder = MessagePackDecoder()
         return try decoder.decode(T.self, from: Data(bytes))
     }
-    
+
     public func addMethod<T: Codable, E: Codable, R: Codable>(
         name: String,
         closure: @escaping (_ args: T, _ env: E?, _ invoker: Invoker) throws -> R
@@ -55,7 +55,7 @@ open class PluginModule {
             guard let sanitizedArgs = decodedArgs else {
                 return [] as [UInt8]
             }
-            
+
             return try closure(sanitizedArgs, decodedEnv, invoker)
         })
     }
@@ -75,7 +75,7 @@ open class PluginModule {
             return AnyEncodable(VoidCodable())
         })
     }
-    
+
     public func addAsyncMethod<T: Codable, E: Codable, R: Codable>(
         name: String,
         closure: @escaping (_ args: T, _ env: E?, _ invoker: Invoker) async throws -> R
@@ -90,21 +90,21 @@ open class PluginModule {
             return try await closure(sanitizedArgs, decodedEnv, invoker)
         })
     }
-    
-    public func _wrap_invoke(
+
+    public func wrapInvoke(
         method: String,
         args: [UInt8]?,
         env: [UInt8]?,
         invoker: Invoker
     ) throws -> [UInt8] {
-        guard let fn = self.methodsMap[method] else {
+        guard let method = self.methodsMap[method] else {
             throw PluginError.methodNotFound
         }
 
         let sanitizedArgs = args ?? [] as [UInt8]
         let result: Encodable?
-        
-        switch fn {
+
+        switch method {
         case .sync(let syncMethod):
             result = try syncMethod(sanitizedArgs, env, invoker)
         case .async(let asyncMethod):
@@ -112,7 +112,7 @@ open class PluginModule {
                 return try await asyncMethod(sanitizedArgs, env, invoker)
             }
         }
-        
+
         if let result = result {
             return try encode(value: AnyEncodable(result))
         } else {

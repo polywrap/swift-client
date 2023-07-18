@@ -9,12 +9,12 @@ import Foundation
 import PolywrapClientNativeLib
 
 public class PluginPackage: FfiWrapPackage {
-    let module: PluginModule;
+    let module: PluginModule
 
     public init(_ module: PluginModule) {
         self.module = module
     }
-    
+
     public func createWrapper() throws -> FfiWrapper {
         PluginWrapper(self.module)
     }

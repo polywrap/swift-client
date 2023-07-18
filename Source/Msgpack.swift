@@ -22,7 +22,7 @@ public struct AnyEncodable: Encodable {
 
 public func encode<T: Encodable>(value: T) throws -> [UInt8] {
     let encoder = MessagePackEncoder()
-    if let dictionary = value as? Dictionary<String, AnyEncodable> {
+    if let dictionary = value as? [String: AnyEncodable] {
         do {
             // If the value is a dictionary, treat it as a custom extension type
             let data = try JSONSerialization.data(withJSONObject: dictionary)  // Convert the dictionary to Data
@@ -30,7 +30,11 @@ public func encode<T: Encodable>(value: T) throws -> [UInt8] {
             let encodedData = try encoder.encode(extensionValue)
             return [UInt8](encodedData)
         } catch {
-            throw EncodingError.invalidValue(value, EncodingError.Context(codingPath: [], debugDescription: "Failed to encode dictionary as MessagePack extension type", underlyingError: error))
+            throw EncodingError.invalidValue(value, EncodingError.Context(
+                codingPath: [],
+                debugDescription: "Failed to encode dictionary as MessagePack extension type",
+                underlyingError: error
+            ))
         }
     } else {
         // Otherwise, treat it as a normal Encodable value
@@ -51,9 +55,14 @@ public func decode<T: Decodable>(value: [UInt8]) throws -> T {
                 return try decoder.decode(T.self, from: extensionValue.data)
             }
         } catch {
-            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: [], debugDescription: "Failed to decode map extension type", underlyingError: error))
+            throw DecodingError.dataCorrupted(
+                DecodingError.Context(
+                    codingPath: [],
+                    debugDescription: "Failed to decode map extension type",
+                    underlyingError: error
+                )
+            )
         }
     }
     throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: [], debugDescription: "Failed to decode value"))
 }
-

@@ -2,7 +2,7 @@ import Foundation
 import AsyncObjects
 
 private final class RunBlocking<T, Failure: Error> {
-    fileprivate var value: Result<T, Failure>? = nil
+    fileprivate var value: Result<T, Failure>?
 }
 
 extension RunBlocking where Failure == Never {
