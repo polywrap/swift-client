@@ -7,6 +7,7 @@
 
 import Foundation
 import MessagePacker
+import PolywrapClientNativeLib
 
 public struct VoidCodable: Codable {}
 

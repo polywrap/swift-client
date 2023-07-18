@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import PolywrapClientNativeLib
 
 public class PluginWrapper: FfiWrapper {
 

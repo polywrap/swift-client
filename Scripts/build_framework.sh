@@ -5,7 +5,7 @@ UDL_NAME="polywrap_native"
 FRAMEWORK_NAME="PolywrapClientNative"
 SWIFT_INTERFACE="PolywrapClientNativeLib"
 
-BUILD_PATH="${IOS_PROJ}/Frameworks/PolywrapClientNative.xcframework"
+BUILD_PATH="${IOS_PROJ}/Native/Frameworks/PolywrapClientNative.xcframework"
 
 cd "$RUST_PROJ"
 
@@ -27,7 +27,7 @@ rm -rf "$IOS_SIM_FRAMEWORK/Headers/${UDL_NAME}FFI.h"
 rm -rf "$IOS_SIM_FRAMEWORK/$FRAMEWORK_NAME.a"
 rm -rf "$MACOS_FRAMEWORK/Headers/${UDL_NAME}FFI.h"
 rm -rf "$MACOS_FRAMEWORK/$FRAMEWORK_NAME.a"
-rm "$IOS_PROJ/Sources/PolywrapClient/$SWIFT_INTERFACE.swift"
+rm "$IOS_PROJ/Native/$SWIFT_INTERFACE.swift"
 
 rm -rf ../../target/universal.a
 rm -rf include/ios/*
@@ -36,7 +36,7 @@ rm -rf include/ios/*
 mkdir -p include/ios
 
 # UniFfi bindgen
-cargo run --bin uniffi-bindgen generate "$LOCAL_UDL" --language swift --out-dir $IOS_PROJ/Sources/PolywrapClient/.cache
+cargo run --bin uniffi-bindgen generate "$LOCAL_UDL" --language swift --out-dir $IOS_PROJ/Source/.cache
 
 # Make fat lib for sims
 lipo -create \
@@ -51,13 +51,13 @@ lipo -create \
     -output ../../target/universal_mac.a
 
 # Move headers
-cp "$IOS_PROJ/Sources/PolywrapClient/.cache/${UDL_NAME}FFI.h" \
+cp "$IOS_PROJ/Source/.cache/${UDL_NAME}FFI.h" \
     "$IOS_ARM64_FRAMEWORK/Headers/${UDL_NAME}FFI.h"
 
-cp "$IOS_PROJ/Sources/PolywrapClient/.cache/${UDL_NAME}FFI.h" \
+cp "$IOS_PROJ/Source/.cache/${UDL_NAME}FFI.h" \
     "$IOS_SIM_FRAMEWORK/Headers/${UDL_NAME}FFI.h"
 
-cp "$IOS_PROJ/Sources/PolywrapClient/.cache/${UDL_NAME}FFI.h" \
+cp "$IOS_PROJ/Source/.cache/${UDL_NAME}FFI.h" \
     "$MACOS_FRAMEWORK/Headers/${UDL_NAME}FFI.h"
 
 # Move binaries
@@ -69,7 +69,7 @@ cp "../../target/universal_mac.a" \
     "$MACOS_FRAMEWORK/$FRAMEWORK_NAME.a"
 
 # Move swift interface
-sed "s/${UDL_NAME}FFI/$FRAMEWORK_NAME/g" "$IOS_PROJ/Sources/PolywrapClient/.cache/$UDL_NAME.swift" > "$IOS_PROJ/Sources/PolywrapClient/$SWIFT_INTERFACE.swift"
+sed "s/${UDL_NAME}FFI/$FRAMEWORK_NAME/g" "$IOS_PROJ/Source/.cache/$UDL_NAME.swift" > "$IOS_PROJ/Native/$SWIFT_INTERFACE.swift"
 
 # Update include folder and remove unneeded files
-rm -rf $IOS_PROJ/Sources/PolywrapClient/.cache
+rm -rf $IOS_PROJ/Source/.cache

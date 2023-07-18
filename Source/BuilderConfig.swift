@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import PolywrapClientNativeLib
 
 public class BuilderConfig {
     public let ffi: FfiBuilderConfig

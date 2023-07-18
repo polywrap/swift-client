@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import PolywrapClientNativeLib
 
 public class StaticResolver {
     let resolver: FfiStaticUriResolver;

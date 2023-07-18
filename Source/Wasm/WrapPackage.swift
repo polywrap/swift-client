@@ -5,13 +5,15 @@
 //  Created by Cesar Brazon on 19/6/23.
 //
 
+import Foundation
+import PolywrapClientNativeLib
+
 public enum WasmPackageError: Error {
     case readerMissing
     case loadModuleError
     case unexpectedNilModule
 }
 
-import Foundation
 public class WasmPackage: FfiWrapPackage {
     public let reader: Reader?
     public var module: [UInt8]?
