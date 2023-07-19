@@ -7,11 +7,16 @@ on:
       - chore/docs
 
 jobs:
-  build-and-deploy:
+  deploy-docs:
     runs-on: macOS-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+
+      - name: Generate cases
+        run: |
+          cd Scripts
+          ./generate_cases.sh
 
       - name: Build documentation
         run: ./Scripts/build_docs.sh
