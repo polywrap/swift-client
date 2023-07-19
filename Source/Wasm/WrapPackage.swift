@@ -73,9 +73,11 @@ public class WasmPackage: FfiWrapPackage {
     /// - Returns: A `WasmWrapper` for the module.
     /// - Throws: `WasmPackageError` if there are issues creating the wrapper.
     public func createWrapper() throws -> FfiWrapper {
-        if self.module == nil {
-            try self.getModule()
+        if let module = self.module {
+            return WasmWrapper(module: module)
+        } else {
+            let module = try self.getModule()
+            return WasmWrapper(module: module)
         }
-        return WasmWrapper(module: self.module)
     }
 }
