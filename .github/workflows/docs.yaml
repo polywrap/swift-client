@@ -1,0 +1,23 @@
+name: Build and Deploy Documentation
+
+on:
+  push:
+    branches:
+      - main
+      - chore/docs
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build documentation
+        run: ./Scripts/build_docs.sh
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: docs
+          folder: docs
