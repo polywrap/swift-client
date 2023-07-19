@@ -7,7 +7,7 @@ on:
       - chore/docs
 
 jobs:
-  deploy-docs:
+  build:
     runs-on: macOS-latest
     steps:
       - name: Checkout code
@@ -25,8 +25,31 @@ jobs:
           max_attempts: 5
           command: ./Scripts/build_docs.sh
 
+      - name: Upload docs
+        uses: actions/upload-artifact@v2
+        with:
+          name: docs
+          path: docs
+
+  deploy-docs:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Download docs
+        uses: actions/download-artifact@v2
+        with:
+          name: docs
+
+      - name: Move docs to new directory
+        run: |
+          mkdir new_docs
+          mv docs new_docs/
+
       - name: Deploy documentation to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: docs
-          folder: docs
+          folder: new_docs
