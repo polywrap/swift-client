@@ -14,14 +14,22 @@ class WrapPackageTests: XCTestCase {
     func testWrapPackageWithReader() throws {
         let package = WasmPackage(reader: reader, module: nil)
         let wrapper = try package.createWrapper()
-        XCTAssert(wrapper is WasmWrapper)  // Ensure the type is correct.
+        XCTAssert(wrapper is WasmWrapper)
     }
 
     func testWrapPackageWithModule() throws {
         let module = try reader.readFile(nil)
         let package = WasmPackage(reader: nil, module: module)
         let wrapper = try package.createWrapper()
-        XCTAssert(wrapper is WasmWrapper)  // Ensure the type is correct.
+        XCTAssert(wrapper is WasmWrapper)
+    }
+
+        func testGetModuleThrowsWhenWrongPathGiven() {
+        let readerWithWrongPath = ResourceReader(bundle: Bundle.module, path: "not-existan")
+        let package = WasmPackage(reader: readerWithWrongPath, module: nil)
+        XCTAssertThrowsError(try package.getModule()) { error in
+            XCTAssertEqual(error as? WasmPackageError, WasmPackageError.loadModuleError)
+        }
     }
 
     func testGetModuleThrowsWhenReaderMissing() {

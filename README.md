@@ -1,4 +1,7 @@
-# Swift Client [![codecov](https://codecov.io/gh/polywrap/swift-client/branch/main/graph/badge.svg?token=JvNaa0OHjc)](https://codecov.io/gh/polywrap/swift-client)
+![Public Release Announcement](https://user-images.githubusercontent.com/5522128/177473887-2689cf25-7937-4620-8ca5-17620729a65d.png)
+
+# Swift Client
+ [![codecov](https://codecov.io/gh/polywrap/swift-client/branch/main/graph/badge.svg?token=JvNaa0OHjc)](https://codecov.io/gh/polywrap/swift-client)
 
 Implementation of a client compatible with the [WRAP Protocol](https://github.com/polywrap/specification) in Swift
 
@@ -41,4 +44,4 @@ let result: String = try client.invoke(uri: "wrap/cool-uri", method: "coolMethod
 
 ## Contributions
 
-Contributions to PolywrapClient are more than welcome. If you find a bug or have suggestions for improvements, please open an issue. And if you'd like to contribute code, we would be happy to review a pull request!
+Please check out our [contributing guide](./CONTRIBUTING.md) for guidelines about how to proceed.
