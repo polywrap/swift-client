@@ -1,5 +1,3 @@
-![Public Release Announcement](https://user-images.githubusercontent.com/5522128/177473887-2689cf25-7937-4620-8ca5-17620729a65d.png)
-
 # Polywrap Client Documentation
 
 Welcome to the Polywrap Client documentation. This documentation provides a detailed overview of the functionality and usage of the Polywrap Client library.
@@ -9,7 +7,15 @@ This package allows interaction with the Polywrap Protocol. It is a Swift implem
 
 ## Installation
 
-PolywrapClient is available through Swift Package Manager. To install it into a project, add it as a dependency within your Package.swift manifest:
+PolywrapClient is available through Swift Package Manager. 
+
+### Via Xcode Menu
+
+To add Polywrap Client as an SPM package to your project in Xcode you must do: File -> Swift Packages -> Add Package Dependency. And then enter https://github.com/polywrap/swift-client
+
+### Via Package file
+
+Add it as a dependency within your Package.swift manifest:
 
 ```swift
 let package = Package(
@@ -46,7 +52,7 @@ let client = builder.build()
 let result: String = try client.invoke(uri: "wrap/some-uri", method: "someMethod")
 
 // Or if you'd like to pass args and environment variables
-let result: String = try client.invoke(uri: "wrap/some-uri", method: "anotherMethod", args: someCodableStructInstance, env: anotherCodableStructInstace)
+let result: String = try client.invoke(uri: "wrap/some-uri", method: "coolMethod", args: someCodableStructInstance, env: anotherCodableStructInstace)
 
 ```
 

@@ -7,7 +7,15 @@ Implementation of a client compatible with the [WRAP Protocol](https://github.co
 
 ## Installation
 
-PolywrapClient is available through Swift Package Manager. To install it into a project, add it as a dependency within your Package.swift manifest:
+PolywrapClient is available through Swift Package Manager. 
+
+### Via Xcode Menu
+
+To add Polywrap Client as an SPM package to your project in Xcode you must do: File -> Swift Packages -> Add Package Dependency. And then enter https://github.com/polywrap/swift-client
+
+### Via Package file
+
+Add it as a dependency within your Package.swift manifest:
 
 ```swift
 let package = Package(
