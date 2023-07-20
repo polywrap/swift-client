@@ -11,3 +11,5 @@ DerivedData/
 /Tests/Cases
 cov.info
 /Build
+/BuiltDocs
+/docs

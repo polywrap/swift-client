@@ -9,30 +9,38 @@ import Foundation
 import MessagePacker
 import PolywrapClientNativeLib
 
+/// Codable structure with no content.
 public struct VoidCodable: Codable {}
 
+/// Type alias for a plugin method. A plugin method is a function that takes a msgpack buffer of arguments, an optional msgpack 
+/// buffer for the environment, and an Invoker, and it returns an optional value conforming to Encodable.
 public typealias PluginMethod = (
     _ args: [UInt8],
     _ env: [UInt8]?,
     _ invoker: Invoker
 ) throws -> Encodable?
 
+/// Type alias for an asynchronous plugin method. Similar to PluginMethod but this one is asynchronous.
 public typealias PluginAsyncMethod = (
     _ args: [UInt8],
     _ env: [UInt8]?,
     _ invoker: Invoker
 ) async throws -> Encodable?
 
+/// An enumeration to represent whether a plugin method is asynchronous or synchronous.
 public enum MethodType {
     case async(PluginAsyncMethod)
     case sync(PluginMethod)
 }
 
+/// Custom error type for plugin related errors.
 enum PluginError: Error {
     case methodNotFound
 }
 
+/// `PluginModule` is a class that provides a way to add and invoke synchronous and asynchronous plugin methods.
 open class PluginModule {
+    /// Dictionary to map method names to their respective `MethodType` (sync or async).
     public var methodsMap: [String: MethodType] = [:]
 
     public init() {}
@@ -91,6 +99,24 @@ open class PluginModule {
         })
     }
 
+    /// This function tries to call a plugin method by its name. 
+    /// It takes the method's name, its arguments, the environment, and the Invoker as parameters.
+    /// The function first checks if the method with the given name exists in the `methodsMap`.
+    /// If it doesn't exist, it throws a `PluginError.methodNotFound` error.
+    /// If the method is found, it invokes the method using the provided arguments, environment, and invoker.
+    /// If the method returns a result, it encodes the result into a byte array.
+    /// If the method does not return a result, it returns an empty array.
+    ///
+    /// - Parameters:
+    ///   - method: The name of the method to invoke.
+    ///   - args: The arguments to pass to the method as a byte array.
+    ///   - env: The environment to pass to the method as a byte array.
+    ///   - invoker: The Invoker to pass to the method.
+    ///
+    /// - Throws: `PluginError.methodNotFound` if the method is not found in the `methodsMap`.
+    //// It also propagates any errors that may occur during the execution of the method.
+    ///
+    /// - Returns: The result of the method invocation encoded into a byte array.
     public func wrapInvoke(
         method: String,
         args: [UInt8]?,

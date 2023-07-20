@@ -1,0 +1,36 @@
+name: Build and Deploy Documentation
+
+on:
+  push:
+    branches:
+      main
+
+jobs:
+  deploy-docs:
+    runs-on: macOS-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Generate cases
+        run: |
+          cd Scripts
+          ./generate_cases.sh
+
+      - name: Build docs
+        uses: nick-fields/retry@v2
+        with:
+          timeout_minutes: 30
+          max_attempts: 5
+          command: ./Scripts/build_docs.sh
+
+      - name: Move docs to new directory
+        run: |
+          mkdir new_docs
+          mv docs new_docs/
+
+      - name: Deploy documentation to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: docs
+          folder: new_docs

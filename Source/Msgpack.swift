@@ -20,6 +20,11 @@ public struct AnyEncodable: Encodable {
     }
 }
 
+/// Encodes an `Encodable` type into a msgpack buffer.
+///
+/// - Parameter value: An `Encodable` type value.
+/// - Throws: If the encoding process fails.
+/// - Returns: A msgpack buffer representing the encoded value
 public func encode<T: Encodable>(value: T) throws -> [UInt8] {
     let encoder = MessagePackEncoder()
     if let dictionary = value as? [String: AnyEncodable] {
@@ -43,6 +48,11 @@ public func encode<T: Encodable>(value: T) throws -> [UInt8] {
     }
 }
 
+/// Decodes a msgpack buffer into a `Decodable` type.
+///
+/// - Parameter value: A msgpack buffer to be decoded.
+/// - Throws: If the decoding process fails.
+/// - Returns: A value of `Decodable` type derived from the msgpack buffer.
 public func decode<T: Decodable>(value: [UInt8]) throws -> T {
     let decoder = MessagePackDecoder()
     do {
