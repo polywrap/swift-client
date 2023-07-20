@@ -3,8 +3,7 @@ name: Build and Deploy Documentation
 on:
   push:
     branches:
-      - main
-      - chore/docs
+      main
 
 jobs:
   deploy-docs:
