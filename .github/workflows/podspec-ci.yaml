@@ -1,0 +1,17 @@
+name: CI
+
+on:
+  push:
+    branches:
+      feat/cocoapods-support
+
+jobs:
+  build-and-test:
+    runs-on: macOS-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Lint 
+        run: |
+          cd Native
+          pod lib lint --verbose
