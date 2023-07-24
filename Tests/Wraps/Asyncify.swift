@@ -20,7 +20,7 @@ final class AsyncifyTest: XCTestCase {
         let reader = ResourceReader(bundle: Bundle.module)
 
         let bytes = try reader.readFile("Cases/asyncify/implementations/rs")
-        let embedded_wrapper = WasmWrapper(module: bytes)
+        let embedded_wrapper = try WasmWrapper(module: bytes)
         let uri = try Uri("wrap://wrap/embedded")
         
         let storagePlugin = MemoryStoragePlugin()

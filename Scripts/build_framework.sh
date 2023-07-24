@@ -2,10 +2,10 @@ set -e # Helps to give error info
 
 LOCAL_UDL="src/polywrap_native.udl"
 UDL_NAME="polywrap_native"
-FRAMEWORK_NAME="PolywrapClientNative"
+FRAMEWORK_NAME="libPolywrapClientNative"
 SWIFT_INTERFACE="PolywrapClientNativeLib"
 
-BUILD_PATH="${IOS_PROJ}/Native/Frameworks/PolywrapClientNative.xcframework"
+BUILD_PATH="${IOS_PROJ}/Frameworks/PolywrapClientNative.xcframework"
 
 cd "$RUST_PROJ"
 
@@ -27,7 +27,7 @@ rm -rf "$IOS_SIM_FRAMEWORK/Headers/${UDL_NAME}FFI.h"
 rm -rf "$IOS_SIM_FRAMEWORK/$FRAMEWORK_NAME.a"
 rm -rf "$MACOS_FRAMEWORK/Headers/${UDL_NAME}FFI.h"
 rm -rf "$MACOS_FRAMEWORK/$FRAMEWORK_NAME.a"
-rm "$IOS_PROJ/Native/$SWIFT_INTERFACE.swift"
+rm -f "$IOS_PROJ/Source/$SWIFT_INTERFACE.swift"
 
 rm -rf ../../target/universal.a
 rm -rf include/ios/*
@@ -69,7 +69,7 @@ cp "../../target/universal_mac.a" \
     "$MACOS_FRAMEWORK/$FRAMEWORK_NAME.a"
 
 # Move swift interface
-sed "s/${UDL_NAME}FFI/$FRAMEWORK_NAME/g" "$IOS_PROJ/Source/.cache/$UDL_NAME.swift" > "$IOS_PROJ/Native/$SWIFT_INTERFACE.swift"
+sed "s/${UDL_NAME}FFI/PolywrapClientNative/g" "$IOS_PROJ/Source/.cache/$UDL_NAME.swift" > "$IOS_PROJ/Source/$SWIFT_INTERFACE.swift"
 
 # Update include folder and remove unneeded files
 rm -rf $IOS_PROJ/Source/.cache
