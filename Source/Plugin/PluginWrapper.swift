@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import PolywrapClientNativeLib
+import PolywrapClientNative
 
 /// Represents a wrapper for a plugin module. 
 /// Provides functionality to invoke methods on the wrapped plugin module through the Polywrap Client

@@ -6,10 +6,10 @@
 //
 
 import Foundation
-import PolywrapClientNativeLib
+import PolywrapClient
 
 public class MockInvoker: FFIInvokerProtocol {
-    public func invokeRaw(uri: PolywrapClientNativeLib.FfiUri, method: String, args: [UInt8]?, env: [UInt8]?, resolutionContext: PolywrapClientNativeLib.FfiUriResolutionContext?) throws -> [UInt8] {
+    public func invokeRaw(uri: FfiUri, method: String, args: [UInt8]?, env: [UInt8]?, resolutionContext: FfiUriResolutionContext?) throws -> [UInt8] {
         if method == "foo" {
             return [195]
         } else {
@@ -17,15 +17,15 @@ public class MockInvoker: FFIInvokerProtocol {
         }
     }
     
-    public func getImplementations(uri: PolywrapClientNativeLib.FfiUri) throws -> [PolywrapClientNativeLib.FfiUri] {
+    public func getImplementations(uri: FfiUri) throws -> [FfiUri] {
         return []
     }
     
-    public func getInterfaces() -> [String : [PolywrapClientNativeLib.FfiUri]]? {
+    public func getInterfaces() -> [String : [FfiUri]]? {
         return [:]
     }
     
-    public func getEnvByUri(uri: PolywrapClientNativeLib.FfiUri) -> [UInt8]? {
+    public func getEnvByUri(uri: FfiUri) -> [UInt8]? {
         return []
     }
     

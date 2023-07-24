@@ -1,5 +1,5 @@
 import Foundation
-import PolywrapClientNativeLib
+import PolywrapClientNative
 
 /// `Invoker` is a class that wraps the FfiInvoker object and provides a method to perform invocations.
 public class Invoker {

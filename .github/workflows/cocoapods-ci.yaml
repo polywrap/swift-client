@@ -1,0 +1,19 @@
+name: Cocoapods CI
+
+on:
+  push:
+    branches:
+      main
+  pull_request:
+    branches:
+      main
+
+jobs:
+  build:
+    if: false
+    runs-on: macOS-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Lint native library
+        run: pod lib lint --verbose --allow-warnings

@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import PolywrapClientNativeLib
+import PolywrapClientNative
 
 /// An enumeration of errors that can be thrown when working with a `WasmPackage`.
 public enum WasmPackageError: Error {

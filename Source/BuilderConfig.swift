@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import PolywrapClientNativeLib
+import PolywrapClientNative
 
 /// `BuilderConfig` class provides a configuration interface for the `PolywrapClient`.
 public class BuilderConfig {

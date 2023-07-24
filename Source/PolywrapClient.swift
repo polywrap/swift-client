@@ -1,4 +1,4 @@
-import PolywrapClientNativeLib
+import PolywrapClientNative
 
 /// `PolywrapClient` provides methods to interact with the WRAP standard in Swift
 public class PolywrapClient {

@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import PolywrapClientNativeLib
+import PolywrapClientNative
 
 /// A class representing a wrapper
 public class WasmWrapper: FfiWrapper {

@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import PolywrapClientNativeLib
+import PolywrapClientNative
 
 /// Represents a plugin package that can create a wrapper for a plugin module. 
 public class PluginPackage: FfiWrapPackage {

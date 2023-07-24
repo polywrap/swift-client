@@ -10,7 +10,7 @@ let package = Package(
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
             name: "PolywrapClient",
-            targets: ["PolywrapClient"])
+            targets: ["PolywrapClient", "PolywrapClientNative"])
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
@@ -22,17 +22,12 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
             name: "PolywrapClient",
-            dependencies: ["MessagePacker", "PolywrapClientNativeLib", "AsyncObjects"],
+            dependencies: ["MessagePacker", "PolywrapClientNative", "AsyncObjects"],
             path: "Source"
-        ),
-        .target(
-            name: "PolywrapClientNativeLib",
-            dependencies: ["PolywrapClientNative"],
-            path: "Native"
         ),
         .binaryTarget(
             name: "PolywrapClientNative",
-            path: "Native/Frameworks/PolywrapClientNative.xcframework"
+            path: "Frameworks/PolywrapClientNative.xcframework"
             // url: "https://github.com/polywrap/swift-client/releases/download/v0.0.3/PolywrapClientNative.xcframework.zip",
             // checksum: "4dfbc7f12c4ebbd9e1c62c637775e12c449addce2572452da912c6d137904a4d"
         ),

@@ -7,7 +7,7 @@
 
 import Foundation
 import MessagePacker
-import PolywrapClientNativeLib
+import PolywrapClientNative
 
 /// Codable structure with no content.
 public struct VoidCodable: Codable {}

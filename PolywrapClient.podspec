@@ -11,8 +11,16 @@ Pod::Spec.new do |s|
   s.swift_version  = "5.0"
   s.ios.deployment_target = '13.0'
   s.osx.deployment_target = '10.15'
+  s.source = { :http => "https://github.com/polywrap/swift-client/releases/download/v#{s.version}/PolywrapClientNative.xcframework.zip" }
 
   s.dependency 'MessagePacker', '~> 0.4.7'
   s.dependency 'AsyncObjects', '~> 2.1.0'
-  s.dependency 'PolywrapClientNative', "~> #{s.version}"
+  
+  s.subspec 'PolywrapClientNativeLib' do |native_lib|
+    native_lib.vendored_frameworks = 'Frameworks/PolywrapClientNative.xcframework'
+  end
+
+  s.test_spec 'Tests' do |test_spec|
+    test_spec.source_files = 'Tests/**/*.swift'
+  end
 end
