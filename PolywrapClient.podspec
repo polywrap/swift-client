@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'PolywrapClient'
-  s.version          = '0.0.3'
+  s.version          = '0.0.4'
   s.summary          = 'A short description of PolywrapClient.'
   s.description      = 'A longer description of PolywrapClient.'
   s.homepage         = 'https://github.com/polywrap/swift-client'
@@ -18,9 +18,5 @@ Pod::Spec.new do |s|
   
   s.subspec 'PolywrapClientNativeLib' do |native_lib|
     native_lib.vendored_frameworks = 'Frameworks/PolywrapClientNative.xcframework'
-  end
-
-  s.test_spec 'Tests' do |test_spec|
-    test_spec.source_files = 'Tests/**/*.swift'
   end
 end
