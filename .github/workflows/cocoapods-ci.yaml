@@ -9,10 +9,16 @@ on:
       main
 
 jobs:
+  lint:
+    uses: ./.github/workflows/lint.yaml
   build:
+    needs: lint
     runs-on: macOS-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
-      - name: Lint library
-        run: pod spec lint --verbose --allow-warnings
+      - name: Build native
+        run: pod spec lint PolywrapClientNative.podspec --verbose --allow-warnings --no-clean
+
+      - name: Build client
+        run: pod spec lint PolywrapClient.podspec --verbose --allow-warnings --no-clean
