@@ -1,0 +1,24 @@
+name: Cocoapods CI
+
+on:
+  push:
+    branches:
+      main
+  pull_request:
+    branches:
+      main
+
+jobs:
+  lint:
+    uses: ./.github/workflows/lint.yaml
+  build:
+    needs: lint
+    runs-on: macOS-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Build native
+        run: pod spec lint PolywrapClientNative.podspec --verbose --allow-warnings --no-clean
+
+      - name: Build client
+        run: pod spec lint PolywrapClient.podspec --verbose --allow-warnings --no-clean

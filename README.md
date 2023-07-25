@@ -7,7 +7,15 @@ Implementation of a client compatible with the [WRAP Protocol](https://github.co
 
 ## Installation
 
-PolywrapClient is available through Swift Package Manager. 
+PolywrapClient is available through Swift Package Manager and Cocoapods.
+
+### Via Cocoapods
+
+Add pod to your Podfile:
+
+```Ruby
+pod 'PolywrapClient'
+```
 
 ### Via Xcode Menu
 

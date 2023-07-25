@@ -13,7 +13,7 @@ final class InvokeTests: XCTestCase {
     func testWrapInvoke() throws {
         let reader = ResourceReader(bundle: Bundle.module)
         let bytes = try reader.readFile("Cases/subinvoke/00-subinvoke/implementations/as")
-        let embedded_wrapper = WasmWrapper(module: bytes)
+        let embedded_wrapper = try WasmWrapper(module: bytes)
         let uri = try Uri("wrap://wrap/embedded")
         let builder = BuilderConfig().addWrapper(uri, embedded_wrapper)
         let client = builder.build()

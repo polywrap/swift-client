@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import PolywrapClientNativeLib
+import PolywrapClientNative
 
 /// An enum type for defining error cases related to `Uri` operations.
 public enum UriError: Error, Equatable {

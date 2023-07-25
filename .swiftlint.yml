@@ -1,5 +1,7 @@
 included:
   - Source
+excluded:
+  - Source/PolywrapClientNativeLib.swift
 line_length: 130
 identifier_name:
   min_length: 2

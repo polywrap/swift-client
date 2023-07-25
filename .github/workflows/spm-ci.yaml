@@ -1,4 +1,4 @@
-name: CI
+name: Swift Package Manager CI
 
 on:
   push:
@@ -9,10 +9,13 @@ on:
       main
 
 jobs:
+  lint:
+    uses: ./.github/workflows/lint.yaml
   build-and-test:
+    needs: lint
     runs-on: macOS-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Generate cases
         run: |

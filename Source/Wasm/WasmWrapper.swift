@@ -6,7 +6,11 @@
 //
 
 import Foundation
-import PolywrapClientNativeLib
+import PolywrapClientNative
+
+public enum WasmWrapperError: Error {
+        case fromBytecodeError
+}
 
 /// A class representing a wrapper
 public class WasmWrapper: FfiWrapper {
@@ -17,8 +21,12 @@ public class WasmWrapper: FfiWrapper {
     /// Initializes a new WasmWrapper instance.
     ///
     /// - Parameter module: A Wasm module represented as an array of bytes.
-    public init(module: [UInt8]) {
-        self.ffi = FfiWasmWrapper(wasmModule: module)
+    public init(module: [UInt8]) throws {
+        do {
+            self.ffi = try ffiWasmWrapperFromBytecode(bytes: module)
+        } catch {
+            throw WasmWrapperError.fromBytecodeError
+        }
     }
 
     /// Invokes a method on the Wasm module.
