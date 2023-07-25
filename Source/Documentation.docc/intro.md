@@ -3,11 +3,19 @@
 Welcome to the Polywrap Client documentation. This documentation provides a detailed overview of the functionality and usage of the Polywrap Client library.
 
 
-This package allows interaction with the Polywrap Protocol. It is a Swift implementation of a [Polywrap Client](https://docs.polywrap.io/clients)
+This package allows interaction with the WRAP Protocol. It is a Swift implementation of a [Polywrap Client](https://docs.polywrap.io/clients)
 
 ## Installation
 
-PolywrapClient is available through Swift Package Manager. 
+PolywrapClient is available through Swift Package Manager and Cocoapods.
+
+### Via Cocoapods
+
+Add pod to your Podfile:
+
+```Ruby
+pod 'PolywrapClient'
+```
 
 ### Via Xcode Menu
 
