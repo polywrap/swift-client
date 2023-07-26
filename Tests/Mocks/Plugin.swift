@@ -30,7 +30,9 @@ public struct EmptyEnv: Codable {}
 public struct PlusOneArgs: Codable {}
 
 public class MockPlugin: PluginModule {
+    public var methodsMap: [String : PluginMethod] = [:]
     public var counter = 0
+
     public init(_ value: Int?) {
         if value != nil {
             self.counter = value!
@@ -47,25 +49,26 @@ public class MockPlugin: PluginModule {
 }
 
 public class MemoryStoragePlugin: PluginModule {
+    public var methodsMap: [String : PluginMethod] = [:]
     private var value: Int
 
-    public override init() {
+    public init() {
         self.value = 0
     }
 
-    public func getData(_: EmptyArgs, _: EmptyEnv?, _: Invoker) async throws -> Int {
-        try await Task.sleep(nanoseconds: UInt64(50 * 1_000_000))
+    public func getData(_: EmptyArgs, _: EmptyEnv?, _: Invoker) throws -> Int {
+        try runBlocking {
+            try await Task.sleep(nanoseconds: UInt64(50 * 1_000_000))
+        }
         return self.value
     }
 
-    public func setData(args: SetDataArgs, _: EmptyEnv?, _: Invoker) async throws -> Bool {
-        try await Task.sleep(nanoseconds: UInt64(50 * 1_000_000))
+    public func setData(args: SetDataArgs, _: EmptyEnv?, _: Invoker) throws -> Bool {
+        try runBlocking {
+            try await Task.sleep(nanoseconds: UInt64(50 * 1_000_000))
+        }
         self.value = args.value
         return true
-    }
-
-    func sleep(ms: Int) async throws {
-        try await Task.sleep(nanoseconds: UInt64(ms))
     }
 }
 

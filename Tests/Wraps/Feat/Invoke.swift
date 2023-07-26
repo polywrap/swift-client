@@ -22,7 +22,7 @@ final class InvokeTests: XCTestCase {
     }
     
     func testPluginInvoke() throws {
-        let mockPlugin = MockPlugin(7)
+        var mockPlugin = MockPlugin(7)
         
         mockPlugin.addMethod(name: "add", closure: mockPlugin.add)
         
@@ -35,7 +35,7 @@ final class InvokeTests: XCTestCase {
     }
     
     func testPluginStatefulInvoke() throws {
-        let mockPlugin = MockPlugin(7)
+        var mockPlugin = MockPlugin(7)
         mockPlugin.addVoidMethod(name: "increment", closure: mockPlugin.increment)
         
         let wrapPackage = PluginPackage(mockPlugin)
@@ -52,9 +52,9 @@ final class InvokeTests: XCTestCase {
     }
     
     func testPluginAsyncInvoke() throws {
-        let memoryStoragePlugin = MemoryStoragePlugin()
-        memoryStoragePlugin.addAsyncMethod(name: "getData", closure: memoryStoragePlugin.getData)
-        memoryStoragePlugin.addAsyncMethod(name: "setData", closure: memoryStoragePlugin.setData)
+        var memoryStoragePlugin = MemoryStoragePlugin()
+        memoryStoragePlugin.addMethod(name: "getData", closure: memoryStoragePlugin.getData)
+        memoryStoragePlugin.addMethod(name: "setData", closure: memoryStoragePlugin.setData)
         
         let wrapPackage = PluginPackage(memoryStoragePlugin)
         let uri = try Uri("wrap://plugin/memory-storage")
