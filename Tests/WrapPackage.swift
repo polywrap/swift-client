@@ -24,8 +24,8 @@ class WrapPackageTests: XCTestCase {
         XCTAssert(wrapper is WasmWrapper)
     }
 
-        func testGetModuleThrowsWhenWrongPathGiven() {
-        let readerWithWrongPath = ResourceReader(bundle: Bundle.module, path: "not-existan")
+    func testGetModuleThrowsWhenWrongPathGiven() {
+        let readerWithWrongPath = ResourceReader(bundle: Bundle.module, path: "not-existant")
         let package = WasmPackage(reader: readerWithWrongPath, module: nil)
         XCTAssertThrowsError(try package.getModule()) { error in
             XCTAssertEqual(error as? WasmPackageError, WasmPackageError.loadModuleError)

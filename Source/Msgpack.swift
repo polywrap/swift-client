@@ -20,6 +20,10 @@ public struct AnyEncodable: Encodable {
     }
 }
 
+struct AnyEncodableDictionary: Encodable {
+    let dictionary: [String: AnyEncodable]
+}
+
 /// Encodes an `Encodable` type into a msgpack buffer.
 ///
 /// - Parameter value: An `Encodable` type value.
@@ -27,11 +31,11 @@ public struct AnyEncodable: Encodable {
 /// - Returns: A msgpack buffer representing the encoded value
 public func encode<T: Encodable>(value: T) throws -> [UInt8] {
     let encoder = MessagePackEncoder()
-    if let dictionary = value as? [String: AnyEncodable] {
+    if let dictionary = value as? [String: Encodable] {
+        let anyEncodableDictionary = dictionary.mapValues { AnyEncodable($0) }
         do {
-            // If the value is a dictionary, treat it as a custom extension type
-            let data = try JSONSerialization.data(withJSONObject: dictionary)  // Convert the dictionary to Data
-            let extensionValue = MessagePackExtension(type: 0x1, data: data)
+            let dicData = try encoder.encode(anyEncodableDictionary)
+            let extensionValue = MessagePackExtension(type: 0x1, data: dicData)
             let encodedData = try encoder.encode(extensionValue)
             return [UInt8](encodedData)
         } catch {
