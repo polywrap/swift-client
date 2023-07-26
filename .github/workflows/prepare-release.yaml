@@ -1,0 +1,15 @@
+name: Create pre-release
+
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  deploy-wrappers:
+    if: |
+      github.event.pull_request.merged &&
+      endsWith(github.event.pull_request.title, '/prepare/release')
+    runs-on: macos-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3

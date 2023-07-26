@@ -1,18 +1,26 @@
 name: Release binary
 
 on:
-  push:
-    tags:
-      - "v*.*.*"
+  pull_request:
+    types: [closed]
+    paths:
+      - 'VERSION'
 
 jobs:
   Release-Binary:
+    if: |
+      github.event.pull_request.merged &&
+      endsWith(github.event.pull_request.title, '/prepare/release')
     runs-on: macOS-latest
 
     steps:
       - uses: actions/checkout@v2
         with:
           path: "swift-client"
+
+      - name: Get version
+        id: get_version
+        run: echo "::set-output name=version::$(cat ./swift-client/VERSION)"
 
       - name: Set IOS_PROJ environment variable
         run: echo "IOS_PROJ=$(pwd)/swift-client" >> $GITHUB_ENV
@@ -66,10 +74,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
+          tag_name: ${{ steps.get_version.outputs.version }}
+          release_name: Release ${{ steps.get_version.outputs.version }}
           draft: false
-          prerelease: false
+          prerelease: true
 
       - name: Upload Release Asset
         id: upload-release-asset 
