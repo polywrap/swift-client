@@ -49,10 +49,10 @@ extension RunBlocking where Failure == Error {
     }
 }
 
-internal func runBlocking<T>(@_implicitSelfCapture _ operation: @Sendable @escaping () async -> T) -> T {
+public func runBlocking<T>(@_implicitSelfCapture _ operation: @Sendable @escaping () async -> T) -> T {
     RunBlocking().runBlocking(operation)
 }
 
-internal func runBlocking<T>(@_implicitSelfCapture _ operation: @Sendable @escaping () async throws -> T) throws -> T {
+public func runBlocking<T>(@_implicitSelfCapture _ operation: @Sendable @escaping () async throws -> T) throws -> T {
     try RunBlocking().runBlocking(operation)
 }

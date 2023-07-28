@@ -23,9 +23,9 @@ final class AsyncifyTest: XCTestCase {
         let embedded_wrapper = try WasmWrapper(module: bytes)
         let uri = try Uri("wrap://wrap/embedded")
         
-        let storagePlugin = MemoryStoragePlugin()
-        storagePlugin.addAsyncMethod(name: "getData", closure: storagePlugin.getData)
-        storagePlugin.addAsyncMethod(name: "setData", closure: storagePlugin.setData)
+        var storagePlugin = MemoryStoragePlugin()
+        storagePlugin.addMethod(name: "getData", closure: storagePlugin.getData)
+        storagePlugin.addMethod(name: "setData", closure: storagePlugin.setData)
         let wrapPackage = PluginPackage(storagePlugin)
 
         let storageUri = try Uri("wrap://ens/memory-storage.polywrap.eth")
