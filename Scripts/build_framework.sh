@@ -10,11 +10,11 @@ BUILD_PATH="${IOS_PROJ}/Frameworks/PolywrapClientNative.xcframework"
 cd "$RUST_PROJ"
 
 # Compile the rust
-cargo build --target aarch64-apple-ios
-cargo build --target aarch64-apple-ios-sim
-cargo build --target x86_64-apple-ios
-cargo build --target x86_64-apple-darwin # For macOS w/Intel
-cargo build --target aarch64-apple-darwin # For macOS w/M1
+cargo build --release --target aarch64-apple-ios
+cargo build --release --target aarch64-apple-ios-sim
+cargo build --release --target x86_64-apple-ios
+cargo build --release --target x86_64-apple-darwin # For macOS w/Intel
+cargo build --release --target aarch64-apple-darwin # For macOS w/M1
 
 IOS_ARM64_FRAMEWORK="$BUILD_PATH/ios-arm64"
 IOS_SIM_FRAMEWORK="$BUILD_PATH/ios-simulator"
@@ -40,14 +40,14 @@ cargo run --bin uniffi-bindgen generate "$LOCAL_UDL" --language swift --out-dir 
 
 # Make fat lib for sims
 lipo -create \
-    "../../target/aarch64-apple-ios-sim/debug/lib${UDL_NAME}.a" \
-    "../../target/x86_64-apple-ios/debug/lib${UDL_NAME}.a" \
+    "../../target/aarch64-apple-ios-sim/release/lib${UDL_NAME}.a" \
+    "../../target/x86_64-apple-ios/release/lib${UDL_NAME}.a" \
     -output ../../target/universal.a
 
 # Make fat lib for mac
 lipo -create \
-    "../../target/aarch64-apple-darwin/debug/lib${UDL_NAME}.a" \
-    "../../target/x86_64-apple-darwin/debug/lib${UDL_NAME}.a" \
+    "../../target/aarch64-apple-darwin/release/lib${UDL_NAME}.a" \
+    "../../target/x86_64-apple-darwin/release/lib${UDL_NAME}.a" \
     -output ../../target/universal_mac.a
 
 # Move headers
@@ -61,7 +61,7 @@ cp "$IOS_PROJ/Source/.cache/${UDL_NAME}FFI.h" \
     "$MACOS_FRAMEWORK/Headers/${UDL_NAME}FFI.h"
 
 # Move binaries
-cp "../../target/aarch64-apple-ios/debug/lib${UDL_NAME}.a" \
+cp "../../target/aarch64-apple-ios/release/lib${UDL_NAME}.a" \
     "$IOS_ARM64_FRAMEWORK/$FRAMEWORK_NAME.a"
 cp ../../target/universal.a \
     "$IOS_SIM_FRAMEWORK/$FRAMEWORK_NAME.a"
