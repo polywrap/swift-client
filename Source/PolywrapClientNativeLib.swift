@@ -572,7 +572,7 @@ public func FfiConverterTypeFFIBuilderConfig_lower(_ value: FfiBuilderConfig) ->
 public protocol FFIClientProtocol {
     func invokeRaw(uri: FfiUri, method: String, args: [UInt8]?, env: [UInt8]?, resolutionContext: FfiUriResolutionContext?) throws -> [UInt8]
     func getImplementations(uri: FfiUri) throws -> [FfiUri]
-    func getInterfaces() -> [FfiUri: [FfiUri]]?
+    func getInterfaces() -> [String: [FfiUri]]?
     func getEnvByUri(uri: FfiUri) -> [UInt8]?
     func asInvoker() -> FfiInvoker
     func invokeWrapperRaw(wrapper: FfiWrapper, uri: FfiUri, method: String, args: [UInt8]?, env: [UInt8]?, resolutionContext: FfiUriResolutionContext?) throws -> [UInt8]
@@ -615,8 +615,8 @@ public class FfiClient: FFIClientProtocol {
         )
     }
 
-    public func getInterfaces() -> [FfiUri: [FfiUri]]? {
-        return try! FfiConverterOptionDictionaryTypeFFIUriSequenceTypeFFIUri.lift(
+    public func getInterfaces() -> [String: [FfiUri]]? {
+        return try! FfiConverterOptionDictionaryStringSequenceTypeFFIUri.lift(
             try!
                 rustCall {
                     uniffi_polywrap_native_fn_method_fficlient_get_interfaces(self.pointer, $0)
@@ -774,7 +774,7 @@ public func FfiConverterTypeFFICompiledWasmModule_lower(_ value: FfiCompiledWasm
 public protocol FFIInvokerProtocol {
     func invokeRaw(uri: FfiUri, method: String, args: [UInt8]?, env: [UInt8]?, resolutionContext: FfiUriResolutionContext?) throws -> [UInt8]
     func getImplementations(uri: FfiUri) throws -> [FfiUri]
-    func getInterfaces() -> [FfiUri: [FfiUri]]?
+    func getInterfaces() -> [String: [FfiUri]]?
     func getEnvByUri(uri: FfiUri) -> [UInt8]?
 }
 
@@ -814,8 +814,8 @@ public class FfiInvoker: FFIInvokerProtocol {
         )
     }
 
-    public func getInterfaces() -> [FfiUri: [FfiUri]]? {
-        return try! FfiConverterOptionDictionaryTypeFFIUriSequenceTypeFFIUri.lift(
+    public func getInterfaces() -> [String: [FfiUri]]? {
+        return try! FfiConverterOptionDictionaryStringSequenceTypeFFIUri.lift(
             try!
                 rustCall {
                     uniffi_polywrap_native_fn_method_ffiinvoker_get_interfaces(self.pointer, $0)
@@ -2662,8 +2662,8 @@ private struct FfiConverterOptionSequenceTypeFFIUriResolutionStep: FfiConverterR
     }
 }
 
-private struct FfiConverterOptionDictionaryTypeFFIUriSequenceTypeFFIUri: FfiConverterRustBuffer {
-    typealias SwiftType = [FfiUri: [FfiUri]]?
+private struct FfiConverterOptionDictionaryStringSequenceTypeFFIUri: FfiConverterRustBuffer {
+    typealias SwiftType = [String: [FfiUri]]?
 
     public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
         guard let value = value else {
@@ -2671,13 +2671,13 @@ private struct FfiConverterOptionDictionaryTypeFFIUriSequenceTypeFFIUri: FfiConv
             return
         }
         writeInt(&buf, Int8(1))
-        FfiConverterDictionaryTypeFFIUriSequenceTypeFFIUri.write(value, into: &buf)
+        FfiConverterDictionaryStringSequenceTypeFFIUri.write(value, into: &buf)
     }
 
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
         switch try readInt(&buf) as Int8 {
         case 0: return nil
-        case 1: return try FfiConverterDictionaryTypeFFIUriSequenceTypeFFIUri.read(from: &buf)
+        case 1: return try FfiConverterDictionaryStringSequenceTypeFFIUri.read(from: &buf)
         default: throw UniffiInternalError.unexpectedOptionalTag
         }
     }
@@ -2840,22 +2840,22 @@ private struct FfiConverterDictionaryStringCallbackInterfaceFfiUriPackageOrWrapp
     }
 }
 
-private struct FfiConverterDictionaryTypeFFIUriSequenceTypeFFIUri: FfiConverterRustBuffer {
-    public static func write(_ value: [FfiUri: [FfiUri]], into buf: inout [UInt8]) {
+private struct FfiConverterDictionaryStringSequenceTypeFFIUri: FfiConverterRustBuffer {
+    public static func write(_ value: [String: [FfiUri]], into buf: inout [UInt8]) {
         let len = Int32(value.count)
         writeInt(&buf, len)
         for (key, value) in value {
-            FfiConverterTypeFFIUri.write(key, into: &buf)
+            FfiConverterString.write(key, into: &buf)
             FfiConverterSequenceTypeFFIUri.write(value, into: &buf)
         }
     }
 
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [FfiUri: [FfiUri]] {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [String: [FfiUri]] {
         let len: Int32 = try readInt(&buf)
-        var dict = [FfiUri: [FfiUri]]()
+        var dict = [String: [FfiUri]]()
         dict.reserveCapacity(Int(len))
         for _ in 0 ..< len {
-            let key = try FfiConverterTypeFFIUri.read(from: &buf)
+            let key = try FfiConverterString.read(from: &buf)
             let value = try FfiConverterSequenceTypeFFIUri.read(from: &buf)
             dict[key] = value
         }
@@ -2974,7 +2974,7 @@ private var initializationResult: InitializationResult {
     if uniffi__checksum_method_ffiinvoker_get_implementations() != 32319 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi__checksum_method_ffiinvoker_get_interfaces() != 11540 {
+    if uniffi__checksum_method_ffiinvoker_get_interfaces() != 12762 {
         return InitializationResult.apiChecksumMismatch
     }
     if uniffi__checksum_method_ffiinvoker_get_env_by_uri() != 58467 {
@@ -3034,7 +3034,7 @@ private var initializationResult: InitializationResult {
     if uniffi__checksum_method_fficlient_get_implementations() != 16080 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi__checksum_method_fficlient_get_interfaces() != 44237 {
+    if uniffi__checksum_method_fficlient_get_interfaces() != 56113 {
         return InitializationResult.apiChecksumMismatch
     }
     if uniffi__checksum_method_fficlient_get_env_by_uri() != 64263 {
