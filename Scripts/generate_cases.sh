@@ -3,7 +3,7 @@
 set -euo pipefail
 
 REPO_NAME="wrap-test-harness"
-TAG="0.1.1"
+TAG="0.2.0"
 SOURCE_FOLDER="../Tests/Cases"
 TMP_FOLDER="${SOURCE_FOLDER}/tmp"
 CASES_ZIP="${TMP_FOLDER}/cases.zip"

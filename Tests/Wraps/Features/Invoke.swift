@@ -17,7 +17,7 @@ final class InvokeTests: XCTestCase {
         let uri = try Uri("wrap://wrap/embedded")
         let builder = BuilderConfig().addWrapper(uri, embedded_wrapper)
         let client = builder.build()
-        let result: Int = try client.invoke(uri: uri, method: "add", args: AddArgs(a: 1, b: 2), env: nil)
+        let result: Int = try client.invoke(uri: uri, method: "add", args: AddArgs(a: 1, b: 2))
         XCTAssertEqual(result, 3)
     }
     
@@ -30,7 +30,7 @@ final class InvokeTests: XCTestCase {
         let uri = try Uri("wrap://plugin/mock")
         let builder = BuilderConfig().addPackage(uri, wrapPackage)
         let client = builder.build()
-        let result: Int = try client.invoke(uri: uri, method: "add", args: AddArgs(a: 1, b: 2), env: nil)
+        let result: Int = try client.invoke(uri: uri, method: "add", args: AddArgs(a: 1, b: 2))
         XCTAssertEqual(result, 3)
     }
     
@@ -61,7 +61,7 @@ final class InvokeTests: XCTestCase {
         let builder = BuilderConfig().addPackage(uri, wrapPackage)
         let client = builder.build()
         
-        let result: Bool = try client.invoke(uri: uri, method: "setData", args: SetDataArgs(5000), env: nil)
+        let result: Bool = try client.invoke(uri: uri, method: "setData", args: SetDataArgs(5000))
         XCTAssertEqual(result, true)
         let data: Int = try client.invoke(uri: uri, method: "getData")
         XCTAssertEqual(data, 5000)

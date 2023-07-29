@@ -32,7 +32,7 @@ final class AsyncifyTest: XCTestCase {
         let builder = BuilderConfig().addWrapper(uri, embedded_wrapper).addPackage(storageUri, wrapPackage)
         
         let client = builder.build()
-        let result: [String] = try client.invoke(uri: uri, method: "subsequentInvokes", args: ArgsSubsequentInvokes(40), env: nil)
+        let result: [String] = try client.invoke(uri: uri, method: "subsequentInvokes", args: ArgsSubsequentInvokes(40))
         let expected = Array(0..<40).map { String($0) }
         XCTAssertEqual(result, expected)
     }

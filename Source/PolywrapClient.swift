@@ -34,6 +34,59 @@ public class PolywrapClient {
 
         return try decode(value: result)
     }
+    
+    
+    /// Invokes a method with arguments.
+    ///
+    /// - Parameters:
+    ///   - uri: A `Uri` object.
+    ///   - method: The name of the method to invoke.
+    ///   - args: The arguments for the method.
+    /// - Throws: If the invocation fails.
+    /// - Returns: A value of type `R`.
+    public func invoke<A: Encodable, R: Decodable>(
+        uri: Uri,
+        method: String,
+        args: A?
+    ) throws -> R {
+        let encodedArgs = try encode(value: args)
+        let encodedEnv: [UInt8]? = nil
+        let result = try self.ffi.invokeRaw(
+            uri: uri.ffi,
+            method: method,
+            args: encodedArgs,
+            env: encodedEnv,
+            resolutionContext: nil
+        )
+
+        return try decode(value: result)
+    }
+    
+    /// Invokes a method with arguments.
+    ///
+    /// - Parameters:
+    ///   - uri: A `Uri` object.
+    ///   - method: The name of the method to invoke.
+    ///   - env: The environment variables for the method.
+    /// - Throws: If the invocation fails.
+    /// - Returns: A value of type `R`.
+    public func invoke<E: Encodable, R: Decodable>(
+        uri: Uri,
+        method: String,
+        env: E?
+    ) throws -> R {
+        let encodedArgs: [UInt8]? = nil
+        let encodedEnv = try encode(value: env)
+        let result = try self.ffi.invokeRaw(
+            uri: uri.ffi,
+            method: method,
+            args: encodedArgs,
+            env: encodedEnv,
+            resolutionContext: nil
+        )
+
+        return try decode(value: result)
+    }
 
     /// Invokes a method with arguments and environment variables.
     ///
@@ -44,11 +97,11 @@ public class PolywrapClient {
     ///   - env: The environment variables for the method.
     /// - Throws: If the invocation fails.
     /// - Returns: A value of type `R`.
-    public func invoke<T: Encodable, R: Decodable>(
+    public func invoke<A: Encodable, E: Encodable, R: Decodable>(
         uri: Uri,
         method: String,
-        args: T?,
-        env: T?
+        args: A?,
+        env: E?
     ) throws -> R {
         let encodedArgs = try encode(value: args)
         let encodedEnv = try encode(value: env)
