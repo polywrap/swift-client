@@ -27,8 +27,8 @@ let package = Package(
         ),
         .binaryTarget(
             name: "PolywrapClientNative",
-            url: "https://github.com/polywrap/swift-client/releases/download/v0.0.4/PolywrapClientNative.xcframework.zip",
-            checksum: "7d226c35e062eabd108aa11d52ebb9d41c8c6376f6a769b781a8de2f46a54f53"
+            url: "https://github.com/polywrap/swift-client/releases/download/v0.0.5/PolywrapClientNative.xcframework.zip",
+            checksum: "9ee2ea17dee12587b83a42f02b5fe86b99af43cf2e0dc2c5d33670c90b168870"
         ),
         .testTarget(
             name: "PolywrapClientTests",
