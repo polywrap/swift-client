@@ -34,8 +34,7 @@ public class PolywrapClient {
 
         return try decode(value: result)
     }
-    
-    
+
     /// Invokes a method with arguments.
     ///
     /// - Parameters:
@@ -61,7 +60,7 @@ public class PolywrapClient {
 
         return try decode(value: result)
     }
-    
+
     /// Invokes a method with arguments.
     ///
     /// - Parameters:
