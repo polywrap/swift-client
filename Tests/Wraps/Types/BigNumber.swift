@@ -9,7 +9,7 @@ import XCTest
 import PolywrapClient
 
 internal func getClientWithBigNumber() throws -> (PolywrapClient, Uri) {
-    let embeddedWrapper = try getTestWrap(path: "bignumber/implementations/rs")
+    let embeddedWrapper = try getTestWrap(path: "bignumber-type/implementations/rs")
     let wrapUri = try Uri("wrap/bignumber")
     let builder = BuilderConfig()
         .addWrapper(wrapUri, embeddedWrapper)
