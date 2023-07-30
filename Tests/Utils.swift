@@ -8,7 +8,6 @@
 import Foundation
 import PolywrapClient
 
-
 public func getTestWrap(path: String) throws -> WasmWrapper {
     let reader = ResourceReader(bundle: Bundle.module)
     let bytes = try reader.readFile("Cases/" + path)
