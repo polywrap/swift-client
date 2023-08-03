@@ -50,8 +50,6 @@ public func decode<T: Decodable>(value: [UInt8]) throws -> T {
     }
 }
 
-
-
 public struct Map<Key: Codable & Hashable, Value: Codable & Equatable>: Codable, Equatable {
     public static func == (lhs: Map<Key, Value>, rhs: Map<Key, Value>) -> Bool {
         lhs.dictionary == rhs.dictionary
