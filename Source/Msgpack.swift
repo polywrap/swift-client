@@ -108,16 +108,3 @@ public struct Map<Key: Codable & Hashable, Value: Codable & Equatable>: Codable,
         }
     }
 }
-
-public class CustomMessagePackDecoder<T: Decodable>: MessagePackDecoder {
-    public func decode(from data: Data) throws -> T {
-        if T.self is Map<String, Data>.Type {
-            let extensionValue = try super.decode(MessagePackExtension.self, from: data)
-            if extensionValue.type == 1, let map = try? JSONDecoder().decode(T.self, from: extensionValue.data) {
-                return map
-            }
-            // Fall back to regular decoding if we failed to decode the type as Map
-        }
-        return try super.decode(T.self, from: data)
-    }
-}
