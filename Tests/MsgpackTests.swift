@@ -2,6 +2,7 @@ import XCTest
 import Foundation
 
 @testable import PolywrapClient
+import MessagePacker
 
 struct CustomStruct: Encodable, Equatable, Decodable {
     public var int: Int
@@ -97,5 +98,28 @@ class MsgpackTests: XCTestCase {
         }
         
         XCTAssertEqual(decoded, "foo")
+    }
+    
+    func testDecodeValueError() {
+        let invalidData: [UInt8] = [0x01, 0x02, 0x03] // This should be valid encoded data
+        let decoded: Map<String, String>? = try? decode(value: invalidData)
+        XCTAssertNil(decoded, "Decoding should fail with invalid data")
+    }
+
+    func testEncodeDictionaryAsMessagePackExtensionTypeError() {
+        struct NonEncodableValue: Codable, Equatable {
+            func encode(to encoder: Encoder) throws {
+                throw EncodingError.invalidValue(self, EncodingError.Context(codingPath: [], debugDescription: "Test error"))
+            }
+
+            public init() {}
+            init(from decoder: Decoder) throws {
+                throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: [], debugDescription: "Test error"))
+            }
+        }
+
+        let invalidMap: Map<String, NonEncodableValue> = Map(["key": NonEncodableValue()])
+        let encoded = try? encode(value: invalidMap)
+        XCTAssertNil(encoded, "Encoding should fail with non-encodable value")
     }
 }
