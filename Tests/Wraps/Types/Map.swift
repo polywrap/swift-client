@@ -14,7 +14,7 @@ struct ArgsGetKey: Encodable {
 }
 
 struct ArgsReturnMap: Encodable {
-    let map: [String: UInt32]
+    let map: Map<String, Int>
 }
 
 struct ArgsReturnCustomMap: Encodable {
@@ -22,12 +22,12 @@ struct ArgsReturnCustomMap: Encodable {
 }
 
 struct ArgsReturnNestedMap: Encodable {
-    let foo: [String: [String: UInt32]]
+    let foo: Map<String, Map<String, UInt32>>
 }
 
 struct CustomMap: Codable, Equatable {
-    let map: [String: UInt32]
-    let nestedMap: [String: [String: UInt32]]
+    let map: Map<String, Int>
+    let nestedMap: Map<String, Map<String, Int>>
 }
 
 final class MapTypeTests: XCTestCase {
@@ -40,13 +40,8 @@ final class MapTypeTests: XCTestCase {
     }
 
     func createCustomMap() -> CustomMap {
-        var map: [String: UInt32] = [:]
-        map["Hello"] = 1
-        map["Heyo"] = 50
-
-        var nestedMap: [String: [String: UInt32]] = [:]
-        nestedMap["Nested"] = map
-
+        let map: Map<String, Int> = Map(["Hello": 1, "Heyo": 50])
+        let nestedMap: Map<String, Map<String, Int>> = Map(["nested": map])
         return CustomMap(map: map, nestedMap: nestedMap)
     }
 
@@ -63,7 +58,7 @@ final class MapTypeTests: XCTestCase {
         XCTAssertEqual(getKey, 1)
 
         // returnMap
-        let returnedMap: [String: UInt32] = try client.invoke(
+        let returnedMap: Map<String, Int> = try client.invoke(
             uri: uri,
             method: "returnMap",
             args: ArgsReturnMap(map: customMap.map)
@@ -71,22 +66,24 @@ final class MapTypeTests: XCTestCase {
         XCTAssertEqual(returnedMap, customMap.map)
 
         // returnCustomMap
-//        let returnedCustomMap: CustomMap = try client.invoke(
-//            uri: uri,
-//            method: "returnCustomMap",
-//            args: ArgsReturnCustomMap(foo: customMap)
-//        )
-//        XCTAssertEqual(returnedCustomMap, createCustomMap())
+        let returnedCustomMap: CustomMap = try client.invoke(
+            uri: uri,
+            method: "returnCustomMap",
+            args: ArgsReturnCustomMap(foo: customMap)
+        )
+        XCTAssertEqual(returnedCustomMap, createCustomMap())
 
         // returnNestedMap
-//        var nestedMap: [String: [String: UInt32]] = [:]
-//        nestedMap["Hello"] = ["Nested Hello": 59]
-//        nestedMap["Bye"] = ["Nested Bye": 60]
-//        let returnedNestedMap: [String: [String: UInt32]] = try client.invoke(
-//            uri: uri,
-//            method: "returnNestedMap",
-//            args: ArgsReturnNestedMap(foo: nestedMap)
-//        )
-//        XCTAssertEqual(returnedNestedMap, nestedMap)
+        var nestedMap: Map<String, Map<String, UInt32>> = Map([
+            "Hello": Map(["Nested Hello": 59]),
+             "Bye": Map(["Nested Bye": 60])
+        ])
+
+        let returnedNestedMap: Map<String, Map<String, UInt32>> = try client.invoke(
+            uri: uri,
+            method: "returnNestedMap",
+            args: ArgsReturnNestedMap(foo: nestedMap)
+        )
+        XCTAssertEqual(returnedNestedMap, nestedMap)
     }
 }

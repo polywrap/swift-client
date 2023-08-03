@@ -2,6 +2,7 @@ import XCTest
 import Foundation
 
 @testable import PolywrapClient
+import MessagePacker
 
 struct CustomStruct: Encodable, Equatable, Decodable {
     public var int: Int
@@ -12,9 +13,10 @@ struct CustomStruct: Encodable, Equatable, Decodable {
 
 class MsgpackTests: XCTestCase {
     func testEncodeMapWithStruct() {
-        let customStruct: [String: CustomStruct] = ["one": CustomStruct(1)]
+        let customStruct: Map<String, CustomStruct> = Map(["one": CustomStruct(1)])
+        
         guard let encoded = try? encode(value: customStruct),
-              let decoded: [String: CustomStruct] = try? decode(value: encoded)
+              let decoded: Map<String, CustomStruct> = try? decode(value: encoded)
         else {
             XCTFail("Encoding failed")
             return
@@ -23,12 +25,12 @@ class MsgpackTests: XCTestCase {
     }
 
     func testEncodeDecodeMap() {
-        var customMap: [String: String] = [:]
-        customMap["firstKey"] = "firstValue"
-        customMap["secondKey"] = "secondValue"
+        var customMap: Map<String, String> = Map([:])
+        customMap.dictionary["firstKey"] = "firstValue"
+        customMap.dictionary["secondKey"] = "secondValue"
 
         guard let encoded = try? encode(value: customMap),
-              let decoded: [String: String] = try? decode(value: encoded)
+              let decoded: Map<String, String> = try? decode(value: encoded)
         else {
             XCTFail("Encoding or decoding failed")
             return
@@ -38,12 +40,12 @@ class MsgpackTests: XCTestCase {
     }
 
     func testEncodeDecodeNestedMap() {
-        var customMap: [String: [String: String]] = [:]
-        customMap["firstKey"] = ["one": "1"]
-        customMap["secondKey"] = ["second": "2"]
+        var customMap: Map<String, Map<String, String>> = Map([:])
+        customMap.dictionary["firstKey"] = Map(["one": "1"])
+        customMap.dictionary["secondKey"] = Map(["second": "2"])
 
         guard let encoded = try? encode(value: customMap),
-              let decoded: [String: [String: String]] = try? decode(value: encoded)
+              let decoded: Map<String, Map<String, String>> = try? decode(value: encoded)
         else {
             XCTFail("Encoding or decoding failed")
             return
@@ -51,13 +53,34 @@ class MsgpackTests: XCTestCase {
 
         XCTAssertEqual(decoded, customMap)
     }
+
+    func testEncodeDecodeComplexStructWithNestedMap() throws {
+        struct ComplexStruct: Codable, Equatable {
+            let map: Map<String, Int>
+            let nestedMap: Map<String, Map<String, Int>>
+        }
+        
+        let map = Map(["Hello": 1, "Heyo": 50])
+        let nestedMap = Map(["nested": map])
+        
+        let complexStruct = ComplexStruct(map: map, nestedMap: nestedMap)
+        guard let encoded = try? encode(value: complexStruct),
+              let decoded: ComplexStruct = try? decode(value: encoded)
+        else {
+            XCTFail("Encoding or decoding failed")
+            return
+        }
+        XCTAssertEqual(decoded, complexStruct)
+
+    }
+
     func testEncodeDecodeMapOfBytes() {
-        var customMap: [String: [UInt8]] = [:]
-        customMap["firstKey"] = [1, 2, 3]
-        customMap["secondKey"] = [3, 2, 1]
+        var customMap: Map<String, [UInt8]> = Map([:])
+        customMap.dictionary["firstKey"] = [1, 2, 3]
+        customMap.dictionary["secondKey"] = [3, 2, 1]
 
         guard let encoded = try? encode(value: customMap),
-              let decoded: [String: [UInt8]] = try? decode(value: encoded)
+              let decoded: Map<String, [UInt8]> = try? decode(value: encoded)
         else {
             XCTFail("Encoding or decoding failed")
             return
@@ -75,5 +98,28 @@ class MsgpackTests: XCTestCase {
         }
         
         XCTAssertEqual(decoded, "foo")
+    }
+    
+    func testDecodeValueError() {
+        let invalidData: [UInt8] = [0x01, 0x02, 0x03] // This should be valid encoded data
+        let decoded: Map<String, String>? = try? decode(value: invalidData)
+        XCTAssertNil(decoded, "Decoding should fail with invalid data")
+    }
+
+    func testEncodeDictionaryAsMessagePackExtensionTypeError() {
+        struct NonEncodableValue: Codable, Equatable {
+            func encode(to encoder: Encoder) throws {
+                throw EncodingError.invalidValue(self, EncodingError.Context(codingPath: [], debugDescription: "Test error"))
+            }
+
+            public init() {}
+            init(from decoder: Decoder) throws {
+                throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: [], debugDescription: "Test error"))
+            }
+        }
+
+        let invalidMap: Map<String, NonEncodableValue> = Map(["key": NonEncodableValue()])
+        let encoded = try? encode(value: invalidMap)
+        XCTAssertNil(encoded, "Encoding should fail with non-encodable value")
     }
 }

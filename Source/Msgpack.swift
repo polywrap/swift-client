@@ -20,10 +20,6 @@ public struct AnyEncodable: Encodable {
     }
 }
 
-struct AnyEncodableDictionary: Encodable {
-    let dictionary: [String: AnyEncodable]
-}
-
 /// Encodes an `Encodable` type into a msgpack buffer.
 ///
 /// - Parameter value: An `Encodable` type value.
@@ -31,25 +27,8 @@ struct AnyEncodableDictionary: Encodable {
 /// - Returns: A msgpack buffer representing the encoded value
 public func encode<T: Encodable>(value: T) throws -> [UInt8] {
     let encoder = MessagePackEncoder()
-    if let dictionary = value as? [String: Encodable] {
-        let anyEncodableDictionary = dictionary.mapValues { AnyEncodable($0) }
-        do {
-            let dicData = try encoder.encode(anyEncodableDictionary)
-            let extensionValue = MessagePackExtension(type: 0x1, data: dicData)
-            let encodedData = try encoder.encode(extensionValue)
-            return [UInt8](encodedData)
-        } catch {
-            throw EncodingError.invalidValue(value, EncodingError.Context(
-                codingPath: [],
-                debugDescription: "Failed to encode dictionary as MessagePack extension type",
-                underlyingError: error
-            ))
-        }
-    } else {
-        // Otherwise, treat it as a normal Encodable value
-        let data = try encoder.encode(AnyEncodable(value))
-        return [UInt8](data)
-    }
+    let data = try encoder.encode(value)
+    return [UInt8](data)
 }
 
 /// Decodes a msgpack buffer into a `Decodable` type.
@@ -62,11 +41,59 @@ public func decode<T: Decodable>(value: [UInt8]) throws -> T {
     do {
         return try decoder.decode(T.self, from: Data(value))
     } catch {
+        throw DecodingError.dataCorrupted(
+            DecodingError.Context(
+                codingPath: [],
+                debugDescription: "Failed to decode value"
+            )
+        )
+    }
+}
+
+public struct Map<Key: Codable & Hashable, Value: Codable & Equatable>: Codable, Equatable {
+    public static func == (lhs: Map<Key, Value>, rhs: Map<Key, Value>) -> Bool {
+        lhs.dictionary == rhs.dictionary
+    }
+
+    var dictionary: [Key: Value]
+
+    public init(_ dictionary: [Key: Value]) {
+        self.dictionary = dictionary
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        let encoder = MessagePackEncoder()
         do {
-            let extensionValue = try decoder.decode(MessagePackExtension.self, from: Data(value))
-            // If the extension type is 0x1, decode the value since we know it's a dictionary
+            let dicData = try encoder.encode(self.dictionary)
+            let extensionValue = MessagePackExtension(type: 1, data: dicData)
+            try container.encode(extensionValue)
+        } catch {
+            throw EncodingError.invalidValue(
+                dictionary,
+                EncodingError.Context(
+                    codingPath: [],
+                    debugDescription: "Failed to encode dictionary as MessagePack extension type",
+                    underlyingError: error
+                )
+            )
+        }
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let decoder = MessagePackDecoder()
+        do {
+            let extensionValue = try container.decode(MessagePackExtension.self)
             if extensionValue.type == 1 {
-                return try decoder.decode(T.self, from: extensionValue.data)
+                dictionary = try decoder.decode([Key: Value].self, from: extensionValue.data)
+            } else {
+                throw DecodingError.dataCorrupted(
+                    DecodingError.Context(
+                        codingPath: [],
+                        debugDescription: "Unexpected extension type"
+                    )
+                )
             }
         } catch {
             throw DecodingError.dataCorrupted(
@@ -78,5 +105,4 @@ public func decode<T: Decodable>(value: [UInt8]) throws -> T {
             )
         }
     }
-    throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: [], debugDescription: "Failed to decode value"))
 }
