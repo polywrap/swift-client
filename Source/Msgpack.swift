@@ -56,7 +56,7 @@ public struct Map<Key: Codable & Hashable, Value: Codable & Equatable>: Codable,
     public static func == (lhs: Map<Key, Value>, rhs: Map<Key, Value>) -> Bool {
         lhs.dictionary == rhs.dictionary
     }
-    
+
     var dictionary: [Key: Value]
 
     public init(_ dictionary: [Key: Value]) {
@@ -66,12 +66,10 @@ public struct Map<Key: Codable & Hashable, Value: Codable & Equatable>: Codable,
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         let encoder = MessagePackEncoder()
-        let anyEncodableDictionary = dictionary.mapValues { AnyEncodable($0) }
         do {
-            let dicData = try encoder.encode(anyEncodableDictionary)
-            let extensionValue = MessagePackExtension(type: 0x1, data: dicData)
-            let encodedData = try encoder.encode(extensionValue)
-            try container.encode(encodedData)
+            let dicData = try encoder.encode(self.dictionary)
+            let extensionValue = MessagePackExtension(type: 1, data: dicData)
+            try container.encode(extensionValue)
         } catch {
             throw EncodingError.invalidValue(
                 dictionary,
