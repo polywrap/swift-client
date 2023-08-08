@@ -1,0 +1,35 @@
+PODS:
+  - AsyncObjects (2.1.0):
+    - OrderedCollections (~> 1.0.0)
+  - MessagePacker (0.4.7)
+  - OrderedCollections (1.0.4)
+  - PolywrapClient (0.0.6):
+    - AsyncObjects (~> 2.1.0)
+    - MessagePacker (~> 0.4.7)
+    - PolywrapClientNative (~> 0.0.5)
+  - PolywrapClientNative (0.0.5)
+
+DEPENDENCIES:
+  - PolywrapClient (from `../`)
+
+SPEC REPOS:
+  trunk:
+    - AsyncObjects
+    - MessagePacker
+    - OrderedCollections
+    - PolywrapClientNative
+
+EXTERNAL SOURCES:
+  PolywrapClient:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  AsyncObjects: 37d04187100fd9cd545a6570a8ad727c5a3c5090
+  MessagePacker: ab2fe250e86ea7aedd1a9ee47a37083edd41fd02
+  OrderedCollections: c754ce5f9e42cf22b73afd73582317347903ab6d
+  PolywrapClient: 1362268e98738e351a3fcee35cad030427046966
+  PolywrapClientNative: a1d5df8a4248379095e8abd408b7a4cb9f3fe80c
+
+PODFILE CHECKSUM: 10c9229157b5a5c30244629a4538cc1fc81a7015
+
+COCOAPODS: 1.12.1
