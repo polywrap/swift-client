@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'PolywrapClient'
-  s.version          = '0.0.6'
+  s.version          = '0.0.7'
   s.summary          = 'Implementation of a client compatible with the WRAP Protocol in Swift'
   s.homepage         = 'https://github.com/polywrap/swift-client'
   s.license          = 'MIT'
