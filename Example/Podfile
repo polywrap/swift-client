@@ -3,8 +3,8 @@ platform :ios, '17.0'
 
 workspace 'example'
 
-target 'HelloWorld' do
-  project 'HelloWorld/HelloWorld.xcodeproj'
+target 'Http' do
+  project 'Http/Http.xcodeproj'
 
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
@@ -14,8 +14,8 @@ target 'HelloWorld' do
 end
 
 
-target 'IpfsExample' do
-  project 'IpfsExample/IpfsExample.xcodeproj'
+target 'Ipfs' do
+  project 'Ipfs/Ipfs.xcodeproj'
 
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
