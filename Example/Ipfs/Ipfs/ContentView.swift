@@ -29,21 +29,39 @@ struct ContentView: View {
     
     func ipfsGet(cid: String) -> Data {
         do {
-            let client = BuilderConfig().addSystemDefault().addWeb3Default().build()
+            let client = BuilderConfig()
+                .addSystemDefault()
+                .addWeb3Default()
+                .build()
+            
             let uri = try Uri("wrapscan.io/polywrap/ipfs-http-client@1.0")
-            let resolveResult: ResolveResult = try client.invoke(uri: uri, method: "resolve", args: ResolveArgs(cid: cid, ipfsProvider: "https://ipfs.io/"))
- 
+            
+            let resolveResult: ResolveResult = try client.invoke(
+                uri: uri,
+                method: "resolve",
+                args: ResolveArgs(
+                    cid: cid,
+                    ipfsProvider: "https://ipfs.io/"
+                )
+            )
+            
             print("\(resolveResult)")
             
-            let catResult: Data = try client.invoke(uri: uri, method: "cat", args: CatArgs(cid: resolveResult.cid, ipfsProvider: resolveResult.provider))
-           
+            let catResult: Data = try client.invoke(
+                uri: uri,
+                method: "cat",
+                args: CatArgs(
+                    cid: resolveResult.cid,
+                    ipfsProvider: resolveResult.provider
+                )
+            )
             
             print("\(catResult)")
             
             return catResult
         } catch {
             print("\(error)")
-            return Data([]);
+            return Data([])
         }
     }
     
