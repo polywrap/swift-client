@@ -48,7 +48,7 @@ struct ContentView: View {
     var body: some View {
         ScrollView {
             VStack (alignment: .center){
-                Image(systemName: "globe")
+                Image(systemName: "link")
                     .imageScale(.large)
                     .foregroundStyle(.tint)
                 Text("Hello, HTTP!")

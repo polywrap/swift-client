@@ -1,15 +1,12 @@
-# Uncomment the next line to define a global platform for your project
-platform :ios, '17.0'
+platform :ios, '16.1'
 
 workspace 'example'
 
 target 'Http' do
   project 'Http/Http.xcodeproj'
 
-  # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
 
-  # Pods for HelloWorld
   pod 'PolywrapClient', :path => '../'
 end
 
@@ -17,22 +14,28 @@ end
 target 'Ipfs' do
   project 'Ipfs/Ipfs.xcodeproj'
 
-  # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
 
-  # Pods for HelloWorld
   pod 'PolywrapClient', :path => '../'
 end
 
 target 'Ens' do
   project 'Ens/Ens.xcodeproj'
 
-  # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
 
-  # Pods for HelloWorld
   pod 'PolywrapClient', :path => '../'
 end
+
+target 'Ethers' do
+  project 'Ethers/Ethers.xcodeproj'
+
+  use_frameworks!
+
+  pod 'PolywrapClient', :path => '../'
+  pod 'MetamaskProviderPlugin', :git => 'https://github.com/polywrap/ethereum-wallet.git'
+end
+
 
 post_install do |installer|
   installer.pods_project.targets.each do |target|
