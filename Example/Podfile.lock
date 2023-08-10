@@ -4,7 +4,7 @@ PODS:
   - MessagePacker (0.4.7)
   - metamask-ios-sdk (0.2.0):
     - Socket.IO-Client-Swift (~> 16.0.1)
-  - MetamaskProviderPlugin (0.0.3):
+  - MetamaskProviderPlugin (0.0.4):
     - metamask-ios-sdk (~> 0.2.0)
     - PolywrapClient (~> 0.0.6)
   - OrderedCollections (1.0.4)
@@ -39,14 +39,14 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   MetamaskProviderPlugin:
-    :commit: 96d9a38b9415875a48236dd56e098515f47866f7
+    :commit: f63f1ad720c36050f3c9e5cd946c27883d3365ca
     :git: https://github.com/polywrap/ethereum-wallet.git
 
 SPEC CHECKSUMS:
   AsyncObjects: 37d04187100fd9cd545a6570a8ad727c5a3c5090
   MessagePacker: ab2fe250e86ea7aedd1a9ee47a37083edd41fd02
   metamask-ios-sdk: 3c7b575d49b947cdf03ca1c766a9dec9f2c50b90
-  MetamaskProviderPlugin: 46afd5ae07cf3d4aac13be88b4e9ff14994ea033
+  MetamaskProviderPlugin: a40bd317d40e0ae7a95becdd8eca69d36a31d3bf
   OrderedCollections: c754ce5f9e42cf22b73afd73582317347903ab6d
   PolywrapClient: 1362268e98738e351a3fcee35cad030427046966
   PolywrapClientNative: a1d5df8a4248379095e8abd408b7a4cb9f3fe80c

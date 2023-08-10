@@ -9,82 +9,82 @@ import SwiftUI
 import MetamaskProviderPlugin
 import PolywrapClient
 
-struct Domain: Codable {
-    var name: String
-    var version: String
-    var chainId: UInt
-    var verifyingContract: String
-}
-
-struct Person: Codable {
-    var name: String
-    var wallet: String
-}
-
-struct Mail: Codable {
-    var from: Person
-    var to: Person
-    var contents: String
-}
 
 struct Payload: Codable {
-    var domain: Domain
+    var domain: [String: KnownCodable]
     var primaryType: String
-    var types: AllTypeDefs
-    var message: Mail
-}
-
-struct TypeDef: Codable {
-    var name: String
-    var type: String
-}
-
-struct AllTypeDefs: Codable {
-    var EIP712Domain: [TypeDef]
-    var Person: [TypeDef]
-    var Mail: [TypeDef]
+    var types: [String: [[String: String]]]
+    var message: [String: KnownCodable]
 }
 
 struct SignTypedDataArgs: Codable {
     var payload: String
 }
 
-let typeDefs = AllTypeDefs(
-    EIP712Domain: [
-        TypeDef(name: "name", type: "string"),
-        TypeDef(name: "version", type: "string"),
-        TypeDef(name: "chainId", type: "uint256"),
-        TypeDef(name: "verifyingContract", type: "address"),
+
+let typeDefs = [
+    "EIP712Domain": [
+        [
+            "name": "name",
+            "type": "string"
+        ],
+        [
+            "type": "string",
+            "name": "version"
+        ],
+        [
+            "type": "uint256",
+            "name": "chainId",
+        ],
+        [
+            "type": "address",
+            "name": "verifyingContract"
+        ]
     ],
-    Person: [
-        TypeDef(name: "name", type: "string"),
-        TypeDef(name: "wallet", type: "string"),
+    "Person": [
+        [
+            "name": "name",
+            "type": "string",
+        ],
+        [
+            "name": "wallet",
+            "type": "address"
+        ]
     ],
-    Mail: [
-        TypeDef(name: "from", type: "Person"),
-        TypeDef(name: "to", type: "Person"),
-        TypeDef(name: "contents", type: "string"),
+    "Mail": [
+        [
+            "name": "from",
+            "type": "Person"
+        ],
+        [
+            "name": "to",
+            "type": "Person"
+        ],
+        [
+            "name": "contents",
+            "type": "string"
+        ]
     ]
-)
+]
 
-let domain = Domain(
-    name: "Ether Mail",
-    version: "1",
-    chainId: 1,
-    verifyingContract: "0xcccccccccccccccccccccccccccccccccccccccc"
-)
+let domain: [String: KnownCodable] = [
+    "name": .string("Ether Mail"),
+    "version": .string("1"),
+    "chainId": .int(1),
+    "verifyingContract": .string("0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC")
+]
 
-let message = Mail(
-    from: Person(
-        name: "Alice",
-        wallet: "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-    ),
-    to: Person(
-        name: "Bob",
-        wallet: "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
-    ),
-    contents: "Hello Bob. I'm Alice."
-)
+let message: [String: KnownCodable] = [
+    "from": .dict([
+        "name": .string("Cow"),
+        "wallet": .string("0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826")
+    ]),
+    "to": .dict([
+        "name": .string("Bob"),
+        "wallet": .string("0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB")
+    ]),
+    "contents": .string("Hello Bob!")
+]
 
 let payload = Payload(
     domain: domain,
@@ -99,9 +99,11 @@ func encodeToJSONString<T: Codable>(_ value: T) -> String? {
     let encoder = JSONEncoder()
     
     do {
+        print(value)
         let jsonData = try encoder.encode(value)
         print("managed to encode")
-        return String(data: jsonData, encoding: .utf8)
+        let stringified = String(data: jsonData, encoding: .utf8)
+        return stringified
     } catch {
         print("Error encoding to JSON: \(error)")
         return nil
@@ -116,12 +118,16 @@ struct EthersExampleView: View {
     func getSignedTypeData(payload: Payload) -> String {
         do {
             print("Get client")
+            let pluginUri = try Uri("wrapscan.io/polywrap/ethereum-wallet@1.0")
+
             let client = BuilderConfig()
                 .addSystemDefault()
-                .addPackage(try Uri("wrapscan.io/polywrap/ethereum-wallet@1.0"), PluginPackage(metamaskProvider))
+                .addPackage(try Uri("plugin/swift-provider"), PluginPackage(metamaskProvider))
+                .addRedirect(try Uri("plugin/ethereum-wallet@1.0"), try Uri("plugin/swift-provider"))
                 .build()
             
             print("Invoke")
+            
             let signedTypeData: String = try client.invoke(
                 uri: try Uri("wrapscan.io/polywrap/ethers@1.0"),
                 method: "signTypedData",
