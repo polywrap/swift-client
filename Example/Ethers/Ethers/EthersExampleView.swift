@@ -115,7 +115,10 @@ struct EthersExampleView: View {
     
     @State private var signedTypeData: String = ""
     
-    func getSignedTypeData(payload: Payload) -> String {
+    // When interacting with a plugin that uses runBlocking
+    // https://github.com/polywrap/ethereum-wallet/blob/main/implementations/swift/metamask/Source/MetamaskProvider.swift#L140
+    // we need to make the function async to guarantee that the UI does not get blocked
+    func getSignedTypeData(payload: Payload) async -> String {
         do {
             print("Get client")
             let pluginUri = try Uri("wrapscan.io/polywrap/ethereum-wallet@1.0")
@@ -147,7 +150,10 @@ struct EthersExampleView: View {
         VStack{
             Text("Connected to Metamask")
             Button("Get signed type data", action: {
-                signedTypeData = getSignedTypeData(payload: payload)
+                // When consuming an async method, we need to use the Task construct to handle the asynchronous computation
+                Task {
+                    signedTypeData = await getSignedTypeData(payload: payload)
+                }
             })
             .buttonStyle(.borderedProminent)
             Text("Signed type data:")
