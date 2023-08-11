@@ -39,7 +39,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   MetamaskProviderPlugin:
-    :commit: f63f1ad720c36050f3c9e5cd946c27883d3365ca
+    :commit: 6768a476d74f5baaf7e5cd9e471b4d7a873f66fa
     :git: https://github.com/polywrap/ethereum-wallet.git
 
 SPEC CHECKSUMS:
