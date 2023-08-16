@@ -10,7 +10,7 @@ import PolywrapClientNative
 
 /// `BuilderConfig` class provides a configuration interface for the `PolywrapClient`.
 public class BuilderConfig {
-    public let ffi: FfiBuilderConfig
+    internal let ffi: FfiBuilderConfig
 
     /// Creates an instance of `BuilderConfig`.
     public init() {

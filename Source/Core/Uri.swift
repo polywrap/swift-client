@@ -15,7 +15,7 @@ public enum UriError: Error, Equatable {
 
 /// `Uri` is a class used to manage URIs within the context of the Polywrap client.
 public class Uri {
-    public let ffi: FfiUri  // An instance of `FfiUri` class provided by `PolywrapClientNativeLib`.
+    internal let ffi: FfiUri  // An instance of `FfiUri` class provided by `PolywrapClientNativeLib`.
 
     /// Initializer accepting a URI string. It attempts to create an `FfiUri` instance from the string.
     /// If the operation fails, throws a `UriError.parseError`.

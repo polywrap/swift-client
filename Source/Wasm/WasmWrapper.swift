@@ -16,7 +16,7 @@ public enum WasmWrapperError: Error {
 public class WasmWrapper: IffiWrapper {
 
     /// A foreign function interface (FFI) to a Wasm wrapper provided by PolywrapClientNativeLib.
-    public let ffi: FfiWrapper
+    internal let ffi: FfiWrapper
 
     /// Initializes a new WasmWrapper instance.
     ///

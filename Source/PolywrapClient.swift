@@ -2,7 +2,7 @@ import PolywrapClientNative
 
 /// `PolywrapClient` provides methods to interact with the WRAP standard in Swift
 public class PolywrapClient {
-    public let ffi: FfiClient
+    internal let ffi: FfiClient
     /// Creates a new `PolywrapClient`.
     ///
     /// - Parameters:
