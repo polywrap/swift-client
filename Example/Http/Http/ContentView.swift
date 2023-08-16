@@ -25,7 +25,6 @@ struct ContentView: View {
         do {
             let client = BuilderConfig()
                 .addSystemDefault()
-                .addWeb3Default()
                 .build()
             
             let uri = try Uri("wrapscan.io/polywrap/http@1.0")

@@ -31,7 +31,6 @@ struct ContentView: View {
         do {
             let client = BuilderConfig()
                 .addSystemDefault()
-                .addWeb3Default()
                 .build()
             
             let uri = try Uri("wrapscan.io/polywrap/ipfs-http-client@1.0")

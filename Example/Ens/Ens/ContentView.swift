@@ -14,7 +14,7 @@ struct GetResolverArgs: Codable {
 }
 
 struct GetOwnerArgs: Codable {
-    var resolverAddress: String
+    var registryAddress: String
     var domain: String
 }
 
@@ -30,13 +30,14 @@ struct EnsDomainInfo {
 }
 
 struct ContentView: View {
-    @State private var ensDomain: String = "wraps.eth"
+    @State private var ensDomain: String = "vitalik.eth"
     @State private var registryAddress: String = "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e"
     @State private var resolver: String = ""
     @State private var owner: String = ""
     @State private var address: String = ""
-    
-    func getEnsInfo(ensDomain: String, registryAddress: String) -> EnsDomainInfo {
+    @State private var isExecuting = false
+
+    func getEnsInfo(ensDomain: String, registryAddress: String) async -> EnsDomainInfo {
         do {
             let client = BuilderConfig()
                 .addSystemDefault()
@@ -53,19 +54,15 @@ struct ContentView: View {
             )
             
             print("Resolver: \(resolver)")
-            
-            // Commented out due to an issue with invoking getOwner
-            // It seems that the args are not properly passed.
-            /*
+
              let owner: String = try client.invoke(
-             uri: uri,
-             method: "getOwner",
-             args: GetOwnerArgs(
-             resolverAddress: resolver,
-             domain: ensDomain
+                 uri: uri,
+                 method: "getOwner",
+                 args: GetOwnerArgs(
+                     registryAddress: registryAddress,
+                     domain: ensDomain
+                 )
              )
-             )
-             */
             
             let address: String = try client.invoke(
                 uri: uri,
@@ -79,7 +76,7 @@ struct ContentView: View {
             print("Address: \(address)")
             
             return EnsDomainInfo(
-                owner: "not yet supported",
+                owner: owner,
                 resolver: resolver,
                 address: address
             )
@@ -104,17 +101,25 @@ struct ContentView: View {
                     .textFieldStyle(.roundedBorder)
                 TextField("Domain", text: $ensDomain)
                     .textFieldStyle(.roundedBorder)
-                Button("Get", action: {
-                    let info = getEnsInfo(
-                        ensDomain: ensDomain,
-                        registryAddress: registryAddress
-                    )
-                    resolver = info.resolver
-                    owner = info.owner
-                    address = info.address
-                })
-                .buttonStyle(.bordered)
-                
+                if isExecuting {
+                    ProgressView()
+                        .frame(width: 50, height: 50)
+                } else {
+                    Button("Get", action: {
+                        Task {
+                            isExecuting = true
+                            defer { isExecuting = false }
+                            let info = await getEnsInfo(
+                                ensDomain: ensDomain,
+                                registryAddress: registryAddress
+                            )
+                            resolver = info.resolver
+                            owner = info.owner
+                            address = info.address
+                        }
+                    })
+                    .buttonStyle(.bordered)
+                }
                 Group {
                     Text("Resolver:")
                     Text("\(resolver)")

@@ -95,13 +95,10 @@ let payload = Payload(
 
 
 func encodeToJSONString<T: Codable>(_ value: T) -> String? {
-    print("encode")
     let encoder = JSONEncoder()
     
     do {
-        print(value)
         let jsonData = try encoder.encode(value)
-        print("managed to encode")
         let stringified = String(data: jsonData, encoding: .utf8)
         return stringified
     } catch {
@@ -114,13 +111,13 @@ struct EthersExampleView: View {
     var metamaskProvider: MetamaskProvider
     
     @State private var signedTypeData: String = ""
-    
+    @State private var isExecuting = false
+
     // When interacting with a plugin that uses runBlocking
     // https://github.com/polywrap/ethereum-wallet/blob/main/implementations/swift/metamask/Source/MetamaskProvider.swift#L140
     // we need to make the function async to guarantee that the UI does not get blocked
     func getSignedTypeData(payload: Payload) async -> String {
         do {
-            print("Get client")
             let pluginUri = try Uri("wrapscan.io/polywrap/ethereum-wallet@1.0")
 
             let client = BuilderConfig()
@@ -128,17 +125,13 @@ struct EthersExampleView: View {
                 .addPackage(try Uri("plugin/swift-provider"), PluginPackage(metamaskProvider))
                 .addRedirect(try Uri("plugin/ethereum-wallet@1.0"), try Uri("plugin/swift-provider"))
                 .build()
-            
-            print("Invoke")
-            
+
             let signedTypeData: String = try client.invoke(
                 uri: try Uri("wrapscan.io/polywrap/ethers@1.0"),
                 method: "signTypedData",
                 args: SignTypedDataArgs(payload: encodeToJSONString(payload)!)
             );
-            
-            print("returning signed type data")
-            
+
             return signedTypeData;
         } catch {
             print("\(error)")
@@ -149,13 +142,19 @@ struct EthersExampleView: View {
     var body: some View {
         VStack{
             Text("Connected to Metamask")
-            Button("Get signed type data", action: {
-                // When consuming an async method, we need to use the Task construct to handle the asynchronous computation
-                Task {
-                    signedTypeData = await getSignedTypeData(payload: payload)
-                }
-            })
-            .buttonStyle(.borderedProminent)
+            if isExecuting {
+                ProgressView()
+                    .frame(width: 50, height: 50)
+            } else {
+                Button("Get signed type data", action: {
+                    // When consuming an async method, we need to use the Task construct to handle the asynchronous computation
+                    Task {
+                        isExecuting = true
+                        defer { isExecuting = false }
+                        signedTypeData = await getSignedTypeData(payload: payload)
+                    }
+                }).buttonStyle(.borderedProminent)
+            }
             Text("Signed type data:")
             Text(signedTypeData)
                 .monospaced()
