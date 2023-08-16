@@ -1,15 +1,15 @@
-![Public Release Announcement](https://user-images.githubusercontent.com/5522128/177473887-2689cf25-7937-4620-8ca5-17620729a65d.png)
+![polywrap-banner](https://raw.githubusercontent.com/polywrap/branding/master/assets/banner.png)
 
-# Swift Client
- [![codecov](https://codecov.io/gh/polywrap/swift-client/branch/main/graph/badge.svg?token=JvNaa0OHjc)](https://codecov.io/gh/polywrap/swift-client)
+# Swift Client  [![codecov](https://codecov.io/gh/polywrap/swift-client/branch/main/graph/badge.svg?token=JvNaa0OHjc)](https://codecov.io/gh/polywrap/swift-client)
 
-Implementation of a client compatible with the [WRAP Protocol](https://github.com/polywrap/specification) in Swift
+
+Implementation of the Polywrap client in Swift.
 
 ## Installation
 
 PolywrapClient is available through Swift Package Manager and Cocoapods.
 
-### Via Cocoapods
+#### Via Cocoapods
 
 Add pod to your Podfile:
 
@@ -17,11 +17,11 @@ Add pod to your Podfile:
 pod 'PolywrapClient'
 ```
 
-### Via Xcode Menu
+#### Via Xcode Menu
 
 To add Polywrap Client as an SPM package to your project in Xcode you must do: File -> Swift Packages -> Add Package Dependency. And then enter https://github.com/polywrap/swift-client
 
-### Via Package file
+#### Via Package file
 
 Add it as a dependency within your Package.swift manifest:
 
@@ -35,28 +35,42 @@ let package = Package(
 )
 ```
 
-Then import PolywrapClient wherever you’d like to use it:
+## Getting started
 
-```swift
-import PolywrapClient
-```
-
-## Usage
-
-Here's an example of how you could use the `PolywrapClient` class:
+Create a new Polywrap Client Config Builder instance, add the bundles you want to use, and then create a new Polywrap Client instance from the builder.
 
 ```swift
 import PolywrapClient
 
-// Create a Config Builder instance
-let builder = BuilderConfig()
+struct CatArgs: Codable {
+    var cid: String
+    var ipfsProvider: String
+}
 
-// Create a PolywrapClient instance with the builder
-let client = builder.build()
+func main() throws {
+    let client = BuilderConfig()
+        .addSystemDefault()
+        .build()
 
-// Invoke any method by passing URI and method name
-let result: String = try client.invoke(uri: "wrap/cool-uri", method: "coolMethod")
+    let catResult: Data = try client.invoke(
+        uri: try Uri("wrapscan.io/polywrap/ipfs-http-client@1.0"),
+        method: "cat",
+        args: CatArgs(
+            cid: resolveResult.cid,
+            ipfsProvider: resolveResult.provider
+        )
+    )
+
+    print(catResult)
+}
 ```
+
+## Resources
+
+- [Documentation](https://docs.polywrap.io/)
+- [Examples](./Example)
+- [Features supported](https://github.com/polywrap/client-readiness/tree/main/clients/swift/Sources/Readiness/Features)
+- [Support](https://discord.polywrap.io)
 
 ## Contributions
 
