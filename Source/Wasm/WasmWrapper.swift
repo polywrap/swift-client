@@ -13,17 +13,17 @@ public enum WasmWrapperError: Error {
 }
 
 /// A class representing a wrapper
-public class WasmWrapper: FfiWrapper {
+public class WasmWrapper: IffiWrapper {
 
     /// A foreign function interface (FFI) to a Wasm wrapper provided by PolywrapClientNativeLib.
-    public let ffi: FfiWasmWrapper
+    public let ffi: FfiWrapper
 
     /// Initializes a new WasmWrapper instance.
     ///
     /// - Parameter module: A Wasm module represented as an array of bytes.
     public init(module: [UInt8]) throws {
         do {
-            self.ffi = try ffiWasmWrapperFromBytecode(bytes: module)
+            self.ffi = try ffiWrapperFromBytecode(bytes: module)
         } catch {
             throw WasmWrapperError.fromBytecodeError
         }
