@@ -19,7 +19,7 @@ public class PluginPackage: IffiWrapPackage {
     public init(_ module: PluginModule) {
         self.module = module
     }
-    
+
     internal var ffi: FfiWrapPackage {
         FfiWrapPackage(wrapper: self)
     }
