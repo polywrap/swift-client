@@ -7,25 +7,25 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A40989052A811959003A61E2 /* HelloWorldApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40989042A811959003A61E2 /* HelloWorldApp.swift */; };
+		A40989052A811959003A61E2 /* LoggerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40989042A811959003A61E2 /* LoggerApp.swift */; };
 		A40989072A811959003A61E2 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40989062A811959003A61E2 /* ContentView.swift */; };
 		A40989092A811959003A61E2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A40989082A811959003A61E2 /* Assets.xcassets */; };
 		A409890C2A811959003A61E2 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A409890B2A811959003A61E2 /* Preview Assets.xcassets */; };
-		FAE5D73027BD30837356CF62 /* Pods_HelloWorld.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 892005AF232BE3036785363D /* Pods_HelloWorld.framework */; };
+		FAE5D73027BD30837356CF62 /* Pods_Logger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 892005AF232BE3036785363D /* Pods_Logger.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		0389B9B8ACA5A2FE2B5291BC /* Pods-HelloWorld.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HelloWorld.debug.xcconfig"; path = "Target Support Files/Pods-HelloWorld/Pods-HelloWorld.debug.xcconfig"; sourceTree = "<group>"; };
-		1ADA6F73A8BD7714540DD229 /* Pods-HelloWorld.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HelloWorld.release.xcconfig"; path = "Target Support Files/Pods-HelloWorld/Pods-HelloWorld.release.xcconfig"; sourceTree = "<group>"; };
-		3E44A50F9988A3D692E157D5 /* Pods-HelloWorld.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HelloWorld.release.xcconfig"; path = "Target Support Files/Pods-HelloWorld/Pods-HelloWorld.release.xcconfig"; sourceTree = "<group>"; };
-		892005AF232BE3036785363D /* Pods_HelloWorld.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HelloWorld.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		9281F6C0890FA76702290CFE /* Pods-HelloWorld.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HelloWorld.debug.xcconfig"; path = "Target Support Files/Pods-HelloWorld/Pods-HelloWorld.debug.xcconfig"; sourceTree = "<group>"; };
-		A40989012A811959003A61E2 /* HelloWorld.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HelloWorld.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		A40989042A811959003A61E2 /* HelloWorldApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelloWorldApp.swift; sourceTree = "<group>"; };
+		0389B9B8ACA5A2FE2B5291BC /* Pods-Logger.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Logger.debug.xcconfig"; path = "Target Support Files/Pods-Logger/Pods-Logger.debug.xcconfig"; sourceTree = "<group>"; };
+		1ADA6F73A8BD7714540DD229 /* Pods-Logger.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Logger.release.xcconfig"; path = "Target Support Files/Pods-Logger/Pods-Logger.release.xcconfig"; sourceTree = "<group>"; };
+		3E44A50F9988A3D692E157D5 /* Pods-Logger.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Logger.release.xcconfig"; path = "Target Support Files/Pods-Logger/Pods-Logger.release.xcconfig"; sourceTree = "<group>"; };
+		892005AF232BE3036785363D /* Pods_Logger.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Logger.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9281F6C0890FA76702290CFE /* Pods-Logger.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Logger.debug.xcconfig"; path = "Target Support Files/Pods-Logger/Pods-Logger.debug.xcconfig"; sourceTree = "<group>"; };
+		A40989012A811959003A61E2 /* Logger.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Logger.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A40989042A811959003A61E2 /* LoggerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggerApp.swift; sourceTree = "<group>"; };
 		A40989062A811959003A61E2 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		A40989082A811959003A61E2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A409890B2A811959003A61E2 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		DB7DFCCC2A8DA18B0062156E /* HelloWorld.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = HelloWorld.entitlements; sourceTree = "<group>"; };
+		DB7DFCCC2A8DA18B0062156E /* Logger.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Logger.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -33,7 +33,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FAE5D73027BD30837356CF62 /* Pods_HelloWorld.framework in Frameworks */,
+				FAE5D73027BD30837356CF62 /* Pods_Logger.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -43,7 +43,7 @@
 		A40988F82A811959003A61E2 = {
 			isa = PBXGroup;
 			children = (
-				A40989032A811959003A61E2 /* HelloWorld */,
+				A40989032A811959003A61E2 /* Logger */,
 				A40989022A811959003A61E2 /* Products */,
 				DAD33018BD112F3A441BDD01 /* Pods */,
 				DBAA5E452375ED29B283BE3A /* Frameworks */,
@@ -53,21 +53,21 @@
 		A40989022A811959003A61E2 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				A40989012A811959003A61E2 /* HelloWorld.app */,
+				A40989012A811959003A61E2 /* Logger.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		A40989032A811959003A61E2 /* HelloWorld */ = {
+		A40989032A811959003A61E2 /* Logger */ = {
 			isa = PBXGroup;
 			children = (
-				DB7DFCCC2A8DA18B0062156E /* HelloWorld.entitlements */,
-				A40989042A811959003A61E2 /* HelloWorldApp.swift */,
+				DB7DFCCC2A8DA18B0062156E /* Logger.entitlements */,
+				A40989042A811959003A61E2 /* LoggerApp.swift */,
 				A40989062A811959003A61E2 /* ContentView.swift */,
 				A40989082A811959003A61E2 /* Assets.xcassets */,
 				A409890A2A811959003A61E2 /* Preview Content */,
 			);
-			path = HelloWorld;
+			path = Logger;
 			sourceTree = "<group>";
 		};
 		A409890A2A811959003A61E2 /* Preview Content */ = {
@@ -81,10 +81,10 @@
 		DAD33018BD112F3A441BDD01 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				0389B9B8ACA5A2FE2B5291BC /* Pods-HelloWorld.debug.xcconfig */,
-				3E44A50F9988A3D692E157D5 /* Pods-HelloWorld.release.xcconfig */,
-				9281F6C0890FA76702290CFE /* Pods-HelloWorld.debug.xcconfig */,
-				1ADA6F73A8BD7714540DD229 /* Pods-HelloWorld.release.xcconfig */,
+				0389B9B8ACA5A2FE2B5291BC /* Pods-Logger.debug.xcconfig */,
+				3E44A50F9988A3D692E157D5 /* Pods-Logger.release.xcconfig */,
+				9281F6C0890FA76702290CFE /* Pods-Logger.debug.xcconfig */,
+				1ADA6F73A8BD7714540DD229 /* Pods-Logger.release.xcconfig */,
 			);
 			name = Pods;
 			path = ../Pods;
@@ -93,7 +93,7 @@
 		DBAA5E452375ED29B283BE3A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				892005AF232BE3036785363D /* Pods_HelloWorld.framework */,
+				892005AF232BE3036785363D /* Pods_Logger.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -101,9 +101,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		A40989002A811959003A61E2 /* HelloWorld */ = {
+		A40989002A811959003A61E2 /* Logger */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A409890F2A811959003A61E2 /* Build configuration list for PBXNativeTarget "HelloWorld" */;
+			buildConfigurationList = A409890F2A811959003A61E2 /* Build configuration list for PBXNativeTarget "Logger" */;
 			buildPhases = (
 				F2010062D55D268828BAE1A9 /* [CP] Check Pods Manifest.lock */,
 				A40988FD2A811959003A61E2 /* Sources */,
@@ -115,9 +115,9 @@
 			);
 			dependencies = (
 			);
-			name = HelloWorld;
-			productName = HelloWorld;
-			productReference = A40989012A811959003A61E2 /* HelloWorld.app */;
+			name = Logger;
+			productName = Logger;
+			productReference = A40989012A811959003A61E2 /* Logger.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -135,7 +135,7 @@
 					};
 				};
 			};
-			buildConfigurationList = A40988FC2A811959003A61E2 /* Build configuration list for PBXProject "HelloWorld" */;
+			buildConfigurationList = A40988FC2A811959003A61E2 /* Build configuration list for PBXProject "Logger" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -148,7 +148,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				A40989002A811959003A61E2 /* HelloWorld */,
+				A40989002A811959003A61E2 /* Logger */,
 			);
 		};
 /* End PBXProject section */
@@ -172,15 +172,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-HelloWorld/Pods-HelloWorld-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Logger/Pods-Logger-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-HelloWorld/Pods-HelloWorld-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Logger/Pods-Logger-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-HelloWorld/Pods-HelloWorld-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Logger/Pods-Logger-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		F2010062D55D268828BAE1A9 /* [CP] Check Pods Manifest.lock */ = {
@@ -198,7 +198,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-HelloWorld-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-Logger-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -213,7 +213,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A40989072A811959003A61E2 /* ContentView.swift in Sources */,
-				A40989052A811959003A61E2 /* HelloWorldApp.swift in Sources */,
+				A40989052A811959003A61E2 /* LoggerApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -341,14 +341,14 @@
 		};
 		A40989102A811959003A61E2 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9281F6C0890FA76702290CFE /* Pods-HelloWorld.debug.xcconfig */;
+			baseConfigurationReference = 9281F6C0890FA76702290CFE /* Pods-Logger.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = HelloWorld/HelloWorld.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Logger/Logger.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"HelloWorld/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"Logger/Preview Content\"";
 				DEVELOPMENT_TEAM = S6LDFWH8UA;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -364,7 +364,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.polywrap.HelloWorldExample;
+				PRODUCT_BUNDLE_IDENTIFIER = com.polywrap.LoggerExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -374,14 +374,14 @@
 		};
 		A40989112A811959003A61E2 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1ADA6F73A8BD7714540DD229 /* Pods-HelloWorld.release.xcconfig */;
+			baseConfigurationReference = 1ADA6F73A8BD7714540DD229 /* Pods-Logger.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = HelloWorld/HelloWorld.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Logger/Logger.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"HelloWorld/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"Logger/Preview Content\"";
 				DEVELOPMENT_TEAM = S6LDFWH8UA;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -397,7 +397,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.polywrap.HelloWorldExample;
+				PRODUCT_BUNDLE_IDENTIFIER = com.polywrap.LoggerExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -408,7 +408,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		A40988FC2A811959003A61E2 /* Build configuration list for PBXProject "HelloWorld" */ = {
+		A40988FC2A811959003A61E2 /* Build configuration list for PBXProject "Logger" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A409890D2A811959003A61E2 /* Debug */,
@@ -417,7 +417,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A409890F2A811959003A61E2 /* Build configuration list for PBXNativeTarget "HelloWorld" */ = {
+		A409890F2A811959003A61E2 /* Build configuration list for PBXNativeTarget "Logger" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A40989102A811959003A61E2 /* Debug */,

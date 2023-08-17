@@ -14,6 +14,10 @@ Invokes the http plugin to do a GET request, getting the HTML from a website
 
 Invokes the IPFS wrap, fetching an image and showing it
 
+### Logger
+
+Invokes the logger wrap, which interacts with the logger plugin. It shows a println message from WASM world
+
 ### Ethers
 
 Invoke the Ethers wrap, and signs a typed data using Metamask App; this can only be run in a device (you must have Metamask installed in your phone). By using the ethereum wallet plugin for metamask it shows you how you can write to Ethereum blockchain

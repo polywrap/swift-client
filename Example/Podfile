@@ -2,8 +2,8 @@ platform :ios, '16.1'
 
 workspace 'example'
 
-target 'HelloWorld' do
-  project 'HelloWorld/HelloWorld.xcodeproj'
+target 'Logger' do
+  project 'Logger/Logger.xcodeproj'
 
   use_frameworks!
 

@@ -1,6 +1,6 @@
 //
 //  ContentView.swift
-//  HelloWorld
+//  Logger
 //
 //  Created by Jure Granić-Skender on 07.08.2023..
 //

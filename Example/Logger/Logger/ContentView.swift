@@ -1,6 +1,6 @@
 //
 //  ContentView.swift
-//  HelloWorld
+//  Logger
 //
 //  Created by Cesar Brazon on 16.08.2023..
 //
