@@ -35,13 +35,9 @@ extension PluginModule {
         closure: @escaping (_ args: T, _ env: E?, _ invoker: Invoker) throws -> R
     ) {
         methodsMap[name] = {(_ args: [UInt8], _ env: [UInt8]?, _ invoker: Invoker) throws -> Encodable? in
-            let decodedArgs: T? = try decode(value: args)
+            let decodedArgs: T = try decode(value: args)
             let decodedEnv: E? = try env.flatMap { try decode(value: $0) }
-            guard let sanitizedArgs = decodedArgs else {
-                return [] as [UInt8]
-            }
-
-            return try closure(sanitizedArgs, decodedEnv, invoker)
+            return try closure(decodedArgs, decodedEnv, invoker)
         }
     }
 
@@ -50,13 +46,9 @@ extension PluginModule {
         closure: @escaping (_ args: T, _ env: E?, _ invoker: Invoker) throws -> Void
     ) {
         methodsMap[name] = { args, env, invoker in
-            let decodedArgs: T? = try decode(value: args)
+            let decodedArgs: T = try decode(value: args)
             let decodedEnv: E? = try env.flatMap { try decode(value: $0) }
-
-            guard let sanitizedArgs = decodedArgs else {
-                return [] as [UInt8]
-            }
-            try closure(sanitizedArgs, decodedEnv, invoker)
+            try closure(decodedArgs, decodedEnv, invoker)
             return AnyEncodable(VoidCodable())
         }
     }
