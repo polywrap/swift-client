@@ -8,7 +8,7 @@ target 'Logger' do
   use_frameworks!
 
   pod 'PolywrapClient', :path => '../'
-  pod 'LoggerPlugin', :git => 'https://github.com/polywrap/logging.git', :branch => "feat/swift-implementation"
+  pod 'LoggerPlugin', :git => 'https://github.com/polywrap/logging.git'
 end
 
 target 'Http' do
