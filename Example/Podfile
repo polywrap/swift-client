@@ -1,0 +1,55 @@
+platform :ios, '16.1'
+
+workspace 'example'
+
+target 'Logger' do
+  project 'Logger/Logger.xcodeproj'
+
+  use_frameworks!
+
+  pod 'PolywrapClient', :path => '../'
+  pod 'LoggerPlugin', :git => 'https://github.com/polywrap/logging.git'
+end
+
+target 'Http' do
+  project 'Http/Http.xcodeproj'
+
+  use_frameworks!
+
+  pod 'PolywrapClient', :path => '../'
+end
+
+
+target 'Ipfs' do
+  project 'Ipfs/Ipfs.xcodeproj'
+
+  use_frameworks!
+
+  pod 'PolywrapClient', :path => '../'
+end
+
+target 'Ens' do
+  project 'Ens/Ens.xcodeproj'
+
+  use_frameworks!
+
+  pod 'PolywrapClient', :path => '../'
+end
+
+target 'Ethers' do
+  project 'Ethers/Ethers.xcodeproj'
+
+  use_frameworks!
+
+  pod 'PolywrapClient', :path => '../'
+  pod 'MetamaskProviderPlugin', :git => 'https://github.com/polywrap/ethereum-wallet.git'
+end
+
+
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings.delete 'IPHONEOS_DEPLOYMENT_TARGET'
+    end
+  end
+end
