@@ -19,7 +19,7 @@ public enum WasmPackageError: Error {
 }
 
 /// Represents a WRAP package.
-public class WasmPackage: FfiWrapPackage {
+public class WasmPackage: IffiWrapPackage {
     /// The `Reader` used to read the module.
     public let reader: Reader?
     /// The module as an array of bytes (`UInt8`).
@@ -72,7 +72,7 @@ public class WasmPackage: FfiWrapPackage {
     ///
     /// - Returns: A `WasmWrapper` for the module.
     /// - Throws: `WasmPackageError` if there are issues creating the wrapper.
-    public func createWrapper() throws -> FfiWrapper {
+    public func createWrapper() throws -> IffiWrapper {
         if let module = self.module {
             return try WasmWrapper(module: module)
         } else {

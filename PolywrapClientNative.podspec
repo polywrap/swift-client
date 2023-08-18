@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'PolywrapClientNative'
-  s.version          = '0.0.5'
+  s.version          = '0.0.7'
   s.summary          = 'Binary framework for Polywrap Client'
   s.homepage         = 'https://github.com/polywrap/swift-client'
   s.license          = 'MIT'

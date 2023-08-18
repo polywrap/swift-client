@@ -8,7 +8,7 @@
 import Foundation
 import PolywrapClient
 
-public class MockWrap: FfiWrapper {
+public class MockWrap: IffiWrapper {
     public func invoke(method: String, args: [UInt8]?, env: [UInt8]?, invoker: FfiInvoker) throws -> [UInt8] {
         // In msgpack: True = [195] and False = [194]
         if method == "foo" {

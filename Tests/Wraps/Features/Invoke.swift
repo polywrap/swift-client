@@ -80,4 +80,15 @@ final class InvokeTests: XCTestCase {
         let result: Int = try client.invoke(uri: invokeWrapUri, method: "addAndIncrement", args: AddArgs(a: 1, b: 1))
         XCTAssertEqual(result, 3)
     }
+
+    func testInvokeRaw() throws {
+        let wrap = try getTestWrap(path: "subinvoke/00-subinvoke/implementations/as")
+        let uri = try Uri("wrap://wrap/embedded")
+        let builder = BuilderConfig().addWrapper(uri, wrap)
+        let client = builder.build()
+
+        let encodedArgs = try encode(value: AddArgs(a: 1, b: 1))
+        let result = try client.invokeRaw(uri: uri, method: "add", args: encodedArgs, env: nil)
+        XCTAssertEqual(result, [2])
+    }
 }

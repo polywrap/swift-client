@@ -25,14 +25,6 @@ enum PluginError: Error {
     case methodNotFound
 }
 
-private func decode<T: Codable>(_ bytes: [UInt8]?) throws -> T? {
-    guard let bytes = bytes else {
-        return nil
-    }
-    let decoder = MessagePackDecoder()
-    return try decoder.decode(T.self, from: Data(bytes))
-}
-
 public protocol PluginModule {
     var methodsMap: [String: PluginMethod] { get set }
 }
@@ -43,13 +35,9 @@ extension PluginModule {
         closure: @escaping (_ args: T, _ env: E?, _ invoker: Invoker) throws -> R
     ) {
         methodsMap[name] = {(_ args: [UInt8], _ env: [UInt8]?, _ invoker: Invoker) throws -> Encodable? in
-            let decodedArgs: T? = try decode(args)
-            let decodedEnv: E? = try decode(env)
-            guard let sanitizedArgs = decodedArgs else {
-                return [] as [UInt8]
-            }
-
-            return try closure(sanitizedArgs, decodedEnv, invoker)
+            let decodedArgs: T = try decode(value: args)
+            let decodedEnv: E? = try env.flatMap { try decode(value: $0) }
+            return try closure(decodedArgs, decodedEnv, invoker)
         }
     }
 
@@ -58,13 +46,9 @@ extension PluginModule {
         closure: @escaping (_ args: T, _ env: E?, _ invoker: Invoker) throws -> Void
     ) {
         methodsMap[name] = { args, env, invoker in
-            let decodedArgs: T? = try decode(args)
-            let decodedEnv: E? = try decode(env)
-
-            guard let sanitizedArgs = decodedArgs else {
-                return [] as [UInt8]
-            }
-            try closure(sanitizedArgs, decodedEnv, invoker)
+            let decodedArgs: T = try decode(value: args)
+            let decodedEnv: E? = try env.flatMap { try decode(value: $0) }
+            try closure(decodedArgs, decodedEnv, invoker)
             return AnyEncodable(VoidCodable())
         }
     }
