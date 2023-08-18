@@ -4,7 +4,7 @@ import PolywrapClientNative
 /// `Invoker` is a class that wraps the FfiInvoker object and provides a method to perform invocations.
 public class Invoker {
     /// FfiInvoker instance wrapped by this Invoker.
-    let ffi: FfiInvoker
+    internal let ffi: FfiInvoker
 
     /// Initializes an `Invoker` instance with the provided FfiInvoker.
     ///

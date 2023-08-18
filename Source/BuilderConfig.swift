@@ -10,7 +10,7 @@ import PolywrapClientNative
 
 /// `BuilderConfig` class provides a configuration interface for the `PolywrapClient`.
 public class BuilderConfig {
-    public let ffi: FfiBuilderConfig
+    internal let ffi: FfiBuilderConfig
 
     /// Creates an instance of `BuilderConfig`.
     public init() {
@@ -45,8 +45,8 @@ public class BuilderConfig {
     ///   - uri: The `Uri` of the wrapper.
     ///   - wrapper: The wrapper to add.
     /// - Returns: The same instance of `BuilderConfig` for method chaining.
-    public func addWrapper(_ uri: Uri, _ wrapper: FfiWrapper) -> Self {
-        self.ffi.addWrapper(uri: uri.ffi, wrapper: wrapper)
+    public func addWrapper(_ uri: Uri, _ wrapper: WasmWrapper) -> Self {
+        self.ffi.addWrapper(uri: uri.ffi, wrapper: wrapper.ffi)
         return self
     }
 
@@ -65,8 +65,8 @@ public class BuilderConfig {
     ///   - uri: The `Uri` of the package.
     ///   - package: The package to add.
     /// - Returns: The same instance of `BuilderConfig` for method chaining.
-    public func addPackage(_ uri: Uri, _ package: FfiWrapPackage) -> Self {
-        self.ffi.addPackage(uri: uri.ffi, package: package)
+    public func addPackage(_ uri: Uri, _ package: PluginPackage) -> Self {
+        self.ffi.addPackage(uri: uri.ffi, package: package.ffi)
         return self
     }
 

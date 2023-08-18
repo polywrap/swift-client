@@ -10,7 +10,7 @@ import PolywrapClientNative
 
 /// Represents a wrapper for a plugin module. 
 /// Provides functionality to invoke methods on the wrapped plugin module through the Polywrap Client
-public class PluginWrapper: FfiWrapper {
+public class PluginWrapper: IffiWrapper {
 
     /// The instance of the `PluginModule` to be wrapped.
     let instance: PluginModule
