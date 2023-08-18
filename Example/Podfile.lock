@@ -10,11 +10,11 @@ PODS:
     - metamask-ios-sdk (~> 0.2.0)
     - PolywrapClient (~> 0.0.6)
   - OrderedCollections (1.0.4)
-  - PolywrapClient (0.0.6):
+  - PolywrapClient (0.0.8):
     - AsyncObjects (~> 2.1.0)
     - MessagePacker (~> 0.4.7)
-    - PolywrapClientNative (~> 0.0.5)
-  - PolywrapClientNative (0.0.5)
+    - PolywrapClientNative (~> 0.0.7)
+  - PolywrapClientNative (0.0.7)
   - Socket.IO-Client-Swift (16.0.1):
     - Starscream (~> 4.0)
   - Starscream (4.0.4)
@@ -58,11 +58,11 @@ SPEC CHECKSUMS:
   metamask-ios-sdk: 3c7b575d49b947cdf03ca1c766a9dec9f2c50b90
   MetamaskProviderPlugin: a40bd317d40e0ae7a95becdd8eca69d36a31d3bf
   OrderedCollections: c754ce5f9e42cf22b73afd73582317347903ab6d
-  PolywrapClient: 1362268e98738e351a3fcee35cad030427046966
-  PolywrapClientNative: a1d5df8a4248379095e8abd408b7a4cb9f3fe80c
+  PolywrapClient: c8f2edac2500bbc421dfe7d2c4af757fa6db7224
+  PolywrapClientNative: 30398b076b00c8bbf5c2046cfa1c1554c3c31321
   Socket.IO-Client-Swift: c116d6dc9fd6be9c259bacfe143f8725bce7d79e
   Starscream: 5178aed56b316f13fa3bc55694e583d35dd414d9
 
-PODFILE CHECKSUM: 2a8d4aface0cc8bad7b009d2547b278039768df1
+PODFILE CHECKSUM: d83afd9af1181011912c62ac6afc50b1bb756a7b
 
 COCOAPODS: 1.12.1
